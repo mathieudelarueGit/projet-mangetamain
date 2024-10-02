@@ -1,1 +1,2 @@
 2024-10-01 20:43:48,339 - ERROR - Erreur lors de la lecture du fichier CSV spécifié à  \ l'emplacement data/P_recipes.csv: [Errno 2] No such file or directory: 'data/P_recipes.csv'
+2024-10-02 12:30:14,765 - ERROR - Erreur lors de la lecture du fichier CSV spécifié à  \ l'emplacement data/P_recipes.csv: [Errno 2] No such file or directory: 'data/P_recipes.csv'
