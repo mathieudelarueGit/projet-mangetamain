@@ -5,3 +5,8 @@
 2024-10-02 19:31:00,112 - INFO - Unzipped dataset/PP_users.csv.zip successfully into dataset/PP_users.csv_extracted
 2024-10-02 19:31:00,310 - INFO - Loaded CSV from ZIP: dataset/PP_users.csv_extracted/PP_users.csv
 2024-10-02 19:31:00,402 - INFO - Loaded Pickle file: dataset/ingr_map.pkl
+2024-10-03 12:51:23,115 - INFO - Unzipped dataset/PP_recipes.csv.zip successfully into dataset/PP_recipes.csv_extracted
+2024-10-03 12:51:25,720 - INFO - Loaded CSV from ZIP: dataset/PP_recipes.csv_extracted/PP_recipes.csv
+2024-10-03 12:51:26,268 - INFO - Unzipped dataset/PP_users.csv.zip successfully into dataset/PP_users.csv_extracted
+2024-10-03 12:51:26,456 - INFO - Loaded CSV from ZIP: dataset/PP_users.csv_extracted/PP_users.csv
+2024-10-03 12:51:26,548 - INFO - Loaded Pickle file: dataset/ingr_map.pkl
