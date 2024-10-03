@@ -1,7 +1,15 @@
+import logging
 import pandas as pd
 import streamlit as st
 
-from data_loader import *
+from src.data_loader import *
+from src.log_config import setup_logging
+
+# Initialize logging
+setup_logging()
+
+# Get a logger specific to this module
+logger = logging.getLogger(__name__)
 
 # Load data files into dataframes
 df_PP_recipes = load_data("dataset/PP_recipes.csv.zip")
