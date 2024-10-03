@@ -1,20 +1,14 @@
-import pandas as pd
-import zipfile
 import os
-import streamlit as st
-import logging
+import zipfile
 
-# Configure logging to track errors and important events in the application
-logging.basicConfig(
-    filename="app.log",  # Logs will be written to 'app.log'
-    filemode="a",  # Append mode: new logs will be added to the existing file
-    format="%(asctime)s - %(levelname)s - %(message)s",  # Log format: timestamp, log level, and message
-    level=logging.DEBUG,  # Set the logging level to DEBUG to capture all events
-)
+import pandas as pd
+import streamlit as st
+
+from log_config import *
 
 
 @st.cache_data
-def unzip_data(file_name):
+def unzip_data(file_name: str) -> list:
     """
     Unzips a ZIP file and returns a list of the extracted files. This function is cached
     by Streamlit to prevent repeated unzipping if the ZIP file hasn't changed.
@@ -55,7 +49,7 @@ def unzip_data(file_name):
 
 
 @st.cache_data
-def load_data(file_name):
+def load_data(file_name: str) -> pd.DataFrame:
     """
     Loads data from a file (CSV, ZIP containing CSV, or Pickle). This function handles
     different file types and returns the loaded data as a pandas DataFrame. The function
