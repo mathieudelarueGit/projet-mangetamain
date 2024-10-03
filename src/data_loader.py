@@ -5,12 +5,10 @@ import zipfile
 import pandas as pd
 import streamlit as st
 
-logging.basicConfig(
-    filename="app.log",  # Logs will be written to 'app.log'
-    filemode="a",  # Append mode: new logs will be added to the existing file
-    format="%(asctime)s - %(levelname)s - %(message)s",  # Log format: timestamp, log level, and message
-    level=logging.DEBUG,  # Set the logging level to DEBUG to capture all events
-)
+from src.log_config import *
+
+# Get a logger specific to this module
+logger = logging.getLogger(__name__)
 
 
 @st.cache_data
@@ -43,14 +41,14 @@ def unzip_data(file_name: str) -> list:
         extracted_files = [
             os.path.join(extracted_dir, f) for f in os.listdir(extracted_dir)
         ]
-        logging.info(
+        logger.info(
             f"Unzipped {file_name} successfully into {extracted_dir}"
         )  # Log success
         return extracted_files
 
     except Exception as e:
         # Log the error and raise the exception
-        logging.error(f"Error while unzipping {file_name}: {e}")
+        logger.error(f"Error while unzipping {file_name}: {e}")
         raise
 
 
@@ -75,7 +73,7 @@ def load_data(file_name: str) -> pd.DataFrame:
         # If the file is a CSV, load it directly
         if file_name.endswith(".csv"):
             df = pd.read_csv(file_name)
-            logging.info(f"Loaded CSV file: {file_name}")  # Log success
+            logger.info(f"Loaded CSV file: {file_name}")  # Log success
 
         # If the file is a ZIP, unzip it and load the first CSV found
         elif file_name.endswith(".zip"):
@@ -83,12 +81,12 @@ def load_data(file_name: str) -> pd.DataFrame:
             # Find the first CSV file in the unzipped files
             csv_file = [f for f in extracted_files if f.endswith(".csv")][0]
             df = pd.read_csv(csv_file)
-            logging.info(f"Loaded CSV from ZIP: {csv_file}")  # Log success
+            logger.info(f"Loaded CSV from ZIP: {csv_file}")  # Log success
 
         # If the file is a Pickle (.pkl), load it as a DataFrame
         elif file_name.endswith(".pkl"):
             df = pd.read_pickle(file_name)
-            logging.info(f"Loaded Pickle file: {file_name}")  # Log success
+            logger.info(f"Loaded Pickle file: {file_name}")  # Log success
 
         # Raise an error if the file type is unsupported
         else:
@@ -98,5 +96,5 @@ def load_data(file_name: str) -> pd.DataFrame:
 
     except Exception as e:
         # Log the error and raise the exception
-        logging.error(f"Error while loading data from {file_name}: {e}")
+        logger.error(f"Error while loading data from {file_name}: {e}")
         raise
