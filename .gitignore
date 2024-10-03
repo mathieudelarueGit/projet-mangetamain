@@ -8,6 +8,3 @@
 __pycache__/
 *.py[cod]
 *$py.class
-
-# Ignore log files
-src/logs/*.log
