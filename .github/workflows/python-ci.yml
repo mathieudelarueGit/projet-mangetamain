@@ -15,21 +15,16 @@ jobs:
     # Run the job on the latest version of Ubuntu
     runs-on: ubuntu-latest
 
-    # Test on different Python versions
-    strategy:
-      matrix:
-        python-version: [3.8, 3.9, 3.10, 3.11]
-
     # Steps to execute in the job
     steps:
       # Checkout the code from the repository
       - uses: actions/checkout@v3
 
-      # Set up Python with the version specified in the matrix
-      - name: Set up Python ${{ matrix.python-version }}
+      # Set up Python 3.11
+      - name: Set up Python 3.11
         uses: actions/setup-python@v4
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: "3.11"
 
       # Install Poetry
       - name: Install Poetry
