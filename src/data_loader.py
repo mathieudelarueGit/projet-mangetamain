@@ -4,7 +4,7 @@ import zipfile
 
 import pandas as pd
 import streamlit as st
-
+import kaggle
 from log_config import *
 
 # Get a logger specific to this module
@@ -98,3 +98,29 @@ def load_data(file_name: str) -> pd.DataFrame:
         # Log the error and raise the exception
         logger.error(f"Error while loading data from {file_name}: {e}")
         raise
+
+def load_kaggle_dataset(dataset_slug, filename):
+    """
+    Loads data from Kaggle.
+
+    Args:
+        file_name (str): The path to the file (can be .csv, .zip, or .pkl).
+        dataset_slug (str): slug dataset
+    Returns:
+        pd.DataFrame: The loaded data as a pandas DataFrame.
+
+    Raises:
+        ValueError: If the file type is unsupported.
+        Exception: If an error occurs during file loading, logs the error and raises the exception.
+    """
+    # Download le dataset
+    kaggle.api.dataset_download_files(dataset_slug, path='.', unzip=False)
+
+    # Extract the file
+    with zipfile.ZipFile(f'{dataset_slug.split("/")[-1]}.zip', 'r') as z:
+        with z.open(filename) as f:
+            df = pd.read_csv(f)
+    
+    # Delete the zip after using
+    os.remove(f'{dataset_slug.split("/")[-1]}.zip')
+    return df
