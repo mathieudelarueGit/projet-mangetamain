@@ -60,7 +60,3 @@ def setup_logging() -> None:
         # Add both handlers to the root logger
         logger.addHandler(debug_handler)
         logger.addHandler(error_handler)
-
-        print(f"Added handlers: {logger.handlers}")
-    else:
-        print("Handlers already exist")

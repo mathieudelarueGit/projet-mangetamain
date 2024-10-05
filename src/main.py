@@ -2,8 +2,8 @@ import logging
 import pandas as pd
 import streamlit as st
 
-from src.data_loader import *
-from src.log_config import setup_logging
+from data_loader import *
+from log_config import setup_logging
 
 # Initialize logging
 setup_logging()

@@ -5,7 +5,7 @@ import zipfile
 import pandas as pd
 import streamlit as st
 
-from src.log_config import *
+from log_config import *
 
 # Get a logger specific to this module
 logger = logging.getLogger(__name__)
