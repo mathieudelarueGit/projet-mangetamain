@@ -31,45 +31,36 @@ def setup_logging() -> None:
     if not os.path.exists(log_directory):
         os.makedirs(log_directory)
 
-    # Configure the root logger with the basic settings (but without any handlers)
-    logging.basicConfig(
-        level=logging.DEBUG,  # Set the logging level to capture DEBUG and higher
-        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",  # Include module name
-        datefmt="-%d-%m%Y %H:%M:%S",  # Timestamp format
-    )
-
-    # Set up a file handler for debug-level logs (app_debug.log)
-    debug_handler: logging.FileHandler = logging.FileHandler(
-        os.path.join(log_directory, "app_debug.log")
-    )
-    debug_handler.setLevel(logging.DEBUG)  # Capture DEBUG, INFO, and WARNING logs
-    debug_formatter: logging.Formatter = logging.Formatter(
-        "%(asctime)s - %(name)s - %(levelname)s - %(message)s"  # Include module name
-    )
-    debug_handler.setFormatter(debug_formatter)
-
-    # Add a filter to the debug_handler to exclude ERROR and CRITICAL logs
-    debug_handler.addFilter(MaxLevelFilter(logging.WARNING))
-
-    # Set up a file handler for error-level logs (app_error.log)
-    error_handler: logging.FileHandler = logging.FileHandler(
-        os.path.join(log_directory, "app_error.log")
-    )
-    error_handler.setLevel(logging.ERROR)  # Capture only ERROR and CRITICAL logs
-    error_formatter: logging.Formatter = logging.Formatter(
-        "%(asctime)s - %(name)s - %(levelname)s - %(message)s"  # Include module name
-    )
-    error_handler.setFormatter(error_formatter)
-
     # Get the root logger
-    logger: logging.Logger = logging.getLogger()
+    logger = logging.getLogger()
+    logger.setLevel(logging.DEBUG)  # Set the logging level for the root logger
 
-    # Clear existing handlers to avoid duplicate logs if setup_logging is called multiple times
-    if logger.hasHandlers():
-        logger.handlers.clear()
+    # Add handlers only if none exist
+    if not logger.hasHandlers():
 
-    # Add both the debug and error handlers to the root logger
-    logger.addHandler(
-        debug_handler
-    )  # Only DEBUG, INFO, WARNING will go to app_debug.log
-    logger.addHandler(error_handler)  # Only ERROR and CRITICAL will go to app_error.log
+        # Set up a file handler for debug-level logs (app_debug.log)
+        debug_handler = logging.FileHandler(
+            os.path.join(log_directory, "app_debug.log"), mode="a"
+        )
+        debug_handler.setLevel(logging.DEBUG)  # Capture DEBUG, INFO, and WARNING logs
+        debug_handler.setFormatter(
+            logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+        )
+        debug_handler.addFilter(MaxLevelFilter(logging.WARNING))
+
+        # Set up a file handler for error-level logs (app_error.log)
+        error_handler = logging.FileHandler(
+            os.path.join(log_directory, "app_error.log"), mode="a"
+        )
+        error_handler.setLevel(logging.ERROR)  # Capture only ERROR and CRITICAL logs
+        error_handler.setFormatter(
+            logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+        )
+
+        # Add both handlers to the root logger
+        logger.addHandler(debug_handler)
+        logger.addHandler(error_handler)
+
+        print(f"Added handlers: {logger.handlers}")
+    else:
+        print("Handlers already exist")
