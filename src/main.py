@@ -1,9 +1,8 @@
 import logging
-import pandas as pd
 import streamlit as st
 
-from data_loader import *
-from log_config import setup_logging
+from data_loader import load_data  # Explicit import
+from log_config import setup_logging  # Explicit import
 
 # Initialize logging
 setup_logging()

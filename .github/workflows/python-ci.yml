@@ -41,6 +41,16 @@ jobs:
       - name: Set PYTHONPATH
         run: |
           echo "PYTHONPATH=$PYTHONPATH:$(pwd)/src" >> $GITHUB_ENV
+      
+      # Run Flake8 to check for PEP8 compliance
+      - name: Run Flake8
+        run: |
+          poetry run flake8 src/
+
+      # Run Black to check code formatting
+      - name: Run Black
+        run: |
+          poetry run black --check src/
 
       # Run the tests with coverage threshold
       - name: Run tests with coverage
