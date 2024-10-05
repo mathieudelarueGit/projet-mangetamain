@@ -11,3 +11,6 @@ __pycache__/
 
 # Ignore coverage report file
 .coverage
+
+# Ignore Sphinx build folder
+docs/build/
