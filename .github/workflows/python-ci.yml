@@ -37,6 +37,11 @@ jobs:
         run: |
           poetry install
 
+      # Set PYTHONPATH to include the src directory
+      - name: Set PYTHONPATH
+        run: |
+          echo "PYTHONPATH=$PYTHONPATH:$(pwd)/src" >> $GITHUB_ENV
+
       # Run the tests with coverage threshold
       - name: Run tests with coverage
         run: |
