@@ -18,10 +18,14 @@ class MaxLevelFilter(logging.Filter):
 def setup_logging() -> None:
     """
     Configures the global logging for the application, ensuring logs are written to files.
+
     - Creates a "src/logs" directory if it doesn't exist.
     - Sets up two separate log files: one for debug-level logs (DEBUG, INFO, WARNING)
       and one for error-level logs (ERROR, CRITICAL).
     - Adds the module name to log messages.
+
+    Raises:
+        OSError: If the log directory cannot be created.
     """
 
     # Define the directory where log files will be stored
