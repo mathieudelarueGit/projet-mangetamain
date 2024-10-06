@@ -154,10 +154,9 @@ def load_data_kaggle(base_url: str, owner_slug: str, dataset_slug: str, dataset_
                     logger.info(f"Loaded CSV file: {file_name}")
                     # Check if the DataFrame is loaded correctly and is not empty
                     if df is None or df.empty:
-                        logger.error(f"The DataFrame was not loaded correctly or is empty")
+                        logger.error(f"The DataFrame in file {file_name} was not loaded correctly or is empty")
                         raise ValueError("The DataFrame was not loaded correctly or is empty.")
                         
-                    
                     # Optionally, print the first few rows of the DataFrame for confirmation
                     print(df.head())
                     return df  # Return the loaded DataFrame
