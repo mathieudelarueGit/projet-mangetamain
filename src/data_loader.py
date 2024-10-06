@@ -117,50 +117,61 @@ def load_data_kaggle(base_url: str, owner_slug: str, dataset_slug: str, dataset_
     Raises:
         ValueError: If the DataFrame is empty or not loaded correctly.
     """
-    # Construct the URL for the dataset download
-    url = f"{base_url}/datasets/download/{owner_slug}/{dataset_slug}?datasetVersionNumber={dataset_version}"
+    try:
+        # Construct the URL for the dataset download
+        url = f"{base_url}/datasets/download/{owner_slug}/{dataset_slug}?datasetVersionNumber={dataset_version}"
 
-    # Encode the username and key for basic authentication with taping in the console
-    username_ = input("What's your username ? ")
-    key_api = input("What's your key ? ")
-    creds = base64.b64encode(bytes(f"{username_}:{key_api}", "ISO-8859-1")).decode("ascii")
+        # Encode the username and key for basic authentication with taping in the console
+        username_ = input("What's your username ? ")
+        key_api = input("What's your key ? ")
+        creds = base64.b64encode(bytes(f"{username_}:{key_api}", "ISO-8859-1")).decode("ascii")
+        
+        headers = {
+            "Authorization": f"Basic {creds}"
+        }
+
+        # Send a GET request to the URL with the authorization headers
+        response = requests.get(url, headers=headers)
+
+        # Check if the request was successful
+        if response.status_code != 200:
+            print(f"Error downloading the dataset. Status: {response.status_code}")
+            logger.error(f"Error downloading the dataset. Status: {response.status_code}")
+            print("Response content:", response.text[:1000])  # Display the first 1000 characters of the response content
+            return None  # Return None if the request fails
+
+        # Check if the content type of the response is a ZIP file
+        content_type = response.headers.get('Content-Type')
+        if content_type == 'application/zip':
+            try:
+                # Load the response content as a ZIP file
+                zf = zipfile.ZipFile(io.BytesIO(response.content))
+
+                # Specify the expected CSV file name within the ZIP archive
+                #file_name = "RAW_recipes.csv"  # Replace with the actual name of the CSV file in the ZIP
+                with zf.open(file_name) as file:
+                    df = pd.read_csv(file)
+                    logger.info(f"Loaded CSV file: {file_name}")
+                    # Check if the DataFrame is loaded correctly and is not empty
+                    if df is None or df.empty:
+                        logger.error(f"The DataFrame was not loaded correctly or is empty")
+                        raise ValueError("The DataFrame was not loaded correctly or is empty.")
+                        
+                    
+                    # Optionally, print the first few rows of the DataFrame for confirmation
+                    print(df.head())
+                    return df  # Return the loaded DataFrame
+
+            except zipfile.BadZipFile:
+                
+                logger.error(f"Error: The downloaded file is not a valid ZIP file.: {file_name}")
+        else:
+            print(f"Error: The downloaded file is not a ZIP file. Content-Type: {content_type}")
+            print(response.content[:1000])  # Display a portion of the content for diagnostic purposes
+            return None  # Return None if the content is not a ZIP file
     
-    headers = {
-        "Authorization": f"Basic {creds}"
-    }
-
-    # Send a GET request to the URL with the authorization headers
-    response = requests.get(url, headers=headers)
-
-    # Check if the request was successful
-    if response.status_code != 200:
-        print(f"Error downloading the dataset. Status: {response.status_code}")
-        print("Response content:", response.text[:1000])  # Display the first 1000 characters of the response content
-        return None  # Return None if the request fails
-
-    # Check if the content type of the response is a ZIP file
-    content_type = response.headers.get('Content-Type')
-    if content_type == 'application/zip':
-        try:
-            # Load the response content as a ZIP file
-            zf = zipfile.ZipFile(io.BytesIO(response.content))
-
-            # Specify the expected CSV file name within the ZIP archive
-            #file_name = "RAW_recipes.csv"  # Replace with the actual name of the CSV file in the ZIP
-            with zf.open(file_name) as file:
-                df = pd.read_csv(file)
-                
-                # Check if the DataFrame is loaded correctly and is not empty
-                if df is None or df.empty:
-                    raise ValueError("The DataFrame was not loaded correctly or is empty.")
-                
-                # Optionally, print the first few rows of the DataFrame for confirmation
-                print(df.head())
-                return df  # Return the loaded DataFrame
-
-        except zipfile.BadZipFile:
-            print("Error: The downloaded file is not a valid ZIP file.")
-    else:
-        print(f"Error: The downloaded file is not a ZIP file. Content-Type: {content_type}")
-        print(response.content[:1000])  # Display a portion of the content for diagnostic purposes
-        return None  # Return None if the content is not a ZIP file
+    except Exception as e:
+        # Log the error and raise the exception
+        logger.error(f"Error while loading data from {file_name}: {e}")
+        raise
+    
