@@ -55,7 +55,7 @@ def filtering_bio_recipes_kaggle() -> pd.DataFrame:
     key_words_bio = r'\b(gluten-free|dairy-free|organic|bio|vegetarian)\b'
     # Filtering recipes with the tags bio, organic, traditional, gluten-free, veggie
     bio_recipes1 = df_raw_recipes[df_raw_recipes['tags'].str.contains(key_words_bio, case=False, na=False, regex=True)]
-    print("Informations nutritionnelles des recettes biologiques :")
+    print("Nutritional information for bio recipes :")
     print(bio_recipes1["nutrition"].describe())  #displaying statisical description of the columns
     return bio_recipes1
 
