@@ -1,5 +1,6 @@
 import logging
 import pandas as pd
+import numpy as np
 import streamlit as st
 from log_config import *
 from data_loader import *
@@ -31,6 +32,7 @@ def dataset_study(file_name: str) -> None:
     # Analyze missing data
     print("Number of missing data:", df.isnull().sum().sum())
 
+
 def filtering_bio_recipes_kaggle() -> pd.DataFrame:
     """
     Filters out organic or traditional recipes based on tags.
@@ -59,11 +61,42 @@ def filtering_bio_recipes_kaggle() -> pd.DataFrame:
     print(bio_recipes1["nutrition"].describe())  #displaying statisical description of the columns
     return bio_recipes1
 
-# Define the dataset slug and file names
+def correlation_bio_recipes(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Calculate the Pearson correlation matrix for the given DataFrame.
+
+    This function computes the Pearson correlation coefficient between all 
+    pairs of columns in the input DataFrame and returns the resulting 
+    correlation matrix.
+
+    Parameters:
+    -----------
+    data : pd.DataFrame
+        A pandas DataFrame containing the dataset for which the correlation 
+        matrix will be computed. The DataFrame should contain numerical values 
+        in its columns, as non-numerical data will result in an error.
+
+    Returns:
+    --------
+    pd.DataFrame
+        A DataFrame containing the Pearson correlation matrix. The values 
+        represent the correlation coefficients, ranging from -1 (perfect negative 
+        correlation) to 1 (perfect positive correlation), with 0 indicating no 
+        correlation.
+
+    """
+    # Select only numeric columns
+    numeric_df = df.select_dtypes(include='number')
+    # Compute and return the Pearson correlation matrix
+    matrix_corr = numeric_df.corr(method="pearson")
+    print(matrix_corr)
+    return matrix_corr
+
 filename_recipes = "dataset/PP_recipes.csv_extracted/PP_recipes.csv"
 filename_users = "dataset/PP_users.csv_extracted/PP_users.csv"
-
 # Uncomment the next line to perform dataset study
 # data_recipes = dataset_study(filename_recipes)
-
+#filtering bio recipes
 bio_recipes = filtering_bio_recipes_kaggle()
+#matrix correlation 
+matrix_corr=correlation_bio_recipes(bio_recipes)
