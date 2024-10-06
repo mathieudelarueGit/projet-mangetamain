@@ -1,10 +1,12 @@
 import os
 import logging
 import zipfile
-
+import requests
+import base64
+import io
 import pandas as pd
 import streamlit as st
-import kaggle
+#import kaggle
 from log_config import *
 
 # Get a logger specific to this module
@@ -99,28 +101,67 @@ def load_data(file_name: str) -> pd.DataFrame:
         logger.error(f"Error while loading data from {file_name}: {e}")
         raise
 
-def load_kaggle_dataset(dataset_slug, filename):
+
+def load_data_kaggle(base_url: str, owner_slug: str, dataset_slug: str, dataset_version: str) -> pd.DataFrame:
     """
-    Loads data from Kaggle.
+    Downloads a dataset from Kaggle and loads it into a pandas DataFrame.
 
     Args:
-        file_name (str): The path to the file (can be .csv, .zip, or .pkl).
-        dataset_slug (str): slug dataset
+        base_url (str): The base URL for the Kaggle API.
+        owner_slug (str): The owner of the dataset (username).
+        dataset_slug (str): The name of the dataset.
+        dataset_version (str): The version number of the dataset.
+
     Returns:
-        pd.DataFrame: The loaded data as a pandas DataFrame.
+        pd.DataFrame: A DataFrame containing the dataset loaded from the downloaded CSV file.
 
     Raises:
-        ValueError: If the file type is unsupported.
-        Exception: If an error occurs during file loading, logs the error and raises the exception.
+        ValueError: If the DataFrame is empty or not loaded correctly.
     """
-    # Download le dataset
-    kaggle.api.dataset_download_files(dataset_slug, path='.', unzip=False)
+    # Construct the URL for the dataset download
+    url = f"{base_url}/datasets/download/{owner_slug}/{dataset_slug}?datasetVersionNumber={dataset_version}"
 
-    # Extract the file
-    with zipfile.ZipFile(f'{dataset_slug.split("/")[-1]}.zip', 'r') as z:
-        with z.open(filename) as f:
-            df = pd.read_csv(f)
+    # Encode the username and key for basic authentication
+    username = "julien1vu"  # Replace with your actual Kaggle username
+    key = "be3af46f88b3b43f33691e866a22f6c3"  # Replace with your actual Kaggle API key
+    creds = base64.b64encode(bytes(f"{username}:{key}", "ISO-8859-1")).decode("ascii")
     
-    # Delete the zip after using
-    os.remove(f'{dataset_slug.split("/")[-1]}.zip')
-    return df
+    headers = {
+        "Authorization": f"Basic {creds}"
+    }
+
+    # Send a GET request to the URL with the authorization headers
+    response = requests.get(url, headers=headers)
+
+    # Check if the request was successful
+    if response.status_code != 200:
+        print(f"Error downloading the dataset. Status: {response.status_code}")
+        print("Response content:", response.text[:1000])  # Display the first 1000 characters of the response content
+        return None  # Return None if the request fails
+
+    # Check if the content type of the response is a ZIP file
+    content_type = response.headers.get('Content-Type')
+    if content_type == 'application/zip':
+        try:
+            # Load the response content as a ZIP file
+            zf = zipfile.ZipFile(io.BytesIO(response.content))
+
+            # Specify the expected CSV file name within the ZIP archive
+            file_name = "RAW_recipes.csv"  # Replace with the actual name of the CSV file in the ZIP
+            with zf.open(file_name) as file:
+                df = pd.read_csv(file)
+                
+                # Check if the DataFrame is loaded correctly and is not empty
+                if df is None or df.empty:
+                    raise ValueError("The DataFrame was not loaded correctly or is empty.")
+                
+                # Optionally, print the first few rows of the DataFrame for confirmation
+                print(df.head())
+                return df  # Return the loaded DataFrame
+
+        except zipfile.BadZipFile:
+            print("Error: The downloaded file is not a valid ZIP file.")
+    else:
+        print(f"Error: The downloaded file is not a ZIP file. Content-Type: {content_type}")
+        print(response.content[:1000])  # Display a portion of the content for diagnostic purposes
+        return None  # Return None if the content is not a ZIP file
