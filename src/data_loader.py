@@ -101,8 +101,7 @@ def load_data(file_name: str) -> pd.DataFrame:
         logger.error(f"Error while loading data from {file_name}: {e}")
         raise
 
-
-def load_data_kaggle(base_url: str, owner_slug: str, dataset_slug: str, dataset_version: str) -> pd.DataFrame:
+def load_data_kaggle(base_url: str, owner_slug: str, dataset_slug: str, dataset_version: str, file_name: str) -> pd.DataFrame:
     """
     Downloads a dataset from Kaggle and loads it into a pandas DataFrame.
 
@@ -121,9 +120,9 @@ def load_data_kaggle(base_url: str, owner_slug: str, dataset_slug: str, dataset_
     # Construct the URL for the dataset download
     url = f"{base_url}/datasets/download/{owner_slug}/{dataset_slug}?datasetVersionNumber={dataset_version}"
 
-    # Encode the username and key for basic authentication
-    username = "julien1vu"  # Replace with your actual Kaggle username
-    key = "be3af46f88b3b43f33691e866a22f6c3"  # Replace with your actual Kaggle API key
+    # Encode the username and key for basic authentication with taping in the console
+    username = input("What's your username ? ")
+    key = input("What's your key ? ")
     creds = base64.b64encode(bytes(f"{username}:{key}", "ISO-8859-1")).decode("ascii")
     
     headers = {
@@ -147,7 +146,7 @@ def load_data_kaggle(base_url: str, owner_slug: str, dataset_slug: str, dataset_
             zf = zipfile.ZipFile(io.BytesIO(response.content))
 
             # Specify the expected CSV file name within the ZIP archive
-            file_name = "RAW_recipes.csv"  # Replace with the actual name of the CSV file in the ZIP
+            #file_name = "RAW_recipes.csv"  # Replace with the actual name of the CSV file in the ZIP
             with zf.open(file_name) as file:
                 df = pd.read_csv(file)
                 

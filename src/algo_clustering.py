@@ -49,17 +49,14 @@ def filtering_bio_recipes_kaggle() -> pd.DataFrame:
     owner_slug = "shuyangli94"
     dataset_slug = "food-com-recipes-and-user-interactions"
     dataset_version = "2"
-    
-    df_raw_recipes = load_data_kaggle(base_url, owner_slug, dataset_slug, dataset_version)
-    print("Column names:", df_raw_recipes.columns)
-    if 'tags' not in df_raw_recipes.columns:
-        raise ValueError("The 'tags' column is missing from the DataFrame.")
-    
-    key_words_bio = r'\b(veggie|organic|bio)\b'
-    
+    file_name="RAW_recipes.csv"
+
+    df_raw_recipes = load_data_kaggle(base_url, owner_slug, dataset_slug, dataset_version, file_name)
+    key_words_bio = r'\b(gluten-free|dairy-free|organic|bio|vegetarian)\b'
     # Filtering recipes with the tags bio, organic, traditional, gluten-free, veggie
     bio_recipes1 = df_raw_recipes[df_raw_recipes['tags'].str.contains(key_words_bio, case=False, na=False, regex=True)]
-    print(bio_recipes1)
+    print("Informations nutritionnelles des recettes biologiques :")
+    print(bio_recipes1["nutrition"].describe())  #displaying statisical description of the columns
     return bio_recipes1
 
 # Define the dataset slug and file names
