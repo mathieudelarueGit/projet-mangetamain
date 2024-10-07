@@ -31,6 +31,7 @@ def dataset_study(file_name: str) -> None:
     
     # Analyze missing data
     print("Number of missing data:", df.isnull().sum().sum())
+    return df
 
 
 def filtering_bio_recipes_kaggle() -> pd.DataFrame:
@@ -96,7 +97,11 @@ filename_recipes = "dataset/PP_recipes.csv_extracted/PP_recipes.csv"
 filename_users = "dataset/PP_users.csv_extracted/PP_users.csv"
 # Uncomment the next line to perform dataset study
 # data_recipes = dataset_study(filename_recipes)
+
+users=dataset_study(filename_users)
+matrix_corr_users=correlation_bio_recipes(users)
 #filtering bio recipes
 bio_recipes = filtering_bio_recipes_kaggle()
 #matrix correlation 
 matrix_corr=correlation_bio_recipes(bio_recipes)
+
