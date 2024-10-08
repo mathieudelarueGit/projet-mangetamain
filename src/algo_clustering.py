@@ -34,7 +34,7 @@ def dataset_study(file_name: str) -> None:
     return df
 
 
-def filtering_bio_recipes_kaggle() -> pd.DataFrame:
+def filtering_bio_recipes_kaggle(key_words_bio: str) -> pd.DataFrame:
     """
     Filters out organic or traditional recipes based on tags.
 
@@ -55,11 +55,12 @@ def filtering_bio_recipes_kaggle() -> pd.DataFrame:
     file_name="RAW_recipes.csv"
 
     df_raw_recipes = load_data_kaggle(base_url, owner_slug, dataset_slug, dataset_version, file_name)
-    key_words_bio = r'\b(gluten-free|dairy-free|organic|bio|vegetarian)\b'
+    #key_words_bio = r'\b(gluten-free|dairy-free|organic|bio|vegetarian|veggie)\b'
     # Filtering recipes with the tags bio, organic, traditional, gluten-free, veggie
     bio_recipes1 = df_raw_recipes[df_raw_recipes['tags'].str.contains(key_words_bio, case=False, na=False, regex=True)]
     print("Nutritional information for bio recipes :")
     print(bio_recipes1["nutrition"].describe())  #displaying statisical description of the columns
+    print(bio_recipes1)
     return bio_recipes1
 
 def correlation_bio_recipes(df: pd.DataFrame) -> pd.DataFrame:
@@ -93,15 +94,15 @@ def correlation_bio_recipes(df: pd.DataFrame) -> pd.DataFrame:
     print(matrix_corr)
     return matrix_corr
 
-filename_recipes = "dataset/PP_recipes.csv_extracted/PP_recipes.csv"
-filename_users = "dataset/PP_users.csv_extracted/PP_users.csv"
+#filename_recipes = "dataset/PP_recipes.csv_extracted/__MACOSX/PP_recipes.csv"
+#filename_users = "dataset/PP_users.csv_extracted/__MACOSX/PP_users.csv"
 # Uncomment the next line to perform dataset study
 # data_recipes = dataset_study(filename_recipes)
 
-users=dataset_study(filename_users)
-matrix_corr_users=correlation_bio_recipes(users)
+#users=dataset_study(filename_users)
+#matrix_corr_users=correlation_bio_recipes(users)
 #filtering bio recipes
-bio_recipes = filtering_bio_recipes_kaggle()
+bio_recipes = filtering_bio_recipes_kaggle(r'\b(organic|bio|vegetarian|veggie|homemade|traditional|eco-friendly|local|healthy|farm|seasonal|green|natural|fresh|plant)\b')
 #matrix correlation 
 matrix_corr=correlation_bio_recipes(bio_recipes)
 
