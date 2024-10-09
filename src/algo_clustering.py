@@ -102,7 +102,8 @@ def correlation_bio_recipes(df: pd.DataFrame) -> pd.DataFrame:
 #users=dataset_study(filename_users)
 #matrix_corr_users=correlation_bio_recipes(users)
 #filtering bio recipes
-bio_recipes = filtering_bio_recipes_kaggle(r'\b(organic|bio|vegetarian|veggie|homemade|traditional|eco-friendly|local|healthy|farm|seasonal|green|natural|fresh|plant)\b')
+bio_recipes = filtering_bio_recipes_kaggle(r'\b(organic|bio|clean|vegetable|vegan|traditional|eco-friendly|local|healthy|seasonal|green|natural|fresh|plant|sustainable|heritage|garden|whole|farm)\b')
+#69173 recipes found with the list of keywords
 #matrix correlation 
 matrix_corr=correlation_bio_recipes(bio_recipes)
 
