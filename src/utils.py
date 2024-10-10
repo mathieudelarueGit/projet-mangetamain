@@ -161,13 +161,14 @@ def filter_dataframebis1(df: pd.DataFrame, column_names: list, filter_values: li
 #df_filtered_bio=filtering_dataframe(df,r'\b(organic|bio|clean|vegetable|vegan|traditional|eco-friendly|local|healthy|seasonal|green|natural|fresh|plant|sustainable|heritage|garden|whole|farm)\b')
 #print(df_filtered_bio)
 #column_names=['id']
-column_names=['tags','n_ingredients']
+#column_names=['tags','n_ingredients']
 #column_names=['n_ingredients']
 #column_names=['tags']
 #column_names=['tags', 'contributor_id']
 #column_names=['tags', 'minutes']
 #column_names=['tags']
-#column_names=['minutes']
+column_names=['minutes']
+#filter_values1=r'\b(30/60)\b'
 #filter_values1=[30,60]
 #filter_values1=[['organic', 'bio', 'clean', 'vegetable', 'vegan', 'traditional', 'eco-friendly', 'local', 'healthy', 'seasonal', 'green', 'natural', 'fresh', 'plant', 'sustainable', 'heritage', 'garden', 'whole', 'farm'],[60,90,130]]
 #filter_values1=[['organic', 'bio', 'clean', 'vegetable', 'vegan', 'traditional', 'eco-friendly', 'local', 'healthy', 'seasonal', 'green', 'natural', 'fresh', 'plant', 'sustainable', 'heritage', 'garden', 'whole', 'farm'],[2.002290e+09,5.534885e+06]]
@@ -177,12 +178,13 @@ column_names=['tags','n_ingredients']
 #    ['organic', 'bio', 'clean', 'vegetable', 'vegan', 'traditional', 'eco-friendly', 'local', 'healthy', 'seasonal', 'green', 'natural', 'fresh', 'plant', 'sustainable', 'heritage', 'garden', 'whole', 'farm'],  # Filtre pour les tags
 #    [30, 60,90,130]  # minutes filter values
 #]
-filter_values1=[
-    ['organic', 'bio', 'clean', 'vegetable', 'vegan', 'traditional', 'eco-friendly', 'local', 'healthy', 'seasonal', 'green', 'natural', 'fresh', 'plant', 'sustainable', 'heritage', 'garden', 'whole', 'farm'],  # Filtre pour les tags
-    [9,11,13,18]  # contributor_id filter values
-]
-#filter_values1=[8,11,13]
+#filter_values1=[
+#    ['organic', 'bio', 'clean', 'vegetable', 'vegan', 'traditional', 'eco-friendly', 'local', 'healthy', 'seasonal', 'green', 'natural', 'fresh', 'plant', 'sustainable', 'heritage', 'garden', 'whole', 'farm'],  # Filtre pour les tags
+#    [9,11,13,18]  # contributor_id filter values
+#]
 #caution strings
+filter_values1=[[30,60]]
+#filter_values1=[[9,11,13,18]]
 #filter_values1=r'\b(organic|bio|clean|vegetable|vegan|traditional|eco-friendly|local|healthy|seasonal|green|natural|fresh|plant|sustainable|heritage|garden|whole|farm)\b'
 df_filtered_bio=filter_dataframebis1(df,column_names,filter_values1)
 print(f"Number of rows in the filtered dataset: {len(df_filtered_bio)}")
