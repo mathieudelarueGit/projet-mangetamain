@@ -20,9 +20,10 @@ df_RAW_recipes = load_data("dataset/RAW_recipes.csv.zip")
 st.write("Bienvenue sur l'application Streamlit de Mangetamain!")
 
 # Provide file options in a selectbox
-file_options = ["Recettes", "Utilisateurs", "Ingrédients"]
+file_options = ["Recettes", "Recettes brutes", "Utilisateurs", "Ingrédients"]
 dataframes = {
     "Recettes": df_PP_recipes,
+    "Recettes brutes": df_RAW_recipes,
     "Utilisateurs": df_PP_users,
     "Ingrédients": df_ingredients,
 }
