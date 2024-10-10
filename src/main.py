@@ -14,6 +14,7 @@ logger = logging.getLogger(__name__)
 df_PP_recipes = load_data("dataset/PP_recipes.csv.zip")
 df_PP_users = load_data("dataset/PP_users.csv.zip")
 df_ingredients = load_data("dataset/ingr_map.pkl")
+df_RAW_recipes = load_data("dataset/RAW_recipes.csv.zip")
 
 # Title
 st.write("Bienvenue sur l'application Streamlit de Mangetamain!")
