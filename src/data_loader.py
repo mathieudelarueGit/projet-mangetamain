@@ -6,15 +6,9 @@ import base64
 import io
 import pandas as pd
 import streamlit as st
-<<<<<<< HEAD
-#import kaggle
-from log_config import *
-=======
->>>>>>> 5f05405d062bc5f7401a9ec3c501111c5612b306
 
 # Get a logger specific to this module
 logger = logging.getLogger(__name__)
-
 
 @st.cache_data
 def unzip_data(file_name: str) -> list:
@@ -108,77 +102,3 @@ def load_data(file_name: str) -> pd.DataFrame:
         # Log the error and raise the exception
         logger.error(f"Error while loading data from {file_name}: {e}")
         raise
-
-def load_data_kaggle(base_url: str, owner_slug: str, dataset_slug: str, dataset_version: str, file_name: str) -> pd.DataFrame:
-    """
-    Downloads a dataset from Kaggle and loads it into a pandas DataFrame.
-
-    Args:
-        base_url (str): The base URL for the Kaggle API.
-        owner_slug (str): The owner of the dataset (username).
-        dataset_slug (str): The name of the dataset.
-        dataset_version (str): The version number of the dataset.
-
-    Returns:
-        pd.DataFrame: A DataFrame containing the dataset loaded from the downloaded CSV file.
-
-    Raises:
-        ValueError: If the DataFrame is empty or not loaded correctly.
-    """
-    try:
-        # Construct the URL for the dataset download
-        url = f"{base_url}/datasets/download/{owner_slug}/{dataset_slug}?datasetVersionNumber={dataset_version}"
-
-        # Encode the username and key for basic authentication with taping in the console
-        username_ = input("What's your username ? ")
-        key_api = input("What's your key ? ")
-        creds = base64.b64encode(bytes(f"{username_}:{key_api}", "ISO-8859-1")).decode("ascii")
-        
-        headers = {
-            "Authorization": f"Basic {creds}"
-        }
-
-        # Send a GET request to the URL with the authorization headers
-        response = requests.get(url, headers=headers)
-
-        # Check if the request was successful
-        if response.status_code != 200:
-            print(f"Error downloading the dataset. Status: {response.status_code}")
-            logger.error(f"Error downloading the dataset. Status: {response.status_code}")
-            print("Response content:", response.text[:1000])  # Display the first 1000 characters of the response content
-            return None  # Return None if the request fails
-
-        # Check if the content type of the response is a ZIP file
-        content_type = response.headers.get('Content-Type')
-        if content_type == 'application/zip':
-            try:
-                # Load the response content as a ZIP file
-                zf = zipfile.ZipFile(io.BytesIO(response.content))
-
-                # Specify the expected CSV file name within the ZIP archive
-                #file_name = "RAW_recipes.csv"  # Replace with the actual name of the CSV file in the ZIP
-                with zf.open(file_name) as file:
-                    df = pd.read_csv(file)
-                    logger.info(f"Loaded CSV file: {file_name}")
-                    # Check if the DataFrame is loaded correctly and is not empty
-                    if df is None or df.empty:
-                        logger.error(f"The DataFrame in file {file_name} was not loaded correctly or is empty")
-                        raise ValueError("The DataFrame was not loaded correctly or is empty.")
-                        
-                    # Optionally, print the first few rows of the DataFrame for confirmation
-                    print(df.head())
-                    return df  # Return the loaded DataFrame
-
-            except zipfile.BadZipFile:
-                
-                logger.error(f"Error: The downloaded file is not a valid ZIP file.: {file_name}")
-        else:
-            print(f"Error: The downloaded file is not a ZIP file. Content-Type: {content_type}")
-            print(response.content[:1000])  # Display a portion of the content for diagnostic purposes
-            return None  # Return None if the content is not a ZIP file
-    
-    except Exception as e:
-        # Log the error and raise the exception
-        logger.error(f"Error while loading data from {file_name}: {e}")
-        raise
-    
