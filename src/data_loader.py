@@ -6,8 +6,11 @@ import base64
 import io
 import pandas as pd
 import streamlit as st
+<<<<<<< HEAD
 #import kaggle
 from log_config import *
+=======
+>>>>>>> 5f05405d062bc5f7401a9ec3c501111c5612b306
 
 # Get a logger specific to this module
 logger = logging.getLogger(__name__)
@@ -16,8 +19,9 @@ logger = logging.getLogger(__name__)
 @st.cache_data
 def unzip_data(file_name: str) -> list:
     """
-    Unzips a ZIP file and returns a list of the extracted files. This function is cached
-    by Streamlit to prevent repeated unzipping if the ZIP file hasn't changed.
+    Unzips a ZIP file and returns a list of the extracted files. This function
+    is cached by Streamlit to prevent repeated unzipping if the ZIP file hasn't
+    changed.
 
     Args:
         file_name (str): The path to the ZIP file to be unzipped.
@@ -26,15 +30,18 @@ def unzip_data(file_name: str) -> list:
         list: A list of paths to the extracted files.
 
     Raises:
-        Exception: If an error occurs during unzipping, logs the error and raises the exception.
+        Exception: If an error occurs during unzipping, logs the error and
+                  raises the exception.
     """
     try:
-        # Create a unique directory for the extracted files, based on the ZIP file name
+        # Create a unique directory for the extracted files, based on the ZIP
+        # file name
         extracted_dir = os.path.splitext(file_name)[0] + "_extracted"
 
         # Check if the directory already exists to avoid unnecessary unzipping
         if not os.path.exists(extracted_dir):
-            os.makedirs(extracted_dir)  # Create the directory if it doesn't exist
+            # Create the directory if it doesn't exist
+            os.makedirs(extracted_dir)
             # Extract all files from the ZIP archive into the directory
             with zipfile.ZipFile(file_name, "r") as zip_ref:
                 zip_ref.extractall(extracted_dir)
@@ -44,7 +51,7 @@ def unzip_data(file_name: str) -> list:
             os.path.join(extracted_dir, f) for f in os.listdir(extracted_dir)
         ]
         logger.info(
-            f"Unzipped {file_name} successfully into {extracted_dir}"
+            "Unzipped %s successfully into %s", file_name, extracted_dir
         )  # Log success
         return extracted_files
 
@@ -57,9 +64,9 @@ def unzip_data(file_name: str) -> list:
 @st.cache_data
 def load_data(file_name: str) -> pd.DataFrame:
     """
-    Loads data from a file (CSV, ZIP containing CSV, or Pickle). This function handles
-    different file types and returns the loaded data as a pandas DataFrame. The function
-    is cached to optimize performance.
+    Loads data from a file (CSV, ZIP containing CSV, or Pickle). This function
+    handles different file types and returns the loaded data as a pandas
+    DataFrame. The function is cached to optimize performance.
 
     Args:
         file_name (str): The path to the file (can be .csv, .zip, or .pkl).
@@ -69,7 +76,8 @@ def load_data(file_name: str) -> pd.DataFrame:
 
     Raises:
         ValueError: If the file type is unsupported.
-        Exception: If an error occurs during file loading, logs the error and raises the exception.
+        Exception: If an error occurs during file loading, logs the error and
+                  raises the exception.
     """
     try:
         # If the file is a CSV, load it directly

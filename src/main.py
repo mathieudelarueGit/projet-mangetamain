@@ -1,9 +1,8 @@
 import logging
-import pandas as pd
 import streamlit as st
 
-from data_loader import *
-from log_config import setup_logging
+from data_loader import load_data  # Explicit import
+from log_config import setup_logging  # Explicit import
 
 # Initialize logging
 setup_logging()
@@ -15,14 +14,16 @@ logger = logging.getLogger(__name__)
 df_PP_recipes = load_data("dataset/PP_recipes.csv.zip")
 df_PP_users = load_data("dataset/PP_users.csv.zip")
 df_ingredients = load_data("dataset/ingr_map.pkl")
+df_RAW_recipes = load_data("dataset/RAW_recipes.csv.zip")
 
 # Title
 st.write("Bienvenue sur l'application Streamlit de Mangetamain!")
 
 # Provide file options in a selectbox
-file_options = ["Recettes", "Utilisateurs", "Ingrédients"]
+file_options = ["Recettes", "Recettes brutes", "Utilisateurs", "Ingrédients"]
 dataframes = {
     "Recettes": df_PP_recipes,
+    "Recettes brutes": df_RAW_recipes,
     "Utilisateurs": df_PP_users,
     "Ingrédients": df_ingredients,
 }

@@ -17,11 +17,16 @@ class MaxLevelFilter(logging.Filter):
 
 def setup_logging() -> None:
     """
-    Configures the global logging for the application, ensuring logs are written to files.
+    Configures the global logging for the application, ensuring logs are
+    written to files.
+
     - Creates a "src/logs" directory if it doesn't exist.
-    - Sets up two separate log files: one for debug-level logs (DEBUG, INFO, WARNING)
-      and one for error-level logs (ERROR, CRITICAL).
+    - Sets up two separate log files: one for debug-level logs (DEBUG, INFO,
+      WARNING) and one for error-level logs (ERROR, CRITICAL).
     - Adds the module name to log messages.
+
+    Raises:
+        OSError: If the log directory cannot be created.
     """
 
     # Define the directory where log files will be stored
@@ -42,9 +47,13 @@ def setup_logging() -> None:
         debug_handler = logging.FileHandler(
             os.path.join(log_directory, "app_debug.log"), mode="a"
         )
-        debug_handler.setLevel(logging.DEBUG)  # Capture DEBUG, INFO, and WARNING logs
+
+        # Capture DEBUG, INFO, and WARNING logs
+        debug_handler.setLevel(logging.DEBUG)
         debug_handler.setFormatter(
-            logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+            logging.Formatter(
+                "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+            )
         )
         debug_handler.addFilter(MaxLevelFilter(logging.WARNING))
 
@@ -52,9 +61,13 @@ def setup_logging() -> None:
         error_handler = logging.FileHandler(
             os.path.join(log_directory, "app_error.log"), mode="a"
         )
-        error_handler.setLevel(logging.ERROR)  # Capture only ERROR and CRITICAL logs
+
+        # Capture only ERROR and CRITICAL logs
+        error_handler.setLevel(logging.ERROR)
         error_handler.setFormatter(
-            logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+            logging.Formatter(
+                "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+            )
         )
 
         # Add both handlers to the root logger
