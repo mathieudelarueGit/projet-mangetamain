@@ -4,12 +4,17 @@ version = "0.1.0"
 description = ""
 authors = ["Mathieu Delarue <mat.delarue@hotmail.fr>"]
 readme = "README.md"
+packages = [
+    { include = "src" }
+]
 
 [tool.poetry.dependencies]
 python = "^3.11"
 requests = "^2.32.3"
 streamlit = "^1.39.0"
 plotly = "^5.24.1"
+scikit-learn = "^1.5.2"
+numpy = "^2.1.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "^8.3.3"
@@ -28,4 +33,4 @@ build-backend = "poetry.core.masonry.api"
 omit = ["src/main.py"]
 
 [tool.black]
-line-length = 79
+line-length = 88

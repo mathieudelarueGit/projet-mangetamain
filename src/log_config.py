@@ -51,9 +51,7 @@ def setup_logging() -> None:
         # Capture DEBUG, INFO, and WARNING logs
         debug_handler.setLevel(logging.DEBUG)
         debug_handler.setFormatter(
-            logging.Formatter(
-                "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-            )
+            logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
         )
         debug_handler.addFilter(MaxLevelFilter(logging.WARNING))
 
@@ -65,9 +63,7 @@ def setup_logging() -> None:
         # Capture only ERROR and CRITICAL logs
         error_handler.setLevel(logging.ERROR)
         error_handler.setFormatter(
-            logging.Formatter(
-                "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-            )
+            logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
         )
 
         # Add both handlers to the root logger
