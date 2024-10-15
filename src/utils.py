@@ -5,7 +5,15 @@ import streamlit as st
 import re
 from log_config import *
 from data_loader import *
-
+import matplotlib.pyplot as plt
+import re
+import ast
+from log_config import *
+from sklearn.cluster import DBSCAN
+import matplotlib.pyplot as plt
+from sklearn.preprocessing import StandardScaler
+import seaborn as sns
+from data_loader import *
 # Get a logger specific to this module
 logger = logging.getLogger(__name__)
 
@@ -121,7 +129,7 @@ def filter_dataframebis1(df: pd.DataFrame, column_names: list, filter_values: li
         KeyError: If any column in column_names does not exist in the DataFrame.
     """
     # Calling the dataset_study function to analyze the DataFrame (ensure this function is defined elsewhere)
-    df = dataset_study(df)
+    #df = dataset_study(df)
     filtered_df = df.copy()
 
     # If filtering by only one column in the dataset
@@ -195,6 +203,51 @@ filter_values1=[
 df_filtered_bio=filter_dataframebis1(df,column_names,filter_values1)
 print(f"Number of rows in the filtered dataset: {len(df_filtered_bio)}")
 
+def parse_nutrition(nutrition_str: str)->float:
+    """Convert an string to a float."""
+    return np.array(ast.literal_eval(nutrition_str))
 
+def cluster_nutrition_data(df_filtered_bio, eps, min_samples):
+    # Parse the nutrition column
+    nutrition_data = df_filtered_bio['nutrition'].dropna().apply(parse_nutrition)
+    
+    # Convert to DataFrame
+    nutrition_df = pd.DataFrame(nutrition_data.tolist(), columns=[
+        'Calories', 'Total Fat (g)', 'Sugar (g)', 'Sodium (mg)', 'Protein (g)', 
+        'Saturated Fat (g)', 'Carbohydrates (g)'
+    ])
 
+    # Standardize the data
+    scaler = StandardScaler()
+    nutrition_data_scaled = scaler.fit_transform(nutrition_df)
 
+    # Apply DBSCAN
+    dbscan = DBSCAN(eps=eps, min_samples=min_samples)
+    clusters = dbscan.fit_predict(nutrition_data_scaled)
+
+    # Add clusters to data
+    nutrition_df['cluster'] = clusters
+
+    # Visualization function
+    def plot_clusters(x, y, xlabel, ylabel, title, filename):
+        plt.figure(figsize=(10, 6))
+        sns.scatterplot(x=nutrition_df[x], y=nutrition_df[y], hue=clusters, palette='viridis', legend='full')
+        plt.title(title)
+        plt.xlabel(xlabel)
+        plt.ylabel(ylabel)
+        plt.savefig(filename)
+        plt.show()
+    
+    # Plot clusters
+    plot_clusters('Calories', 'Total Fat (g)', 'Calories', 'Total Fat', 'Clustering by Calories and Total Fat', 'src/models/cluster_fat_calories1.png')
+    plot_clusters('Saturated Fat (g)', 'Sodium (mg)', 'Saturated Fat', 'Sodium', 'Clustering by Saturated Fat and Sodium', 'src/models/cluster_sodium_saturated_fat1.png')
+    plot_clusters('Sugar (g)', 'Saturated Fat (g)', 'Sugar', 'Saturated Fat', 'Clustering by Sugar and Saturated Fat', 'src/models/cluster_saturatedfat_sugar1.png')
+    plot_clusters('Sodium (mg)', 'Protein (g)', 'Sodium', 'Protein', 'Clustering by Sodium and Protein', 'src/models/cluster_sodium_proteins1.png')
+    plot_clusters('Total Fat (g)', 'Carbohydrates (g)', 'Total Fat', 'Carbohydrates', 'Clustering by Total Fat and Carbohydrates', 'src/models/cluster_fat_carbohydrates1.png')
+    plot_clusters('Calories', 'Carbohydrates (g)', 'Calories', 'Carbohydrates', 'Clustering by Calories and Carbohydrates', 'src/models/cluster_calories_carbohydrates.png')
+    
+
+eps=1.2
+min_samples=8
+# Usage example
+cluster_nutrition_data(df_filtered_bio,eps,min_samples)
