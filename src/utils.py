@@ -17,8 +17,8 @@ from data_loader import *
 # Get a logger specific to this module
 logger = logging.getLogger(__name__)
 
+
 df = load_data("dataset/RAW_recipes.csv.zip")
-print(df)
 
 # EDA
 def dataset_study(file_name: str) -> None:
@@ -169,10 +169,10 @@ def filter_dataframebis1(df: pd.DataFrame, column_names: list, filter_values: li
 #df_filtered_bio=filtering_dataframe(df,r'\b(organic|bio|clean|vegetable|vegan|traditional|eco-friendly|local|healthy|seasonal|green|natural|fresh|plant|sustainable|heritage|garden|whole|farm)\b')
 #print(df_filtered_bio)
 #column_names=['id']
-column_names=['tags','n_ingredients']
+#column_names=['tags','n_ingredients']
 #column_names=['n_ingredients']
 #column_names=['n_ingredients','contributor_id']
-#column_names=['tags']
+column_names=['tags']
 #column_names=['tags', 'contributor_id']
 #column_names=['tags', 'minutes']
 #column_names=['tags']
@@ -181,16 +181,16 @@ column_names=['tags','n_ingredients']
 #filter_values1=[[30,60]]
 #filter_values1=[['organic', 'bio', 'clean', 'vegetable', 'vegan', 'traditional', 'eco-friendly', 'local', 'healthy', 'seasonal', 'green', 'natural', 'fresh', 'plant', 'sustainable', 'heritage', 'garden', 'whole', 'farm'],[60,90,130]]
 #filter_values1=[['organic', 'bio', 'clean', 'vegetable', 'vegan', 'traditional', 'eco-friendly', 'local', 'healthy', 'seasonal', 'green', 'natural', 'fresh', 'plant', 'sustainable', 'heritage', 'garden', 'whole', 'farm'],[2.002290e+09,5.534885e+06]]
-#filter_values1=[['organic', 'bio', 'clean', 'vegetable', 'vegan', 'traditional', 'eco-friendly', 'local', 'healthy', 'seasonal', 'green', 'natural', 'fresh', 'plant', 'sustainable', 'heritage', 'garden', 'whole', 'farm']]
+filter_values1=[['organic', 'bio', 'clean', 'vegetable', 'vegan', 'traditional', 'eco-friendly', 'local', 'healthy', 'seasonal', 'green', 'natural', 'fresh', 'plant', 'sustainable', 'heritage', 'garden', 'whole', 'farm']]
 #filter_values1=r'\b(organic|bio|clean|vegetable|vegan|traditional|eco-friendly|local|healthy|seasonal|green|natural|fresh|plant|sustainable|heritage|garden|whole|farm)\b'
 #filter_values1=[
 #    ['organic', 'bio', 'clean', 'vegetable', 'vegan', 'traditional', 'eco-friendly', 'local', 'healthy', 'seasonal', 'green', 'natural', 'fresh', 'plant', 'sustainable', 'heritage', 'garden', 'whole', 'farm'],  # Filtre pour les tags
 #    [30, 60,90,130]  # minutes filter values
 #]
-filter_values1=[
-    ['organic', 'bio', 'clean', 'vegetable', 'vegan', 'traditional', 'eco-friendly', 'local', 'healthy', 'seasonal', 'green', 'natural', 'fresh', 'plant', 'sustainable', 'heritage', 'garden', 'whole', 'farm'],  # Filtre pour les tags
-    [9,11,13,18]  # contributor_id filter values
-]
+#filter_values1=[
+#    ['organic', 'bio', 'clean', 'vegetable', 'vegan', 'traditional', 'eco-friendly', 'local', 'healthy', 'seasonal', 'green', 'natural', 'fresh', 'plant', 'sustainable', 'heritage', 'garden', 'whole', 'farm'],  # Filtre pour les tags
+#    [9,11,13,18]  # contributor_id filter values
+#]
 #filter_values1=[
       # Filtre pour les tags
 #    [9,11,13,18], 
@@ -204,8 +204,10 @@ df_filtered_bio=filter_dataframebis1(df,column_names,filter_values1)
 print(f"Number of rows in the filtered dataset: {len(df_filtered_bio)}")
 
 def parse_nutrition(nutrition_str: str)->float:
-    """Convert an string to a float."""
-    return np.array(ast.literal_eval(nutrition_str))
+    try:
+        return np.array(ast.literal_eval(nutrition_str))
+    except ValueError:
+        return np.array([np.nan]*7)  # Gérer les erreurs de conversion
 
 def cluster_nutrition_data(df_filtered_bio, eps, min_samples):
     # Parse the nutrition column
@@ -216,13 +218,13 @@ def cluster_nutrition_data(df_filtered_bio, eps, min_samples):
         'Calories', 'Total Fat (g)', 'Sugar (g)', 'Sodium (mg)', 'Protein (g)', 
         'Saturated Fat (g)', 'Carbohydrates (g)'
     ])
-
+    nutrition_df = nutrition_df.sample(n=10000)
     # Standardize the data
     scaler = StandardScaler()
     nutrition_data_scaled = scaler.fit_transform(nutrition_df)
-
+    
     # Apply DBSCAN
-    dbscan = DBSCAN(eps=eps, min_samples=min_samples)
+    dbscan = DBSCAN(eps=eps, min_samples=min_samples, n_jobs=-1)
     clusters = dbscan.fit_predict(nutrition_data_scaled)
 
     # Add clusters to data
@@ -237,17 +239,18 @@ def cluster_nutrition_data(df_filtered_bio, eps, min_samples):
         plt.ylabel(ylabel)
         plt.savefig(filename)
         plt.show()
-    
+    ''
     # Plot clusters
-    plot_clusters('Calories', 'Total Fat (g)', 'Calories', 'Total Fat', 'Clustering by Calories and Total Fat', 'src/models/cluster_fat_calories1.png')
-    plot_clusters('Saturated Fat (g)', 'Sodium (mg)', 'Saturated Fat', 'Sodium', 'Clustering by Saturated Fat and Sodium', 'src/models/cluster_sodium_saturated_fat1.png')
-    plot_clusters('Sugar (g)', 'Saturated Fat (g)', 'Sugar', 'Saturated Fat', 'Clustering by Sugar and Saturated Fat', 'src/models/cluster_saturatedfat_sugar1.png')
-    plot_clusters('Sodium (mg)', 'Protein (g)', 'Sodium', 'Protein', 'Clustering by Sodium and Protein', 'src/models/cluster_sodium_proteins1.png')
-    plot_clusters('Total Fat (g)', 'Carbohydrates (g)', 'Total Fat', 'Carbohydrates', 'Clustering by Total Fat and Carbohydrates', 'src/models/cluster_fat_carbohydrates1.png')
+    plot_clusters('Calories', 'Total Fat (g)', 'Calories', 'Total Fat', 'Clustering by Calories and Total Fat', 'src/models/cluster_fat_calories.png')
+    plot_clusters('Saturated Fat (g)', 'Sodium (mg)', 'Saturated Fat', 'Sodium', 'Clustering by Saturated Fat and Sodium', 'src/models/cluster_sodium_saturated_fat.png')
+    plot_clusters('Sugar (g)', 'Saturated Fat (g)', 'Sugar', 'Saturated Fat', 'Clustering by Sugar and Saturated Fat', 'src/models/cluster_saturatedfat_sugar.png')
+    plot_clusters('Sodium (mg)', 'Protein (g)', 'Sodium', 'Protein', 'Clustering by Sodium and Protein', 'src/models/cluster_sodium_proteins.png')
+    plot_clusters('Total Fat (g)', 'Carbohydrates (g)', 'Total Fat', 'Carbohydrates', 'Clustering by Total Fat and Carbohydrates', 'src/models/cluster_fat_carbohydrates.png')
     plot_clusters('Calories', 'Carbohydrates (g)', 'Calories', 'Carbohydrates', 'Clustering by Calories and Carbohydrates', 'src/models/cluster_calories_carbohydrates.png')
     
 
-eps=1.2
-min_samples=8
+eps=2
+min_samples=9
 # Usage example
 cluster_nutrition_data(df_filtered_bio,eps,min_samples)
+
