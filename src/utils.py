@@ -204,12 +204,40 @@ df_filtered_bio=filter_dataframebis1(df,column_names,filter_values1)
 print(f"Number of rows in the filtered dataset: {len(df_filtered_bio)}")
 
 def parse_nutrition(nutrition_str: str)->float:
+    """
+    Convert a string representation of a nutrition list into a NumPy array.
+
+    The string is expected to contain a list of nutrition facts, which will be
+    parsed and converted into a NumPy array. If parsing fails, a NumPy array of NaNs
+    with a length of 7 is returned.
+
+    Args:
+        nutrition_str (str): String representation of the nutrition data (e.g., "[100, 10, 5, 300, 20, 3, 40]").
+
+    Returns:
+        np.ndarray: A NumPy array containing the parsed nutrition data, or an array of NaNs if parsing fails.
+    """
     try:
         return np.array(ast.literal_eval(nutrition_str))
     except ValueError:
         return np.array([np.nan]*7)  # Gérer les erreurs de conversion
 
 def cluster_nutrition_data(df_filtered_bio, eps, min_samples):
+    """
+    Perform clustering on nutritional data using DBSCAN and visualize the results.
+
+    This function extracts nutrition data from the 'nutrition' column of the provided DataFrame, 
+    scales it, and then applies the DBSCAN clustering algorithm. The resulting clusters are 
+    visualized using scatter plots.
+
+    Args:
+        df_filtered_bio (pd.DataFrame): The DataFrame containing the 'nutrition' column to be clustered.
+        eps (float): The maximum distance between two samples for one to be considered as in the neighborhood of the other (used in DBSCAN).
+        min_samples (int): The number of samples (or total weight) in a neighborhood for a point to be considered a core point (used in DBSCAN).
+
+    Returns:
+        None: The function does not return any values but saves the generated cluster plots to disk.
+    """
     # Parse the nutrition column
     nutrition_data = df_filtered_bio['nutrition'].dropna().apply(parse_nutrition)
     
@@ -232,6 +260,20 @@ def cluster_nutrition_data(df_filtered_bio, eps, min_samples):
 
     # Visualization function
     def plot_clusters(x, y, xlabel, ylabel, title, filename):
+        """
+        Create and save scatter plots of clustered nutritional data.
+
+        Args:
+            x (str): The name of the column to plot on the x-axis.
+            y (str): The name of the column to plot on the y-axis.
+            xlabel (str): The label for the x-axis.
+            ylabel (str): The label for the y-axis.
+            title (str): The title of the plot.
+            filename (str): The file path to save the plot image.
+
+        Returns:
+            None: The function saves the plot and does not return any values.
+        """
         plt.figure(figsize=(10, 6))
         sns.scatterplot(x=nutrition_df[x], y=nutrition_df[y], hue=clusters, palette='viridis', legend='full')
         plt.title(title)
@@ -239,7 +281,7 @@ def cluster_nutrition_data(df_filtered_bio, eps, min_samples):
         plt.ylabel(ylabel)
         plt.savefig(filename)
         plt.show()
-    ''
+    
     # Plot clusters
     plot_clusters('Calories', 'Total Fat (g)', 'Calories', 'Total Fat', 'Clustering by Calories and Total Fat', 'src/models/cluster_fat_calories.png')
     plot_clusters('Saturated Fat (g)', 'Sodium (mg)', 'Saturated Fat', 'Sodium', 'Clustering by Saturated Fat and Sodium', 'src/models/cluster_sodium_saturated_fat.png')
