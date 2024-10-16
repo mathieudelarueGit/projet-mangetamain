@@ -30,6 +30,7 @@ st.write("Welcome into Mangetamain! data exploration & analysis project")
 # Layout for columns
 row1_1, row1_2, row1_3, row1_4 = st.columns((3, 2, 2, 4))
 
+# A few statistics
 with row1_1:
     st.write("## Encyclopedia for foodies")
     st.write(f"Number of recipes: {df_RAW_recipes.shape[0]}")
@@ -50,6 +51,7 @@ with row1_4:
 # Second row of columns for graphs
 row2_1, row2_2, row2_3 = st.columns(3)
 
+# Display the graphs
 with row2_1:
     st.write("Most recipes are strongly rated:")
     st.plotly_chart(fig1)
