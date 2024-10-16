@@ -12,13 +12,9 @@ from log_config import *
 from sklearn.cluster import DBSCAN
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
-import seaborn as sns
 from data_loader import *
 # Get a logger specific to this module
 logger = logging.getLogger(__name__)
-
-
-df = load_data("dataset/RAW_recipes.csv.zip")
 
 # EDA
 def dataset_study(file_name: str) -> None:
