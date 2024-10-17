@@ -1,16 +1,16 @@
-import os
-print("Répertoire de travail main :", os.getcwd())
-
 import logging
+
 import streamlit as st
 
 # Set the page layout to full width, needs to be at the beginning of the script
-st.set_page_config(layout="wide") # Needs to be at the beginning of the script
+st.set_page_config(layout="wide")  # Needs to be at the beginning of the script
 
 # Explicit imports of home-made modules and features
-from data_loader import load_data  
-from log_config import setup_logging 
-from graphs import fig1, fig2, fig3, top10_hottest_recipes 
+from data_loader import load_data
+from log_config import setup_logging
+from visualisation.graphs import fig1, fig2, fig3, top10_hottest_recipes
+
+# from graphs import fig1, fig2, fig3, top10_hottest_recipes
 
 # Initialize logging
 setup_logging()
@@ -37,7 +37,9 @@ with row1_1:
 
 with row1_2:
     st.write("## Wide community")
-    st.write(f"As many as {df_PP_users.shape[0]} users got their hands dirty and shared their recipes")
+    st.write(
+        f"As many as {df_PP_users.shape[0]} users got their hands dirty and shared their recipes"
+    )
 
 with row1_3:
     st.write("## Varied food")
@@ -46,7 +48,9 @@ with row1_3:
 with row1_4:
     font_size = 2
     st.write("## Most popular recipes")
-    st.write(f"<font size={font_size}>Some recipes are too popular to be serious: \n {top10_hottest_recipes}</font>", unsafe_allow_html=True)
+    st.write(
+        f"<font size={font_size}>{top10_hottest_recipes}</font>", unsafe_allow_html=True
+    )
 
 # Second row of columns for graphs
 row2_1, row2_2, row2_3 = st.columns(3)
@@ -56,12 +60,12 @@ with row2_1:
     st.write("Most recipes are strongly rated:")
     st.plotly_chart(fig1)
     st.write("...hence rate will not be a good feature for recommendation.")
-    
+
 with row2_2:
     st.write("The website and the database was burning hot until 2011:")
     st.plotly_chart(fig2)
     st.write("...from that point on, Instagram probably took over.")
-    
+
 with row2_3:
     st.write("Some recipes are too popular to be serious:")
     st.plotly_chart(fig3)
