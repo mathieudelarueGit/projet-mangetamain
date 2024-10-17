@@ -24,9 +24,9 @@ df_PP_users = load_data("dataset/PP_users.csv.zip")
 df_ingredients = load_data("dataset/ingr_map.pkl")
 df_RAW_recipes = load_data("dataset/RAW_recipes.csv.zip")
 
-def main()->None:
-    """_summary_: this function deals with the display of the main page of the project
-    """
+
+def main() -> None:
+    """_summary_: this function deals with the display of the main page of the project"""
     # Title
     st.write("Welcome into Mangetamain! data exploration & analysis project")
 
@@ -44,35 +44,38 @@ def main()->None:
     with row0_4:
         font_size = 2
         st.write("## Most popular recipes")
-        
+
     # A few statistics
     # Fully aligned statistics
     row1_1, row1_2, row1_3, row1_4 = st.columns((3, 2, 2, 4))
-    
+
     with row1_1:
         st.write(f"Number of recipes: {df_RAW_recipes.shape[0]}")
-    
+
     with row1_2:
         st.write(
             f"As many as {df_PP_users.shape[0]} users got their hands dirty and shared their recipes"
         )
-    
+
     with row1_3:
         st.write(f"{df_ingredients.shape[0]} different ingredients are found")
-    
+
     with row1_4:
         font_size = 2
         st.write(
-            f"<font size={font_size}>{top10_hottest_recipes}</font>", unsafe_allow_html=True
+            f"<font size={font_size}>{top10_hottest_recipes}</font>",
+            unsafe_allow_html=True,
         )
 
     # Sidebar
-    st.sidebar.title("“This is the sidebar”")           ## TO DO
-    st.sidebar.markdown("“Let’s start with binary classification!!”") ## TO DO
+    st.sidebar.title("“This is the sidebar”")  ## TO DO
+    st.sidebar.markdown("“Let’s start with binary classification!!”")  ## TO DO
 
     # Shows if checkbox is checked, because it's slowing down the app
-    if st.sidebar.checkbox("Show general aspects", True): # Add a checkbox to display into the main page
-        st.subheader("Some general purpose analysis")            ## TO DO
+    if st.sidebar.checkbox(
+        "Show general aspects", True
+    ):  # Add a checkbox to display into the main page
+        st.subheader("Some general purpose analysis")  ## TO DO
 
         # Second row of columns for graphs
         row2_1, row2_2, row2_3 = st.columns(3)
@@ -92,25 +95,34 @@ def main()->None:
             st.write("Some recipes are too popular to be serious:")
             st.plotly_chart(fig3)
             st.write("...but we'll keep away from them as they might be biased.")
-            
-        st.sidebar.subheader("Choose classifier") # Add a subheader to the sidebar
-        
-        
-    classifier = st.sidebar.selectbox("Classifier", # Add a selectbox to the sidebar
-                                      ("Support Vector Machine (SVM)", ## TO DO: Add real classifiers
-                                       "Logistic Regression",          ## TO DO: Add real classifiers
-                                       "Random Forest"))               ## TO DO: Add real classifiers
+
+        st.sidebar.subheader("Choose classifier")  # Add a subheader to the sidebar
+
+    classifier = st.sidebar.selectbox(
+        "Classifier",  # Add a selectbox to the sidebar
+        (
+            "Support Vector Machine (SVM)",  ## TO DO: Add real classifiers
+            "Logistic Regression",  ## TO DO: Add real classifiers
+            "Random Forest",
+        ),
+    )  ## TO DO: Add real classifiers
 
     if classifier == "Support Vector Machine (SVM)":
         st.sidebar.subheader("Hyperparameters")
-        st.subheader("Here are the hyperparameters for SVM") ## TO DO: add real features
-        C = st.sidebar.number_input("C (Regularization parameter)", 0.01, 10.0, step=0.01, key="C")
-        kernel = st.sidebar.radio("Kernel", ("rbf", "linear"), key="kernel") 
-        gamma = st.sidebar.radio("Gamma (Kernal coefficient", ("scale", "auto"), key="gamma")
-        metrics = st.sidebar.multiselect("What metrics to plot?",
-                                     ("Confusion Matrix", 
-                                      "ROC Curve", 
-                                      "Precision-Recall Curve"))
+        st.subheader(
+            "Here are the hyperparameters for SVM"
+        )  ## TO DO: add real features
+        C = st.sidebar.number_input(
+            "C (Regularization parameter)", 0.01, 10.0, step=0.01, key="C"
+        )
+        kernel = st.sidebar.radio("Kernel", ("rbf", "linear"), key="kernel")
+        gamma = st.sidebar.radio(
+            "Gamma (Kernal coefficient", ("scale", "auto"), key="gamma"
+        )
+        metrics = st.sidebar.multiselect(
+            "What metrics to plot?",
+            ("Confusion Matrix", "ROC Curve", "Precision-Recall Curve"),
+        )
         st.write(f"kernel: {kernel}, C: {C}, gamma: {gamma}")
 
     # Provide file options in a selectbox
@@ -130,9 +142,10 @@ def main()->None:
         st.write(f"Data du dataframe: {selected_file}")
         df = dataframes[selected_file]
         st.write(df.head())
-        
+
+
 if __name__ == "__main__":
-    main() # this prevents the code from running when the module is imported
+    main()  # this prevents the code from running when the module is imported
 
 # # Title
 # st.write("Welcome into Mangetamain! data exploration & analysis project")
