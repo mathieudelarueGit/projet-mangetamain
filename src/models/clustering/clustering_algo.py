@@ -6,10 +6,7 @@ import ast
 import re
 from sklearn.cluster import DBSCAN
 from sklearn.preprocessing import StandardScaler
-from base import *
-from log_config import *
-from data_loader import *
-#from src.models.clustering.clustering_algo import ClusteringModel
+from src.models.clustering.base import BaseClustering
 
 
 class ClusteringModel(BaseClustering):
@@ -108,6 +105,7 @@ class ClusteringModel(BaseClustering):
     # Initialize and fit the model
     # Assuming df_filtered_bio is the DataFrame with features (X) and target (y)
 
+"""
 X = df_filtered_bio.drop(columns=['target']).values
 y = df_filtered_bio['target'].values
 model = ClusteringModel(eps=2, min_samples=9)
@@ -116,3 +114,4 @@ y_pred = model.predict(X)
 r2 = model.evaluate(y, y_pred)
 print(f"R-squared: {r2}")
 model.plot_clusters('Feature 1', 'Feature 2')
+"""
