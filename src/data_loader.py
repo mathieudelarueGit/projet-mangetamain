@@ -14,26 +14,29 @@ logger = logging.getLogger(__name__)
 def decompress_xz(file_name, output_dir):
     """
     Decompresses a plain .xz file into the output directory.
-    
+
     Args:
         file_name (str): Path to the .xz file.
         output_dir (str): Directory where the decompressed file will be stored.
-    
+
     Returns:
         str: Path to the decompressed file.
     """
-    output_file = os.path.join(output_dir, os.path.splitext(os.path.basename(file_name))[0])
-    with lzma.open(file_name, 'rb') as xz_file:
-        with open(output_file, 'wb') as out_file:
+    output_file = os.path.join(
+        output_dir, os.path.splitext(os.path.basename(file_name))[0]
+    )
+    with lzma.open(file_name, "rb") as xz_file:
+        with open(output_file, "wb") as out_file:
             out_file.write(xz_file.read())
     return output_file
+
 
 @st.cache_data
 def unzip_data(file_name: str) -> list:
     """
-    Unzips a ZIP or decompresses an XZ file and returns a list of the extracted files. This function
-    is cached by Streamlit to prevent repeated unzipping if the file hasn't
-    changed.
+    Unzips a ZIP or decompresses an XZ file and returns a list of the extracted files.
+    This function is cached by Streamlit to prevent repeated unzipping
+    if the file hasn't changed.
 
     Args:
         file_name (str): The path to the ZIP or XZ file to be uncompressed.
@@ -42,8 +45,8 @@ def unzip_data(file_name: str) -> list:
         list: A list of paths to the extracted files.
 
     Raises:
-        Exception: If an error occurs during unzipping or uncompressing, logs the error and
-                  raises the exception.
+        Exception: If an error occurs during unzipping or uncompressing, logs the error
+        and raises the exception.
     """
     try:
         # Create a unique directory for the extracted files, based on the file name
@@ -63,7 +66,9 @@ def unzip_data(file_name: str) -> list:
             elif file_name.endswith(".xz"):
                 decompressed_file = decompress_xz(file_name, extracted_dir)
                 logger.info(f"Decompressed XZ file: {decompressed_file}")
-                return [decompressed_file]  # Return the decompressed file path as a list
+                return [
+                    decompressed_file
+                ]  # Return the decompressed file path as a list
 
             else:
                 raise ValueError(f"Unsupported file type for {file_name}")
@@ -86,8 +91,8 @@ def unzip_data(file_name: str) -> list:
 @st.cache_data
 def load_data(file_name: str) -> pd.DataFrame:
     """
-    Loads data from a file (CSV, ZIP containing CSV, or XZ containing CSV). This function
-    handles different file types and returns the loaded data as a pandas
+    Loads data from a file (CSV, ZIP containing CSV, or XZ containing CSV).
+    This function handles different file types and returns the loaded data as a pandas
     DataFrame. The function is cached to optimize performance.
 
     Args:

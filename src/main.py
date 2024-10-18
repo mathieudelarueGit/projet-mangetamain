@@ -21,7 +21,13 @@ df_RAW_interactions = load_data("dataset/RAW_interactions.csv.xz")
 st.write("Bienvenue sur notre nouvelle app Streamlit!")
 
 # Provide file options in a selectbox
-file_options = ["Recettes", "Recettes brutes", "Utilisateurs", "Ingrédients", "Interactions utilisateurs"]
+file_options = [
+    "Recettes",
+    "Recettes brutes",
+    "Utilisateurs",
+    "Ingrédients",
+    "Interactions utilisateurs",
+]
 dataframes = {
     "Recettes": df_PP_recipes,
     "Recettes brutes": df_RAW_recipes,
