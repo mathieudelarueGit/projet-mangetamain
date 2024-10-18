@@ -23,7 +23,8 @@ df_PP_users = data_loader.load_data("dataset/PP_users.csv.zip")
 df_ingredients = data_loader.load_data("dataset/ingr_map.pkl")
 df_RAW_recipes = data_loader.load_data("dataset/RAW_recipes.csv.zip")
 # Not used here, comment out as req :
-# df_RAW_interactions = data_loader.load_data("dataset/RAW_interactions.csv.xz") 
+# df_RAW_interactions = data_loader.load_data("dataset/RAW_interactions.csv.xz")
+
 
 def main() -> None:
     """_summary_: this function deals with the display of the main page of the project"""
