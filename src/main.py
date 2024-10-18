@@ -18,8 +18,7 @@ df_RAW_recipes = load_data("dataset/RAW_recipes.csv.zip")
 df_RAW_interactions = load_data("dataset/RAW_interactions.csv.xz")
 
 # Title
-resultat = string_test
-st.write(resultat)
+st.write("Bienvenue sur notre nouvelle app Streamlit!")
 
 # Provide file options in a selectbox
 file_options = ["Recettes", "Recettes brutes", "Utilisateurs", "Ingrédients", "Interactions utilisateurs"]
