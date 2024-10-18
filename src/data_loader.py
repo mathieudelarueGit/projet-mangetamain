@@ -62,6 +62,7 @@ class DataLoader:
         """
         Loads data from a file (CSV, ZIP containing CSV, or XZ containing CSV).
         """
+        logger.info(f"Loading data from {file_name}")  # Log when data is being loaded
         try:
             if file_name.endswith(".csv"):
                 df = pd.read_csv(file_name)
