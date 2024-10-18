@@ -1,7 +1,7 @@
 import logging
 import streamlit as st
 
-from data_loader import load_data
+from data_loader import DataLoader
 from log_config import setup_logging
 
 # Initialize logging
@@ -10,12 +10,15 @@ setup_logging()
 # Get a logger specific to this module
 logger = logging.getLogger(__name__)
 
+# Instantiate the DataLoader
+data_loader = DataLoader()
+
 # Load data files into dataframes
-df_PP_recipes = load_data("dataset/PP_recipes.csv.zip")
-df_PP_users = load_data("dataset/PP_users.csv.zip")
-df_ingredients = load_data("dataset/ingr_map.pkl")
-df_RAW_recipes = load_data("dataset/RAW_recipes.csv.zip")
-df_RAW_interactions = load_data("dataset/RAW_interactions.csv.xz")
+df_PP_recipes = data_loader.load_data("dataset/PP_recipes.csv.zip")
+df_PP_users = data_loader.load_data("dataset/PP_users.csv.zip")
+df_ingredients = data_loader.load_data("dataset/ingr_map.pkl")
+df_RAW_recipes = data_loader.load_data("dataset/RAW_recipes.csv.zip")
+df_RAW_interactions = data_loader.load_data("dataset/RAW_interactions.csv.xz")
 
 # Title
 st.write("Bienvenue sur notre nouvelle app Streamlit!")
