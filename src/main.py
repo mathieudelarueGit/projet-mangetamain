@@ -56,8 +56,9 @@ def main() -> None:
 
     with row1_2:
         st.write(
-            "As many as {} users got their hands dirty and shared their recipes"
-            .format(df_PP_users.shape[0])
+            "As many as {} users got their hands dirty and shared their recipes".format(
+                df_PP_users.shape[0]
+            )
         )
 
     with row1_3:
