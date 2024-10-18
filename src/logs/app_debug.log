@@ -255,3 +255,36 @@
 2024-10-18 12:16:37,198 - data_loader - INFO - Loaded CSV from ZIP: dataset/RAW_recipes.csv_extracted/RAW_recipes.csv
 2024-10-18 12:16:38,145 - data_loader - INFO - Successfully extracted dataset/RAW_interactions.csv.xz into dataset/RAW_interactions.csv_extracted
 2024-10-18 12:16:43,945 - data_loader - INFO - Loaded CSV from XZ: dataset/RAW_interactions.csv_extracted/RAW_interactions.csv
+2024-10-18 13:26:18,949 - data_loader - INFO - Loaded CSV from ZIP: dataset/PP_recipes.csv_extracted/PP_recipes.csv
+2024-10-18 13:26:19,747 - data_loader - INFO - Loaded CSV from ZIP: dataset/PP_users.csv_extracted/PP_users.csv
+2024-10-18 13:26:19,843 - data_loader - INFO - Loaded Pickle file: dataset/ingr_map.pkl
+2024-10-18 13:26:25,246 - data_loader - INFO - Loaded CSV from ZIP: dataset/RAW_recipes.csv_extracted/RAW_recipes.csv
+2024-10-18 13:26:32,821 - data_loader - INFO - Loaded CSV from XZ: dataset/RAW_interactions.csv_extracted/RAW_interactions.csv
+2024-10-18 13:42:19,325 - data_loader - INFO - Loaded CSV from ZIP: dataset/PP_recipes.csv_extracted/PP_recipes.csv
+2024-10-18 13:42:20,077 - data_loader - INFO - Loaded CSV from ZIP: dataset/PP_users.csv_extracted/PP_users.csv
+2024-10-18 13:42:20,177 - data_loader - INFO - Loaded Pickle file: dataset/ingr_map.pkl
+2024-10-18 13:42:25,354 - data_loader - INFO - Loaded CSV from ZIP: dataset/RAW_recipes.csv_extracted/RAW_recipes.csv
+2024-10-18 13:42:32,212 - data_loader - INFO - Loaded CSV from XZ: dataset/RAW_interactions.csv_extracted/RAW_interactions.csv
+2024-10-18 13:55:58,414 - data_loader - INFO - Loaded CSV from ZIP: dataset/PP_recipes.csv_extracted/PP_recipes.csv
+2024-10-18 13:55:59,185 - data_loader - INFO - Loaded CSV from ZIP: dataset/PP_users.csv_extracted/PP_users.csv
+2024-10-18 13:55:59,272 - data_loader - INFO - Loaded Pickle file: dataset/ingr_map.pkl
+2024-10-18 13:56:04,492 - data_loader - INFO - Loaded CSV from ZIP: dataset/RAW_recipes.csv_extracted/RAW_recipes.csv
+2024-10-18 13:56:11,661 - data_loader - INFO - Loaded CSV from XZ: dataset/RAW_interactions.csv_extracted/RAW_interactions.csv
+2024-10-18 14:31:18,201 - data_loader - INFO - Loading data from dataset/PP_recipes.csv.zip
+2024-10-18 14:31:21,700 - data_loader - INFO - Loaded CSV from ZIP: dataset/PP_recipes.csv_extracted/PP_recipes.csv
+2024-10-18 14:31:22,275 - data_loader - INFO - Loading data from dataset/PP_users.csv.zip
+2024-10-18 14:31:22,492 - data_loader - INFO - Loaded CSV from ZIP: dataset/PP_users.csv_extracted/PP_users.csv
+2024-10-18 14:31:22,520 - data_loader - INFO - Loading data from dataset/ingr_map.pkl
+2024-10-18 14:31:22,590 - data_loader - INFO - Loaded Pickle file: dataset/ingr_map.pkl
+2024-10-18 14:31:22,598 - data_loader - INFO - Loading data from dataset/RAW_recipes.csv.zip
+2024-10-18 14:31:28,286 - data_loader - INFO - Loaded CSV from ZIP: dataset/RAW_recipes.csv_extracted/RAW_recipes.csv
+2024-10-18 14:31:29,279 - data_loader - INFO - Loading data from dataset/RAW_interactions.csv.xz
+2024-10-18 14:31:35,775 - data_loader - INFO - Loaded CSV from XZ: dataset/RAW_interactions.csv_extracted/RAW_interactions.csv
+2024-10-18 16:57:17,339 - data_loader - INFO - Loading data from dataset/PP_recipes.csv.zip
+2024-10-18 16:57:20,230 - data_loader - INFO - Loaded CSV from ZIP: dataset/PP_recipes.csv_extracted/PP_recipes.csv
+2024-10-18 16:57:20,889 - data_loader - INFO - Loading data from dataset/PP_users.csv.zip
+2024-10-18 16:57:21,103 - data_loader - INFO - Loaded CSV from ZIP: dataset/PP_users.csv_extracted/PP_users.csv
+2024-10-18 16:57:21,132 - data_loader - INFO - Loading data from dataset/ingr_map.pkl
+2024-10-18 16:57:21,206 - data_loader - INFO - Loaded Pickle file: dataset/ingr_map.pkl
+2024-10-18 16:57:21,212 - data_loader - INFO - Loading data from dataset/RAW_recipes.csv.zip
+2024-10-18 16:57:26,913 - data_loader - INFO - Loaded CSV from ZIP: dataset/RAW_recipes.csv_extracted/RAW_recipes.csv
