@@ -7,8 +7,10 @@ st.set_page_config(layout="wide")  # Needs to be at the beginning of the script
 
 from data_loader import DataLoader
 from log_config import setup_logging
-from utils import df_filtered_bio, rate_bio_recipes
+from src.utils import df_filtered_bio, rate_bio_recipes
 from visualisation.graphs import fig1, fig2, fig3, top10_hottest_recipes
+from visualisation.graphs_nutrition import categories, nutrition_hist
+
 
 # Initialize logging
 setup_logging()
@@ -78,7 +80,9 @@ def main() -> None:
 
     # Sidebar
     st.sidebar.title("“This is the sidebar”")  ## TO DO
-    st.sidebar.markdown("“Let’s start with binary classification!!”")  ## TO DO
+    st.sidebar.markdown(
+        "“Let’s start with binary and non-binary classification!!”"
+    )  ## TO DO
 
     # Shows if checkbox is checked, because it's slowing down the app
     if st.sidebar.checkbox(
@@ -104,6 +108,14 @@ def main() -> None:
             st.write("Some recipes are too popular to be serious:")
             st.plotly_chart(fig3)
             st.write("...but we'll keep away from them as they might be biased.")
+        st.sidebar.subheader("Choose classifier")  # Add a subheader to the sidebar
+        # TO DO: Add real classifiers
+        # Create a dropdown for the user to select the category
+        st.title("Top 5 Recipes per nutritionnal component")
+        # Créer une liste déroulante (selectbox) pour sélectionner la catégorie
+        selected_category = st.selectbox("Select a nutritional component", categories)
+        # Afficher le graphique correspondant à la catégorie sélectionnée
+        st.plotly_chart(nutrition_hist[selected_category])
 
         st.sidebar.subheader("Choose classifier")  # Add a subheader to the sidebar
 
@@ -150,6 +162,7 @@ def main() -> None:
         )
         st.write(f"eps: {eps},min_samples: {min_samples} ,metric: {metrics}")
     # Provide file options in a selectbox
+
     file_options = ["Recettes", "Recettes brutes", "Utilisateurs", "Ingrédients"]
     dataframes = {
         "Recettes": df_PP_recipes,
