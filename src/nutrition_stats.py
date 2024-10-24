@@ -1,17 +1,49 @@
-from src.utils import df_filtered_bio
+from utils import df_filtered_bio
 import ast
 import pandas as pd
 
 
 def parse_nutrition(nutrition_str):
     """
-    Parses a string representation of the nutrition data into a list.
+    Parses a string representation of nutritional data into a list of floats.
+    The input string typically represents a list-like format.
+    with 7 nutritional values,
+    and this function extracts those values into a Python list.
+
+    If the input string cannot be parsed correctly.
+    (e.g., due to syntax errors or invalid format).
+    the function returns a list with seven `None` values.
+    which ensures that all returned lists.
+    have a consistent length, even in case of parsing failures.
 
     Args:
-        nutrition_str (str): A string containing a list-like format.
+        nutrition_str (str): A string that contains a list-like structure.
+        with nutritional information.
+        The expected format of the string is similar to:
+        "[calories, total_fat, sugar, sodium, protein, saturated_fat, carbohydrates]".
+        Example: "[250.0, 10.0, 12.0, 200.0, 5.0, 3.0, 30.0]"
 
     Returns:
-        list: A list of nutritional values or a list of None values if parsing fails.
+        list: A list of 7 nutritional values as floats, or a list of 7 `None` elements
+        if the string could not be parsed. The 7 elements correspond to:
+            - Calories (float)
+            - Total Fat (g) (float)
+            - Sugar (g) (float)
+            - Sodium (mg) (float)
+            - Protein (g) (float)
+            - Saturated Fat (g) (float)
+            - Carbohydrates (g) (float)
+
+    Example:
+        >>> parse_nutrition("[250.0, 10.0, 12.0, 200.0, 5.0, 3.0, 30.0]")
+        [250.0, 10.0, 12.0, 200.0, 5.0, 3.0, 30.0]
+
+        >>> parse_nutrition("invalid_string")
+        [None, None, None, None, None, None, None]
+
+    Raises:
+        None: This function does not raise exceptions but instead catches parsing errors
+        and returns a list of `None` values if the input is not in the correct format.
     """
     try:
         # Attempt to parse the string into a Python list using literal_eval
@@ -23,14 +55,35 @@ def parse_nutrition(nutrition_str):
 
 def stats_bio(df_filtered_bio: pd.DataFrame) -> pd.DataFrame:
     """
-    Calculate and display various statistical indicators,
-    as well as identify the 5 recipes with the highest calorie content.
-
+    This function processes a filtered DataFrame of bio recipes and performs.
+    the following tasks:
+    1. Extracts and parses the 'nutrition' column to convert stringified.
+    nutrition data into a usable format.
+    2. Calculates statistical indicators (mean, median, etc.) for various.
+      nutritional components.
+    3. Adds ranking columns to the DataFrame for calories, fats,
+        sugars, sodium, proteins.
+      saturated fats, and carbohydrates.
+    4. Identifies and flags the top 5 recipes in each nutritional component.
+    based on the highest values.
+    The resulting DataFrame contains the original recipe data.
+    the parsed nutritional components.
+    the ranking for each component, and boolean flags indicating whether.
+    a recipe is in the top 5 for each category.
     Args:
-        df_filtered_bio (pd.DataFrame): A filtered DataFrame containing recipes.
-
-    Returns:
-        None
+        df_filtered_bio (pd.DataFrame): A filtered DataFrame containing recipe data.
+        The DataFrame must include
+        a column 'nutrition', where the nutritional information for each recipe.
+        is stored as a string.
+    Returns
+        pd.DataFrame: A DataFrame containing the original recipe data,
+        parsed nutritional data, rankings for each nutritional component,
+        and boolean flags for top 5 recipes in each category.
+    Example:
+        # Assuming df_filtered_bio is a DataFrame with a 'nutrition' column.
+        # in string format.
+        combined_df = stats_bio(df_filtered_bio)
+        combined_df.head()  # To see the result
     """
     # Apply the parse_nutrition function to the 'nutrition' column
     nutrition_data = df_filtered_bio["nutrition"].dropna().apply(parse_nutrition)
