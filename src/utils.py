@@ -1,6 +1,6 @@
 import pandas as pd
 import re  # N'oubliez pas d'importer le module `re` pour les expressions régulières
-from src.data_loader import DataLoader
+from data_loader import DataLoader
 
 # Loads the raw interactions dataset using the data_loader module
 data_loader = DataLoader()
