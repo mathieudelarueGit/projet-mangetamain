@@ -7,7 +7,13 @@ st.set_page_config(layout="wide")  # Needs to be at the beginning of the script
 
 from data_loader import DataLoader
 from log_config import setup_logging
-from utils import df_filtered_bio, rate_bio_recipes
+from utils import (
+    df_filtered_bio,
+    rate_bio_recipes,
+    percent_outliers,
+    outliers_zscore_df,
+    outliers_zscore,
+)
 from visualisation.graphs import fig1, fig2, fig3, top10_hottest_recipes
 from visualisation.graphs_nutrition import categories, nutrition_hist
 
@@ -60,6 +66,12 @@ def main() -> None:
             f"Number of bio recipes: {df_filtered_bio.shape[0]:,}".replace(",", " ")
         )
         st.write(f"Proportion of bio recipes: {rate_bio_recipes:.2f}%")
+        st.write(f"Number of outliers in the bio recipes: {len(outliers_zscore_df)}")
+        st.write(f"Proportion of outliers in the bio recipes: {percent_outliers:.2f}%")
+        st.write("Number of outliers for each column:")
+        # Loop for each column to count outliers
+        for column, num_outliers in outliers_zscore.items():
+            st.write(f"{column}: {num_outliers}")
 
     with row1_2:
         st.write(

@@ -1,6 +1,7 @@
 import pandas as pd
 import re  # N'oubliez pas d'importer le module `re` pour les expressions régulières
 from data_loader import DataLoader
+from scipy import stats
 
 # Loads the raw interactions dataset using the data_loader module
 data_loader = DataLoader()
@@ -102,3 +103,11 @@ filter_values1_bio = [
 
 df_filtered_bio = filter_dataframebis1(df, column_names, filter_values1_bio)
 rate_bio_recipes = float((len(df_filtered_bio) / len(df)) * 100)
+# Select numeric columns from df_filtered_bio.
+numeric_columns = df_filtered_bio.select_dtypes(include=["float64", "int64"]).columns
+# Calculate z-score for each column.
+z_scores = stats.zscore(df_filtered_bio[numeric_columns])
+# Identify outliers (Z-score > 3 ou < -3).
+outliers_zscore = (abs(z_scores) > 3).sum(axis=0)
+outliers_zscore_df = df_filtered_bio[(abs(z_scores) > 3).any(axis=1)]
+percent_outliers = len(outliers_zscore_df) / len(df_filtered_bio) * 100
