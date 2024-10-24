@@ -7,7 +7,7 @@ st.set_page_config(layout="wide")  # Needs to be at the beginning of the script
 
 from data_loader import DataLoader
 from log_config import setup_logging
-from src.utils import df_filtered_bio, rate_bio_recipes
+from utils import df_filtered_bio, rate_bio_recipes
 from visualisation.graphs import fig1, fig2, fig3, top10_hottest_recipes
 from visualisation.graphs_nutrition import categories, nutrition_hist
 
@@ -108,7 +108,6 @@ def main() -> None:
             st.write("Some recipes are too popular to be serious:")
             st.plotly_chart(fig3)
             st.write("...but we'll keep away from them as they might be biased.")
-        st.sidebar.subheader("Choose classifier")  # Add a subheader to the sidebar
         # TO DO: Add real classifiers
         # Create a dropdown for the user to select the category
         st.title("Top 5 Recipes per nutritionnal component")
@@ -122,7 +121,6 @@ def main() -> None:
     classifier = st.sidebar.selectbox(
         "Classifier",  # Add a selectbox to the sidebar
         (
-            "DBSCAN",
             "Support Vector Machine (SVM)",  ## TO DO: Add real classifiers
             "Logistic Regression",  ## TO DO: Add real classifiers
             "Random Forest",
@@ -146,21 +144,6 @@ def main() -> None:
             ("Confusion Matrix", "ROC Curve", "Precision-Recall Curve"),
         )
         st.write(f"kernel: {kernel}, C: {C}, gamma: {gamma}, metrics: {metrics}")
-
-    if classifier == "DBSCAN":
-        st.sidebar.subheader("Hyperparameters")
-        st.subheader(
-            "Here are the hyperparameters for DBSCAN"
-        )  ## TO DO: add real features
-        eps = st.sidebar.number_input("eps", 0.00, 4.00, step=0.01, key="eps")
-        min_samples = st.sidebar.number_input(
-            "min samples", 1, 20, step=1, key="min_samples"
-        )
-        metrics = st.sidebar.multiselect(
-            "What metrics to plot?",
-            ("Silhouette Index", "Calinski-Harabasz Index"),
-        )
-        st.write(f"eps: {eps},min_samples: {min_samples} ,metric: {metrics}")
     # Provide file options in a selectbox
 
     file_options = ["Recettes", "Recettes brutes", "Utilisateurs", "Ingrédients"]

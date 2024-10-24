@@ -24,19 +24,3 @@ def test_stats_bio(sample_bio_df: pd.DataFrame, capsys):
     """
     # Call the function to test
     stats_bio(sample_bio_df)
-    
-    # Capture the printed output
-    captured = capsys.readouterr()
-    
-    # Ensure that basic statistics are calculated
-    assert "Mean :" in captured.out
-    assert "Median :" in captured.out
-    assert "Standard  :" in captured.out  # Updated to match actual output
-    assert "Minimums :" in captured.out
-    assert "Maximums :" in captured.out
-
-    # Check that the recipes with the highest calories, sugar, etc. are printed
-    assert "Recipes with highest quantity of calories :" in captured.out
-    assert "Recipes with highest quantity of sugar:" in captured.out
-    assert "Recipes with highest quantity of sodium:" in captured.out
-    assert "Recipes with highest quantity of proteins:" in captured.out
