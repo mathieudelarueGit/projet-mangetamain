@@ -18,3 +18,211 @@
 2024-10-05 14:06:52,196 - __main__ - CRITICAL - critical
 2024-10-05 14:07:02,035 - __main__ - ERROR - error
 2024-10-05 14:07:02,036 - __main__ - CRITICAL - critical
+2024-11-04 08:43:22,626 - asyncio - ERROR - Task exception was never retrieved
+future: <Task finished name='Task-138' coro=<WebSocketProtocol13.write_message.<locals>.wrapper() done, defined at /Users/mathieudelarue/Desktop/TelecomParis/Kit Big Data/projet-mangetamain/.venv/lib/python3.11/site-packages/tornado/websocket.py:1086> exception=WebSocketClosedError()>
+Traceback (most recent call last):
+  File "/Users/mathieudelarue/Desktop/TelecomParis/Kit Big Data/projet-mangetamain/.venv/lib/python3.11/site-packages/tornado/websocket.py", line 1088, in wrapper
+    await fut
+tornado.iostream.StreamClosedError: Stream is closed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/mathieudelarue/Desktop/TelecomParis/Kit Big Data/projet-mangetamain/.venv/lib/python3.11/site-packages/tornado/websocket.py", line 1090, in wrapper
+    raise WebSocketClosedError()
+tornado.websocket.WebSocketClosedError
+2024-11-04 08:43:22,631 - asyncio - ERROR - Task exception was never retrieved
+future: <Task finished name='Task-139' coro=<WebSocketProtocol13.write_message.<locals>.wrapper() done, defined at /Users/mathieudelarue/Desktop/TelecomParis/Kit Big Data/projet-mangetamain/.venv/lib/python3.11/site-packages/tornado/websocket.py:1086> exception=WebSocketClosedError()>
+Traceback (most recent call last):
+  File "/Users/mathieudelarue/Desktop/TelecomParis/Kit Big Data/projet-mangetamain/.venv/lib/python3.11/site-packages/tornado/websocket.py", line 1088, in wrapper
+    await fut
+tornado.iostream.StreamClosedError: Stream is closed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/mathieudelarue/Desktop/TelecomParis/Kit Big Data/projet-mangetamain/.venv/lib/python3.11/site-packages/tornado/websocket.py", line 1090, in wrapper
+    raise WebSocketClosedError()
+tornado.websocket.WebSocketClosedError
+2024-11-04 08:43:22,635 - asyncio - ERROR - Task exception was never retrieved
+future: <Task finished name='Task-140' coro=<WebSocketProtocol13.write_message.<locals>.wrapper() done, defined at /Users/mathieudelarue/Desktop/TelecomParis/Kit Big Data/projet-mangetamain/.venv/lib/python3.11/site-packages/tornado/websocket.py:1086> exception=WebSocketClosedError()>
+Traceback (most recent call last):
+  File "/Users/mathieudelarue/Desktop/TelecomParis/Kit Big Data/projet-mangetamain/.venv/lib/python3.11/site-packages/tornado/websocket.py", line 1088, in wrapper
+    await fut
+tornado.iostream.StreamClosedError: Stream is closed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/mathieudelarue/Desktop/TelecomParis/Kit Big Data/projet-mangetamain/.venv/lib/python3.11/site-packages/tornado/websocket.py", line 1090, in wrapper
+    raise WebSocketClosedError()
+tornado.websocket.WebSocketClosedError
+2024-11-04 08:43:22,636 - asyncio - ERROR - Task exception was never retrieved
+future: <Task finished name='Task-141' coro=<WebSocketProtocol13.write_message.<locals>.wrapper() done, defined at /Users/mathieudelarue/Desktop/TelecomParis/Kit Big Data/projet-mangetamain/.venv/lib/python3.11/site-packages/tornado/websocket.py:1086> exception=WebSocketClosedError()>
+Traceback (most recent call last):
+  File "/Users/mathieudelarue/Desktop/TelecomParis/Kit Big Data/projet-mangetamain/.venv/lib/python3.11/site-packages/tornado/websocket.py", line 1088, in wrapper
+    await fut
+tornado.iostream.StreamClosedError: Stream is closed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/mathieudelarue/Desktop/TelecomParis/Kit Big Data/projet-mangetamain/.venv/lib/python3.11/site-packages/tornado/websocket.py", line 1090, in wrapper
+    raise WebSocketClosedError()
+tornado.websocket.WebSocketClosedError
+2024-11-04 08:43:22,637 - asyncio - ERROR - Task exception was never retrieved
+future: <Task finished name='Task-142' coro=<WebSocketProtocol13.write_message.<locals>.wrapper() done, defined at /Users/mathieudelarue/Desktop/TelecomParis/Kit Big Data/projet-mangetamain/.venv/lib/python3.11/site-packages/tornado/websocket.py:1086> exception=WebSocketClosedError()>
+Traceback (most recent call last):
+  File "/Users/mathieudelarue/Desktop/TelecomParis/Kit Big Data/projet-mangetamain/.venv/lib/python3.11/site-packages/tornado/websocket.py", line 1088, in wrapper
+    await fut
+tornado.iostream.StreamClosedError: Stream is closed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/mathieudelarue/Desktop/TelecomParis/Kit Big Data/projet-mangetamain/.venv/lib/python3.11/site-packages/tornado/websocket.py", line 1090, in wrapper
+    raise WebSocketClosedError()
+tornado.websocket.WebSocketClosedError
+2024-11-04 08:43:22,648 - asyncio - ERROR - Task exception was never retrieved
+future: <Task finished name='Task-143' coro=<WebSocketProtocol13.write_message.<locals>.wrapper() done, defined at /Users/mathieudelarue/Desktop/TelecomParis/Kit Big Data/projet-mangetamain/.venv/lib/python3.11/site-packages/tornado/websocket.py:1086> exception=WebSocketClosedError()>
+Traceback (most recent call last):
+  File "/Users/mathieudelarue/Desktop/TelecomParis/Kit Big Data/projet-mangetamain/.venv/lib/python3.11/site-packages/tornado/websocket.py", line 1088, in wrapper
+    await fut
+tornado.iostream.StreamClosedError: Stream is closed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/mathieudelarue/Desktop/TelecomParis/Kit Big Data/projet-mangetamain/.venv/lib/python3.11/site-packages/tornado/websocket.py", line 1090, in wrapper
+    raise WebSocketClosedError()
+tornado.websocket.WebSocketClosedError
+2024-11-04 08:43:22,650 - asyncio - ERROR - Task exception was never retrieved
+future: <Task finished name='Task-144' coro=<WebSocketProtocol13.write_message.<locals>.wrapper() done, defined at /Users/mathieudelarue/Desktop/TelecomParis/Kit Big Data/projet-mangetamain/.venv/lib/python3.11/site-packages/tornado/websocket.py:1086> exception=WebSocketClosedError()>
+Traceback (most recent call last):
+  File "/Users/mathieudelarue/Desktop/TelecomParis/Kit Big Data/projet-mangetamain/.venv/lib/python3.11/site-packages/tornado/websocket.py", line 1088, in wrapper
+    await fut
+tornado.iostream.StreamClosedError: Stream is closed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/mathieudelarue/Desktop/TelecomParis/Kit Big Data/projet-mangetamain/.venv/lib/python3.11/site-packages/tornado/websocket.py", line 1090, in wrapper
+    raise WebSocketClosedError()
+tornado.websocket.WebSocketClosedError
+2024-11-04 08:43:22,652 - asyncio - ERROR - Task exception was never retrieved
+future: <Task finished name='Task-145' coro=<WebSocketProtocol13.write_message.<locals>.wrapper() done, defined at /Users/mathieudelarue/Desktop/TelecomParis/Kit Big Data/projet-mangetamain/.venv/lib/python3.11/site-packages/tornado/websocket.py:1086> exception=WebSocketClosedError()>
+Traceback (most recent call last):
+  File "/Users/mathieudelarue/Desktop/TelecomParis/Kit Big Data/projet-mangetamain/.venv/lib/python3.11/site-packages/tornado/websocket.py", line 1088, in wrapper
+    await fut
+tornado.iostream.StreamClosedError: Stream is closed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/mathieudelarue/Desktop/TelecomParis/Kit Big Data/projet-mangetamain/.venv/lib/python3.11/site-packages/tornado/websocket.py", line 1090, in wrapper
+    raise WebSocketClosedError()
+tornado.websocket.WebSocketClosedError
+2024-11-04 08:43:22,654 - asyncio - ERROR - Task exception was never retrieved
+future: <Task finished name='Task-146' coro=<WebSocketProtocol13.write_message.<locals>.wrapper() done, defined at /Users/mathieudelarue/Desktop/TelecomParis/Kit Big Data/projet-mangetamain/.venv/lib/python3.11/site-packages/tornado/websocket.py:1086> exception=WebSocketClosedError()>
+Traceback (most recent call last):
+  File "/Users/mathieudelarue/Desktop/TelecomParis/Kit Big Data/projet-mangetamain/.venv/lib/python3.11/site-packages/tornado/websocket.py", line 1088, in wrapper
+    await fut
+tornado.iostream.StreamClosedError: Stream is closed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/mathieudelarue/Desktop/TelecomParis/Kit Big Data/projet-mangetamain/.venv/lib/python3.11/site-packages/tornado/websocket.py", line 1090, in wrapper
+    raise WebSocketClosedError()
+tornado.websocket.WebSocketClosedError
+2024-11-04 08:43:22,657 - asyncio - ERROR - Task exception was never retrieved
+future: <Task finished name='Task-147' coro=<WebSocketProtocol13.write_message.<locals>.wrapper() done, defined at /Users/mathieudelarue/Desktop/TelecomParis/Kit Big Data/projet-mangetamain/.venv/lib/python3.11/site-packages/tornado/websocket.py:1086> exception=WebSocketClosedError()>
+Traceback (most recent call last):
+  File "/Users/mathieudelarue/Desktop/TelecomParis/Kit Big Data/projet-mangetamain/.venv/lib/python3.11/site-packages/tornado/websocket.py", line 1088, in wrapper
+    await fut
+tornado.iostream.StreamClosedError: Stream is closed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/mathieudelarue/Desktop/TelecomParis/Kit Big Data/projet-mangetamain/.venv/lib/python3.11/site-packages/tornado/websocket.py", line 1090, in wrapper
+    raise WebSocketClosedError()
+tornado.websocket.WebSocketClosedError
+2024-11-04 08:43:22,658 - asyncio - ERROR - Task exception was never retrieved
+future: <Task finished name='Task-148' coro=<WebSocketProtocol13.write_message.<locals>.wrapper() done, defined at /Users/mathieudelarue/Desktop/TelecomParis/Kit Big Data/projet-mangetamain/.venv/lib/python3.11/site-packages/tornado/websocket.py:1086> exception=WebSocketClosedError()>
+Traceback (most recent call last):
+  File "/Users/mathieudelarue/Desktop/TelecomParis/Kit Big Data/projet-mangetamain/.venv/lib/python3.11/site-packages/tornado/websocket.py", line 1088, in wrapper
+    await fut
+tornado.iostream.StreamClosedError: Stream is closed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/mathieudelarue/Desktop/TelecomParis/Kit Big Data/projet-mangetamain/.venv/lib/python3.11/site-packages/tornado/websocket.py", line 1090, in wrapper
+    raise WebSocketClosedError()
+tornado.websocket.WebSocketClosedError
+2024-11-04 08:43:22,658 - asyncio - ERROR - Task exception was never retrieved
+future: <Task finished name='Task-149' coro=<WebSocketProtocol13.write_message.<locals>.wrapper() done, defined at /Users/mathieudelarue/Desktop/TelecomParis/Kit Big Data/projet-mangetamain/.venv/lib/python3.11/site-packages/tornado/websocket.py:1086> exception=WebSocketClosedError()>
+Traceback (most recent call last):
+  File "/Users/mathieudelarue/Desktop/TelecomParis/Kit Big Data/projet-mangetamain/.venv/lib/python3.11/site-packages/tornado/websocket.py", line 1088, in wrapper
+    await fut
+tornado.iostream.StreamClosedError: Stream is closed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/mathieudelarue/Desktop/TelecomParis/Kit Big Data/projet-mangetamain/.venv/lib/python3.11/site-packages/tornado/websocket.py", line 1090, in wrapper
+    raise WebSocketClosedError()
+tornado.websocket.WebSocketClosedError
+2024-11-04 08:43:22,659 - asyncio - ERROR - Task exception was never retrieved
+future: <Task finished name='Task-150' coro=<WebSocketProtocol13.write_message.<locals>.wrapper() done, defined at /Users/mathieudelarue/Desktop/TelecomParis/Kit Big Data/projet-mangetamain/.venv/lib/python3.11/site-packages/tornado/websocket.py:1086> exception=WebSocketClosedError()>
+Traceback (most recent call last):
+  File "/Users/mathieudelarue/Desktop/TelecomParis/Kit Big Data/projet-mangetamain/.venv/lib/python3.11/site-packages/tornado/websocket.py", line 1088, in wrapper
+    await fut
+tornado.iostream.StreamClosedError: Stream is closed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/mathieudelarue/Desktop/TelecomParis/Kit Big Data/projet-mangetamain/.venv/lib/python3.11/site-packages/tornado/websocket.py", line 1090, in wrapper
+    raise WebSocketClosedError()
+tornado.websocket.WebSocketClosedError
+2024-11-04 08:43:22,660 - asyncio - ERROR - Task exception was never retrieved
+future: <Task finished name='Task-151' coro=<WebSocketProtocol13.write_message.<locals>.wrapper() done, defined at /Users/mathieudelarue/Desktop/TelecomParis/Kit Big Data/projet-mangetamain/.venv/lib/python3.11/site-packages/tornado/websocket.py:1086> exception=WebSocketClosedError()>
+Traceback (most recent call last):
+  File "/Users/mathieudelarue/Desktop/TelecomParis/Kit Big Data/projet-mangetamain/.venv/lib/python3.11/site-packages/tornado/websocket.py", line 1088, in wrapper
+    await fut
+tornado.iostream.StreamClosedError: Stream is closed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/mathieudelarue/Desktop/TelecomParis/Kit Big Data/projet-mangetamain/.venv/lib/python3.11/site-packages/tornado/websocket.py", line 1090, in wrapper
+    raise WebSocketClosedError()
+tornado.websocket.WebSocketClosedError
+2024-11-04 08:43:22,661 - asyncio - ERROR - Task exception was never retrieved
+future: <Task finished name='Task-152' coro=<WebSocketProtocol13.write_message.<locals>.wrapper() done, defined at /Users/mathieudelarue/Desktop/TelecomParis/Kit Big Data/projet-mangetamain/.venv/lib/python3.11/site-packages/tornado/websocket.py:1086> exception=WebSocketClosedError()>
+Traceback (most recent call last):
+  File "/Users/mathieudelarue/Desktop/TelecomParis/Kit Big Data/projet-mangetamain/.venv/lib/python3.11/site-packages/tornado/websocket.py", line 1088, in wrapper
+    await fut
+tornado.iostream.StreamClosedError: Stream is closed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/mathieudelarue/Desktop/TelecomParis/Kit Big Data/projet-mangetamain/.venv/lib/python3.11/site-packages/tornado/websocket.py", line 1090, in wrapper
+    raise WebSocketClosedError()
+tornado.websocket.WebSocketClosedError
+2024-11-04 08:43:22,664 - asyncio - ERROR - Task exception was never retrieved
+future: <Task finished name='Task-153' coro=<WebSocketProtocol13.write_message.<locals>.wrapper() done, defined at /Users/mathieudelarue/Desktop/TelecomParis/Kit Big Data/projet-mangetamain/.venv/lib/python3.11/site-packages/tornado/websocket.py:1086> exception=WebSocketClosedError()>
+Traceback (most recent call last):
+  File "/Users/mathieudelarue/Desktop/TelecomParis/Kit Big Data/projet-mangetamain/.venv/lib/python3.11/site-packages/tornado/websocket.py", line 1088, in wrapper
+    await fut
+tornado.iostream.StreamClosedError: Stream is closed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/mathieudelarue/Desktop/TelecomParis/Kit Big Data/projet-mangetamain/.venv/lib/python3.11/site-packages/tornado/websocket.py", line 1090, in wrapper
+    raise WebSocketClosedError()
+tornado.websocket.WebSocketClosedError
