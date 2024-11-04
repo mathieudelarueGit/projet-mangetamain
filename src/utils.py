@@ -111,3 +111,6 @@ z_scores = stats.zscore(df_filtered_bio[numeric_columns])
 outliers_zscore = (abs(z_scores) > 3).sum(axis=0)
 outliers_zscore_df = df_filtered_bio[(abs(z_scores) > 3).any(axis=1)]
 percent_outliers = len(outliers_zscore_df) / len(df_filtered_bio) * 100
+
+# Affichage du pourcentage d'outliers
+print(f"Pourcentage d'outliers dans le dataset: {percent_outliers:.2f}%")
