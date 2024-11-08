@@ -1,4 +1,4 @@
-from utils import df_filtered_bio
+from utils import df_preprocessed
 import ast
 import pandas as pd
 
@@ -53,7 +53,7 @@ def parse_nutrition(nutrition_str):
         return [None] * 7
 
 
-def stats_bio(df_filtered_bio: pd.DataFrame) -> pd.DataFrame:
+def stats_bio(df_preprocessed: pd.DataFrame) -> pd.DataFrame:
     """
     This function processes a filtered DataFrame of bio recipes and performs.
     the following tasks:
@@ -86,7 +86,7 @@ def stats_bio(df_filtered_bio: pd.DataFrame) -> pd.DataFrame:
         combined_df.head()  # To see the result
     """
     # Apply the parse_nutrition function to the 'nutrition' column
-    nutrition_data = df_filtered_bio["nutrition"].dropna().apply(parse_nutrition)
+    nutrition_data = df_preprocessed["nutrition"].dropna().apply(parse_nutrition)
     # Keep only rows where the parsed data has exactly 7 elements
     nutrition_data = nutrition_data[nutrition_data.apply(lambda x: len(x) == 7)]
     # Convert the list of nutrition data into a DataFrame with appropriate column names
@@ -104,29 +104,29 @@ def stats_bio(df_filtered_bio: pd.DataFrame) -> pd.DataFrame:
     )
     # Calculate basic statistical indicators: mean, median, standard deviation, min, max
     combined_df = pd.concat(
-        [df_filtered_bio.reset_index(drop=True), nutrition_df], axis=1
+        [df_preprocessed.reset_index(drop=True), nutrition_df], axis=1
     )
     # Add ranking columns for each nutritional component
     combined_df["Calories Rank"] = combined_df["Calories"].rank(
-        method="min", ascending=False
+        method="min", ascending=True
     )
     combined_df["Total Fat Rank"] = combined_df["Total Fat (g)"].rank(
-        method="min", ascending=False
+        method="min", ascending=True
     )
     combined_df["Sugar Rank"] = combined_df["Sugar (g)"].rank(
-        method="min", ascending=False
+        method="min", ascending=True
     )
     combined_df["Sodium Rank"] = combined_df["Sodium (mg)"].rank(
-        method="min", ascending=False
+        method="min", ascending=True
     )
     combined_df["Protein Rank"] = combined_df["Protein (g)"].rank(
         method="min", ascending=False
     )
     combined_df["Saturated Fat Rank"] = combined_df["Saturated Fat (g)"].rank(
-        method="min", ascending=False
+        method="min", ascending=True
     )
     combined_df["Carbohydrates Rank"] = combined_df["Carbohydrates (g)"].rank(
-        method="min", ascending=False
+        method="min", ascending=True
     )
     # Filter to include only the top 5 recipes for each nutritional component
     combined_df["Top 5 Calories"] = combined_df["Calories Rank"] <= 5
@@ -142,4 +142,5 @@ def stats_bio(df_filtered_bio: pd.DataFrame) -> pd.DataFrame:
     return combined_df
 
 
-combined_df = stats_bio(df_filtered_bio)
+combined_df = stats_bio(df_preprocessed)
+print(combined_df)

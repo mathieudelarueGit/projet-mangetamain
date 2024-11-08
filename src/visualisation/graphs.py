@@ -7,7 +7,9 @@ from src.data_loader import DataLoader
 data_loader = DataLoader()
 # interactions = data_loader.load_data("dataset/RAW_interactions.csv.zip")
 interactions = data_loader.load_data("dataset/RAW_interactions.csv.xz")
-
+interactions_preprocessed = data_loader.load_data(
+    "preprocessed_data/PP_interactions_mangetamain.csv"
+)
 # Creates a DataFrame with the count of each rating in the interactions dataset
 ratio_of_ratings = pd.DataFrame(interactions.rating.value_counts())
 ratio_of_ratings.columns = ["count"]  # Renaming the column to 'count'
@@ -35,7 +37,7 @@ fig1.update_traces(textinfo="label+percent")
 
 
 # Creates a histogram to show the dynamics of interactions over time
-fig2 = px.histogram(interactions.date, title="Dynamics in time")
+fig2 = px.histogram(interactions_preprocessed.date, title="Dynamics in time")
 
 fig2.add_annotation(
     text="Instagram",
@@ -55,17 +57,43 @@ fig2.update_layout(
     yaxis_title="Amount of interactions",  # y-axis label
     showlegend=False,  # Disable the legend
 )
-
-# Creates a scatter plot showing the interaction counts for each recipe
-fig3 = px.scatter(
-    interactions.recipe_id.value_counts(), title="Too popular to be serious"
+fig3 = px.violin(
+    interactions_preprocessed.recipe_id.value_counts(),
+    title="Too popular to be serious",
 )
 
+# Update the appearance to enhance visibility of the wings
+fig3.update_traces(
+    side="positive",  # Ensure the violin is directed to one side
+    width=0.9,  # Adjust the violin's width
+    opacity=0.5,  # Reduce opacity to make violins more transparent
+    jitter=0.05,  # Apply a slight offset to better visualize points
+    spanmode="hard",  # Reduce smoothing for more detailed visualization
+)
 
+# Adjust the axes for better visibility of variations
+fig3.update_layout(
+    yaxis_title="Number of interactions for each recipe",  # y-axis title
+    xaxis_title="Recipe ID",  # Add a title to the x-axis
+    yaxis=dict(
+        range=[
+            0,
+            interactions_preprocessed.recipe_id.value_counts().max() + 100,
+        ],  # Set y-axis range for better visibility
+        tickmode="linear",  # Linear tick mode for a uniform scale
+    ),
+    xaxis=dict(
+        showticklabels=False,  # Hide x-axis labels
+        showline=False,  # Hide x-axis line
+    ),
+    showlegend=False,  # Hide legend
+)
+
+# Add an annotation in the buzzing zone
 fig3.add_annotation(
     text="Buzzing zone",
-    x=197730,  # x position in the range (adjust as needed)
-    y=1000,  # y position (80% of the curve height)
+    x=0,  # x position within the range (adjust if needed)
+    y=600,  # y position (80% of the curve height)
     showarrow=False,
     font=dict(size=15, color="black"),
     bgcolor="rgba(255, 255, 255, 0.7)",  # Semi-transparent white background
@@ -74,23 +102,19 @@ fig3.add_annotation(
     borderpad=4,
 )
 
-fig3.update_layout(
-    xaxis_title="All recipes stored",  # x-axis label (commented out)
-    yaxis_title="Number of interactions for each recipe",  # y-axis label
-    showlegend=False,  # Hides the legend
-    xaxis=dict(
-        tickvals=[],  # No tick values shown on the x-axis
-        showline=False,  # Do not show the x-axis line
-    ),
-)
-
-# Adds a transparent rectangle to highlight the area above 500 interactions
+# Add a transparent shape to mark the area above 500 interactions
 fig3.add_shape(
     type="rect",
-    x0=fig3.data[0].x.min(),  # Start position on x (min value of the x-axis)
-    x1=fig3.data[0].x.max(),  # End position on x (max value of the x-axis)
-    y0=500,  # Start position on y (500)
-    y1=fig3.data[0].y.max(),  # End position on y (max value of the y-axis)
+    x0=fig3.data[0].x.min(),  # Starting x position
+    x1=fig3.data[0].x.max(),  # Ending x position
+    y0=500,  # Starting y position (500 interactions)
+    y1=500,  # Maximum y position
     line=dict(color="rgba(255, 0, 0, 0)"),  # No visible border
-    fillcolor="rgba(255, 0, 0, 0.2)",  # Transparent red fill
+    fillcolor="rgba(255, 0, 0, 0.2)",  # Transparent red fill color
+)
+
+# Further enhance violin visibility by adjusting width
+fig3.update_traces(
+    side="positive",  # May help make distributions clearer
+    width=0.8,  # Width of the violin shape, adjust as needed
 )

@@ -1,6 +1,8 @@
 import logging
 
 import streamlit as st
+import pandas as pd
+import plotly.express as px
 
 # Set the page layout to full width, needs to be at the beginning of the script
 st.set_page_config(layout="wide")  # Needs to be at the beginning of the script
@@ -8,8 +10,7 @@ st.set_page_config(layout="wide")  # Needs to be at the beginning of the script
 from data_loader import DataLoader
 from log_config import setup_logging
 from utils import (
-    df_filtered_bio,
-    rate_bio_recipes,
+    df_preprocessed,
     percent_outliers,
     outliers_zscore_df,
     outliers_zscore,
@@ -61,27 +62,61 @@ def main() -> None:
     row1_1, row1_2, row1_3, row1_4 = st.columns((3, 2, 2, 4))
 
     with row1_1:
-        st.write(f"Number of recipes: {df_RAW_recipes.shape[0]}")
-        st.write(
-            f"Number of bio recipes: {df_filtered_bio.shape[0]:,}".replace(",", " ")
+        # Nombre total de recettes et recettes bio (affichage simple)
+        st.metric(
+            label="Bio recipes",
+            value=f"{df_preprocessed.shape[0]:,}".replace(",", " "),
+            help="Number of bio recipes after pre-processing",
         )
-        st.write(f"Proportion of bio recipes: {rate_bio_recipes:.2f}%")
-        st.write(f"Number of outliers in the bio recipes: {len(outliers_zscore_df)}")
-        st.write(f"Proportion of outliers in the bio recipes: {percent_outliers:.2f}%")
-        st.write("Number of outliers for each column:")
-        # Loop for each column to count outliers
-        for column, num_outliers in outliers_zscore.items():
-            st.write(f"{column}: {num_outliers}")
+        # Données pour le camembert
+        labels = ["Bio", "Non Bio"]
+        values = [
+            df_preprocessed.shape[0],
+            len(df_RAW_recipes) - df_preprocessed.shape[0],
+        ]
+
+        # Créez le graphique en camembert
+        fig = px.pie(
+            names=labels,
+            values=values,
+            title="Recettes bio proportion (%) after preprocess",
+            color=labels,
+            color_discrete_map={"Bio": "green", "Non-Bio": "red"},
+        )
+        # Affiche le graphique avec Streamlit
+        st.plotly_chart(fig)
+        # Nombre et proportion des outliers
+        st.metric(
+            "Outliers count in bio recipes",
+            f"{len(outliers_zscore_df):,}",
+        )
+        st.metric("Outliers proportion (%)", f"{percent_outliers:,}%")
+
+        # Nombre d'outliers pour chaque colonne (diagramme)
+        outliers_df = pd.DataFrame(
+            list(outliers_zscore.items()), columns=["Column", "Outliers count"]
+        )
+        fig = px.bar(
+            outliers_df,
+            x="Column",
+            y="Outliers count",
+            title="Outliers count for ",
+        )
+        fig.update_layout(yaxis_title="Outliers Count", xaxis_title="Column")
 
     with row1_2:
-        st.write(
-            "As many as {} users got their hands dirty and shared their recipes".format(
-                df_PP_users.shape[0]
-            )
+        st.metric(
+            label="Number of users",
+            value=f"{df_PP_users.shape[0]:,}".replace(",", " "),
+            help="As many as users got their hands dirty and shared their recipes",
         )
 
     with row1_3:
-        st.write(f"{df_ingredients.shape[0]} different ingredients are found")
+        st.metric(
+            label="Ingredients",
+            value=f"{df_ingredients.shape[0]:,}".replace(",", " "),
+            help="Number of different ingredients found in the dataset",
+        )
 
     with row1_4:
         font_size = 2
@@ -92,9 +127,6 @@ def main() -> None:
 
     # Sidebar
     st.sidebar.title("“This is the sidebar”")  ## TO DO
-    st.sidebar.markdown(
-        "“Let’s start with binary and non-binary classification!!”"
-    )  ## TO DO
 
     # Shows if checkbox is checked, because it's slowing down the app
     if st.sidebar.checkbox(
@@ -127,53 +159,6 @@ def main() -> None:
         selected_category = st.selectbox("Select a nutritional component", categories)
         # Afficher le graphique correspondant à la catégorie sélectionnée
         st.plotly_chart(nutrition_hist[selected_category])
-
-        st.sidebar.subheader("Choose classifier")  # Add a subheader to the sidebar
-
-    classifier = st.sidebar.selectbox(
-        "Classifier",  # Add a selectbox to the sidebar
-        (
-            "Support Vector Machine (SVM)",  ## TO DO: Add real classifiers
-            "Logistic Regression",  ## TO DO: Add real classifiers
-            "Random Forest",
-        ),
-    )  ## TO DO: Add real classifiers
-
-    if classifier == "Support Vector Machine (SVM)":
-        st.sidebar.subheader("Hyperparameters")
-        st.subheader(
-            "Here are the hyperparameters for SVM"
-        )  ## TO DO: add real features
-        C = st.sidebar.number_input(
-            "C (Regularization parameter)", 0.01, 10.0, step=0.01, key="C"
-        )
-        kernel = st.sidebar.radio("Kernel", ("rbf", "linear"), key="kernel")
-        gamma = st.sidebar.radio(
-            "Gamma (Kernal coefficient", ("scale", "auto"), key="gamma"
-        )
-        metrics = st.sidebar.multiselect(
-            "What metrics to plot?",
-            ("Confusion Matrix", "ROC Curve", "Precision-Recall Curve"),
-        )
-        st.write(f"kernel: {kernel}, C: {C}, gamma: {gamma}, metrics: {metrics}")
-    # Provide file options in a selectbox
-
-    file_options = ["Recettes", "Recettes brutes", "Utilisateurs", "Ingrédients"]
-    dataframes = {
-        "Recettes": df_PP_recipes,
-        "Recettes brutes": df_RAW_recipes,
-        "Utilisateurs": df_PP_users,
-        "Ingrédients": df_ingredients,
-    }
-    selected_file = st.selectbox(
-        "Quel dataframe souhaitez-vous séléctionner: ", file_options
-    )
-
-    # Add a button to trigger file loading and display
-    if st.button("Afficher le dataframe"):
-        st.write(f"Data du dataframe: {selected_file}")
-        df = dataframes[selected_file]
-        st.write(df.head())
 
 
 if __name__ == "__main__":

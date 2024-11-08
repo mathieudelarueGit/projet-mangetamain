@@ -13,6 +13,13 @@ def interactions_data():
     interactions = data_loader.load_data("dataset/RAW_interactions.csv.xz")
     return interactions
 
+@pytest.fixture
+def interactions_preprocessed_data():
+    # Simule le chargement des données en utilisant le DataLoader
+    data_loader = DataLoader()
+    interactions_preprocessed = data_loader.load_data(
+    "preprocessed_data/PP_interactions_mangetamain.csv")
+    return interactions_preprocessed
 
 def test_interactions_loading(interactions_data):
     # Vérifie que les données sont bien chargées sous forme de DataFrame
@@ -26,6 +33,12 @@ def test_interactions_loading(interactions_data):
         "recipe_id" in interactions_data.columns
     ), "La colonne 'recipe_id' est manquante."
 
+def test_interactions_loading(interactions_preprocessed_data):
+    # Vérifie que les données sont bien chargées sous forme de DataFrame
+    assert "date" in interactions_preprocessed_data.columns, "La colonne 'date' est manquante."
+    assert (
+        "recipe_id" in interactions_preprocessed_data.columns
+    ), "La colonne 'recipe_id' est manquante."
 
 def test_ratio_of_ratings(interactions_data):
     # Calcule le ratio des ratings
@@ -41,7 +54,6 @@ def test_ratio_of_ratings(interactions_data):
     assert (
         ratio_of_ratings["count"].sum() == interactions_data.shape[0]
     ), "La somme des 'count' ne correspond pas au nombre total d'interactions."
-
 
 def test_pie_chart_creation(interactions_data):
     # Crée un DataFrame avec les ratios
@@ -66,10 +78,9 @@ def test_pie_chart_creation(interactions_data):
         fig1, go.Figure
     ), "Le graphique n'est pas un objet de type Figure."
 
-
-def test_histogram_creation(interactions_data):
+def test_histogram_creation(interactions_preprocessed_data):
     # Crée un histogramme
-    fig2 = px.histogram(interactions_data.date, title="Dynamics in time")
+    fig2 = px.histogram(interactions_preprocessed_data.date, title="Dynamics in time")
 
     # Vérifie que le graphique est bien un objet de type Figure
     assert isinstance(
@@ -81,11 +92,10 @@ def test_histogram_creation(interactions_data):
         fig2.layout.title.text == "Dynamics in time"
     ), "Le titre de l'histogramme n'est pas correct."
 
-
-def test_scatter_plot_creation(interactions_data):
+def test_scatter_plot_creation(interactions_preprocessed_data):
     # Crée un scatter plot
-    fig3 = px.scatter(
-        interactions_data.recipe_id.value_counts(), title="Too popular to be serious"
+    fig3 = px.violin(
+        interactions_preprocessed_data.recipe_id.value_counts(), title="Too popular to be serious"
     )
 
     # Vérifie que le graphique est bien un objet de type Figure
@@ -98,10 +108,9 @@ def test_scatter_plot_creation(interactions_data):
         fig3.layout.title.text == "Too popular to be serious"
     ), "Le titre du scatter plot n'est pas correct."
 
-
-def test_annotations_in_figures(interactions_data):
+def test_annotations_in_figures(interactions_preprocessed_data):
     # Crée un histogramme
-    fig2 = px.histogram(interactions_data.date, title="Dynamics in time")
+    fig2 = px.histogram(interactions_preprocessed_data.date, title="Dynamics in time")
     fig2.add_annotation(
         text="Instagram",
         x="2012-01-31",
