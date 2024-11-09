@@ -103,7 +103,7 @@ filter_values1_bio = [
 ]
 
 df_filtered_bio = filter_dataframebis1(df, column_names, filter_values1_bio)
-rate_bio_recipes = float((len(df_preprocessed) / len(df)) * 100)
+rate_bio_recipes = round((len(df_preprocessed) / len(df)) * 100, 2)
 # Select numeric columns from df_filtered_bio
 numeric_columns = df_preprocessed.select_dtypes(include=["float64", "int64"]).columns
 # Calculate z-score for each column.
@@ -111,6 +111,3 @@ z_scores = stats.zscore(df_preprocessed[numeric_columns])
 # Identify outliers (Z-score > 3 ou < -3).
 outliers_zscore = (abs(z_scores) > 3).sum(axis=0)
 outliers_zscore_df = df_preprocessed[(abs(z_scores) > 3).any(axis=1)]
-percent_outliers = len(outliers_zscore_df) / len(df_preprocessed) * 100
-# Affichage du pourcentage d'outliers
-print(f"Pourcentage d'outliers dans le dataset: {percent_outliers:.0f}%")

@@ -107,12 +107,11 @@ fig3.add_shape(
     type="rect",
     x0=fig3.data[0].x.min(),  # Starting x position
     x1=fig3.data[0].x.max(),  # Ending x position
-    y0=500,  # Starting y position (500 interactions)
+    y0=10,  # Starting y position (500 interactions)
     y1=500,  # Maximum y position
     line=dict(color="rgba(255, 0, 0, 0)"),  # No visible border
     fillcolor="rgba(255, 0, 0, 0.2)",  # Transparent red fill color
 )
-
 # Further enhance violin visibility by adjusting width
 fig3.update_traces(
     side="positive",  # May help make distributions clearer

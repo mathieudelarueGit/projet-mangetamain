@@ -1,8 +1,6 @@
 import logging
 
 import streamlit as st
-import pandas as pd
-import plotly.express as px
 
 # Set the page layout to full width, needs to be at the beginning of the script
 st.set_page_config(layout="wide")  # Needs to be at the beginning of the script
@@ -11,9 +9,8 @@ from data_loader import DataLoader
 from log_config import setup_logging
 from utils import (
     df_preprocessed,
-    percent_outliers,
+    rate_bio_recipes,
     outliers_zscore_df,
-    outliers_zscore,
 )
 from visualisation.graphs import fig1, fig2, fig3, top10_hottest_recipes
 from visualisation.graphs_nutrition import categories, nutrition_hist
@@ -29,12 +26,8 @@ logger = logging.getLogger(__name__)
 data_loader = DataLoader()
 
 # Load data files into dataframes
-df_PP_recipes = data_loader.load_data("dataset/PP_recipes.csv.zip")
 df_PP_users = data_loader.load_data("dataset/PP_users.csv.zip")
 df_ingredients = data_loader.load_data("dataset/ingr_map.pkl")
-df_RAW_recipes = data_loader.load_data("dataset/RAW_recipes.csv.zip")
-# Not used here, comment out as req :
-# df_RAW_interactions = data_loader.load_data("dataset/RAW_interactions.csv.xz")
 
 
 def main() -> None:
@@ -62,47 +55,19 @@ def main() -> None:
     row1_1, row1_2, row1_3, row1_4 = st.columns((3, 2, 2, 4))
 
     with row1_1:
-        # Nombre total de recettes et recettes bio (affichage simple)
+        # Total number of bio recipes
         st.metric(
             label="Bio recipes",
             value=f"{df_preprocessed.shape[0]:,}".replace(",", " "),
             help="Number of bio recipes after pre-processing",
         )
-        # Données pour le camembert
-        labels = ["Bio", "Non Bio"]
-        values = [
-            df_preprocessed.shape[0],
-            len(df_RAW_recipes) - df_preprocessed.shape[0],
-        ]
-
-        # Créez le graphique en camembert
-        fig = px.pie(
-            names=labels,
-            values=values,
-            title="Recettes bio proportion (%) after preprocess",
-            color=labels,
-            color_discrete_map={"Bio": "green", "Non-Bio": "red"},
-        )
-        # Affiche le graphique avec Streamlit
-        st.plotly_chart(fig)
-        # Nombre et proportion des outliers
+        st.metric("Bio recipes proportion (%)", f"{rate_bio_recipes:,}%")
+        # Outliers proportion and number
         st.metric(
-            "Outliers count in bio recipes",
-            f"{len(outliers_zscore_df):,}",
+            label="Outliers",
+            value=f"{len(outliers_zscore_df)}",
+            help="Outliers count in bio recipes",
         )
-        st.metric("Outliers proportion (%)", f"{percent_outliers:,}%")
-
-        # Nombre d'outliers pour chaque colonne (diagramme)
-        outliers_df = pd.DataFrame(
-            list(outliers_zscore.items()), columns=["Column", "Outliers count"]
-        )
-        fig = px.bar(
-            outliers_df,
-            x="Column",
-            y="Outliers count",
-            title="Outliers count for ",
-        )
-        fig.update_layout(yaxis_title="Outliers Count", xaxis_title="Column")
 
     with row1_2:
         st.metric(
@@ -142,12 +107,10 @@ def main() -> None:
             st.write("Most recipes are strongly rated:")
             st.plotly_chart(fig1)
             st.write("...hence rate will not be a good feature for recommendation.")
-
         with row2_2:
             st.write("The website and the database was burning hot until 2011:")
             st.plotly_chart(fig2)
             st.write("...from that point on, Instagram probably took over.")
-
         with row2_3:
             st.write("Some recipes are too popular to be serious:")
             st.plotly_chart(fig3)
