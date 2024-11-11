@@ -1,4 +1,5 @@
 import streamlit as st
+
 st.set_page_config(layout="wide")
 from data_loader import DataLoader
 from log_config import setup_logging
