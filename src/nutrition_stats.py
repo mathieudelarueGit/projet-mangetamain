@@ -129,13 +129,13 @@ def stats_bio(df_preprocessed: pd.DataFrame) -> pd.DataFrame:
         method="min", ascending=True
     )
     # Filter to include only the top 5 recipes for each nutritional component
-    combined_df["Top 5 Calories"] = combined_df["Calories Rank"] <= 5
-    combined_df["Top 5 Total Fat"] = combined_df["Total Fat Rank"] <= 5
-    combined_df["Top 5 Sugar"] = combined_df["Sugar Rank"] <= 5
-    combined_df["Top 5 Sodium"] = combined_df["Sodium Rank"] <= 5
-    combined_df["Top 5 Protein"] = combined_df["Protein Rank"] <= 5
-    combined_df["Top 5 Saturated Fat"] = combined_df["Saturated Fat Rank"] <= 5
-    combined_df["Top 5 Carbohydrates"] = combined_df["Carbohydrates Rank"] <= 5
+    combined_df["Top 4 Calories"] = combined_df["Calories Rank"] <= 4
+    combined_df["Top 4 Total Fat"] = combined_df["Total Fat Rank"] <= 4
+    combined_df["Top 4 Sugar"] = combined_df["Sugar Rank"] <= 4
+    combined_df["Top 4 Sodium"] = combined_df["Sodium Rank"] <= 4
+    combined_df["Top 4 Protein"] = combined_df["Protein Rank"] <= 4
+    combined_df["Top 4 Saturated Fat"] = combined_df["Saturated Fat Rank"] <= 4
+    combined_df["Top 4 Carbohydrates"] = combined_df["Carbohydrates Rank"] <= 4
 
     # Displaying the recipes in a dataframe with highest.
     # quantity for each nutritional component

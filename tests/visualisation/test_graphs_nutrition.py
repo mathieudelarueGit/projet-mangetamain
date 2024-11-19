@@ -1,7 +1,7 @@
 import pytest
 import pandas as pd
 import plotly.graph_objects as go
-from src.visualisation.graphs_nutrition import plot_top_5_recipes_by_nutrition  
+from src.visualisation.graphs_nutrition import plot_top_4_recipes_by_nutrition  
 
 
 @pytest.fixture
@@ -20,7 +20,7 @@ def sample_combined_df():
     return pd.DataFrame(data)
 
 
-def test_plot_top_5_recipes_by_nutrition(sample_combined_df):
+def test_plot_top_4_recipes_by_nutrition(sample_combined_df):
     """Test the plot_top_5_recipes_by_nutrition function."""
 
     categories = [
@@ -32,7 +32,7 @@ def test_plot_top_5_recipes_by_nutrition(sample_combined_df):
     "Saturated Fat (g)",
     "Carbohydrates (g)",
     ]
-    fig = plot_top_5_recipes_by_nutrition(sample_combined_df, categories)
+    fig = plot_top_4_recipes_by_nutrition(sample_combined_df, categories)
 
     # Check if the figure is an instance of list
     assert isinstance(fig, dict) 
@@ -49,4 +49,4 @@ def test_plot_top_5_recipes_by_nutrition(sample_combined_df):
         assert isinstance(fig[category], go.Figure)
 
     # Optionally, check if the layout title for one of the figures is correct
-    assert fig["Calories"].layout.title.text == "Top 5 Recipes by Calories"
+    assert fig["Calories"].layout.title.text == "Top 4 Recipes by Calories"

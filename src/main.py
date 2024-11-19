@@ -105,7 +105,7 @@ def display_general_aspects():
 @st.fragment
 def display_nutritional_analysis():
     """Displays a dropdown and chart for nutritional components analysis"""
-    st.title("Top 5 Recipes per nutritional component")
+    st.title("Top 4 Recipes per nutritional component")
     selected_category = st.selectbox("Select a nutritional component", categories)
     st.plotly_chart(nutrition_hist[selected_category])
 
