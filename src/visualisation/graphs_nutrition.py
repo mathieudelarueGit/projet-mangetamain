@@ -3,7 +3,7 @@ import plotly.express as px
 import pandas as pd
 
 
-def plot_top_5_recipes_by_nutrition(
+def plot_top_4_recipes_by_nutrition(
     combined_df: pd.DataFrame, categories: list
 ) -> dict:
     """
@@ -20,14 +20,14 @@ def plot_top_5_recipes_by_nutrition(
     figures = {}
     for category in categories:
         # Sort recipes depending on the category
-        top_5_recipes = combined_df.sort_values(by=category, ascending=False).head(5)
+        top_4_recipes = combined_df.sort_values(by=category, ascending=False).head(4)
 
         # Créer un graphique pour la catégorie actuelle
         fig = px.bar(
-            top_5_recipes,
+            top_4_recipes,
             x="name",
             y=category,
-            title=f"Top 5 Recipes by {category}",
+            title=f"Top 4 Recipes by {category}",
             labels={"name": "Recipe Name", category: category},
             color_discrete_sequence=["#1f77b4"],
         )
@@ -49,4 +49,4 @@ categories = [
 
 
 # Générer les graphiques
-nutrition_hist = plot_top_5_recipes_by_nutrition(combined_df, categories)
+nutrition_hist = plot_top_4_recipes_by_nutrition(combined_df, categories)
