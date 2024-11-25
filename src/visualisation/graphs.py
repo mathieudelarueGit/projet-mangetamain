@@ -1,7 +1,7 @@
 import pandas as pd
 import plotly.express as px
 
-from src.data_loader import DataLoader
+from data_loader import DataLoader
 
 # Loads the raw interactions dataset using the data_loader module
 data_loader = DataLoader()
@@ -13,10 +13,6 @@ interactions_preprocessed = data_loader.load_data(
 # Creates a DataFrame with the count of each rating in the interactions dataset
 ratio_of_ratings = pd.DataFrame(interactions.rating.value_counts())
 ratio_of_ratings.columns = ["count"]  # Renaming the column to 'count'
-# The top 10 most popular recipes (commented out alternative approach)
-with open("src/visualisation/top10_hottest_recipes.txt") as f:
-    top10_hottest_recipes = f.read()
-
 # Adds a 'ratio' column to store the ratio of each rating relative to the total count
 ratio_of_ratings["ratio"] = ratio_of_ratings["count"] / ratio_of_ratings["count"].sum()
 
@@ -54,7 +50,7 @@ fig2.add_annotation(
 # Updates the labels of the axes
 fig2.update_layout(
     xaxis_title="Time",  # x-axis label
-    yaxis_title="Amount of interactions",  # y-axis label
+    yaxis_title="Number of interactions",  # y-axis label
     showlegend=False,  # Disable the legend
 )
 fig3 = px.violin(

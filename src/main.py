@@ -8,7 +8,7 @@ from utils import (
     rate_bio_recipes,
     outliers_zscore_df,
 )
-from visualisation.graphs import fig1, fig2, fig3, top10_hottest_recipes
+from visualisation.graphs import fig2
 from visualisation.graphs_nutrition import categories, nutrition_hist
 
 # Initialize logging and set page configuration
@@ -42,13 +42,11 @@ def display_statistics(df_preprocessed, rate_bio_recipes, outliers_zscore_df):
     row0_1, row0_2, row0_3, row0_4 = st.columns((3, 2, 2, 4))
 
     with row0_1:
-        st.write("## Encyclopedia for foodies")
+        st.write("## Bio recipes overview")
     with row0_2:
-        st.write("## Wide community")
+        st.write("## Large community fan")
     with row0_3:
-        st.write("## Varied food")
-    with row0_4:
-        st.write("## Most popular recipes")
+        st.write("## Ingredient food")
 
     row1_1, row1_2, row1_3, row1_4 = st.columns((3, 2, 2, 4))
 
@@ -56,7 +54,7 @@ def display_statistics(df_preprocessed, rate_bio_recipes, outliers_zscore_df):
         st.metric(
             label="Bio recipes",
             value=f"{df_preprocessed.shape[0]:,}".replace(",", " "),
-            help="Number of bio recipes after pre-processing",
+            help="Number of bio recipes after pre-processing step",
         )
         st.metric("Bio recipes proportion (%)", f"{rate_bio_recipes:.2f}%")
         st.metric(
@@ -67,39 +65,25 @@ def display_statistics(df_preprocessed, rate_bio_recipes, outliers_zscore_df):
 
     with row1_2:
         st.metric(
-            label="Number of users",
+            label="Number of contributors",
             value=f"{df_PP_users.shape[0]:,}".replace(",", " "),
-            help="As many as users got their hands dirty and shared their recipes",
+            help="Contributors who where registrered",
         )
 
     with row1_3:
         st.metric(
             label="Ingredients",
             value=f"{df_ingredients.shape[0]:,}".replace(",", " "),
-            help="Number of different ingredients found in the dataset",
+            help="Number of different ingredients",
         )
-
-    with row1_4:
-        st.write(f"{top10_hottest_recipes}", unsafe_allow_html=True)
 
 
 @st.fragment
 def display_general_aspects():
     """Displays general analysis charts"""
-    row2_1, row2_2, row2_3 = st.columns(3)
-
-    with row2_1:
-        st.write("Most recipes are strongly rated:")
-        st.plotly_chart(fig1)
-        st.write("...hence rate will not be a good feature for recommendation.")
-    with row2_2:
-        st.write("The website and the database was burning hot until 2011:")
-        st.plotly_chart(fig2)
-        st.write("...from that point on, Instagram probably took over.")
-    with row2_3:
-        st.write("Some recipes are too popular to be serious:")
-        st.plotly_chart(fig3)
-        st.write("...but we'll keep away from them as they might be biased.")
+    st.write("The website and the database was burning hot until 2011:")
+    st.plotly_chart(fig2)
+    st.write("...from that point on, Instagram probably took over.")
 
 
 @st.fragment
@@ -118,9 +102,9 @@ def main():
     if st.sidebar.checkbox("Show general aspects", True):
         st.subheader("Some general purpose analysis")
         display_general_aspects()
-
-    # Displaying nutritional components
-    display_nutritional_analysis()
+    # displaying nutritional components recipe bio
+    if st.sidebar.checkbox("Show analysis of nutritional components", True):
+        display_nutritional_analysis()
 
 
 if __name__ == "__main__":

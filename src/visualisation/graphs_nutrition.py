@@ -1,4 +1,4 @@
-from src.nutrition_stats import combined_df
+from nutrition_stats import combined_df
 import plotly.express as px
 import pandas as pd
 
