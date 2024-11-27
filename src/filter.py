@@ -61,9 +61,9 @@ class RecipeFilter:
                 self.filtered_recipes = self.filtered_recipes[
                     self.filtered_recipes["nutrition"].apply(
                         lambda x: (
-                            isinstance(x, (list, tuple)) and
-                            len(x) > 4 and
-                            x[4] >= protein_min
+                            isinstance(x, (list, tuple))
+                            and len(x) > 4
+                            and x[4] >= protein_min
                         )
                     )
                 ]
@@ -76,9 +76,9 @@ class RecipeFilter:
                 self.filtered_recipes = self.filtered_recipes[
                     self.filtered_recipes["nutrition"].apply(
                         lambda x: (
-                            isinstance(x, (list, tuple)) and
-                            len(x) > 6 and
-                            x[6] >= carbs_min
+                            isinstance(x, (list, tuple))
+                            and len(x) > 6
+                            and x[6] >= carbs_min
                         )
                     )
                 ]
@@ -91,9 +91,9 @@ class RecipeFilter:
                 self.filtered_recipes = self.filtered_recipes[
                     self.filtered_recipes["nutrition"].apply(
                         lambda x: (
-                            isinstance(x, (list, tuple)) and
-                            len(x) > 1 and
-                            x[1] <= fat_max
+                            isinstance(x, (list, tuple))
+                            and len(x) > 1
+                            and x[1] <= fat_max
                         )
                     )
                 ]

@@ -73,8 +73,8 @@ else:
 if filtered_recipes is None or filtered_recipes.empty:
     # Display front page or "No Recipes Found" message
     if (
-        "no_recipes_message" in st.session_state and
-        st.session_state["no_recipes_message"]
+        "no_recipes_message" in st.session_state
+        and st.session_state["no_recipes_message"]
     ):
         st.sidebar.markdown(
             f"<span style='color:red;'>{st.session_state['no_recipes_message']}</span>",
