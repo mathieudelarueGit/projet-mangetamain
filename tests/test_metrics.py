@@ -1,5 +1,5 @@
 import unittest
-from metrics import calculate_mtm_score
+from src.metrics import calculate_mtm_score
 
 class TestCalculateMTMScore(unittest.TestCase):
     """

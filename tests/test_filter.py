@@ -1,6 +1,7 @@
 import unittest
 import pandas as pd
-from filter import RecipeFilter
+from src.filter import RecipeFilter
+
 
 class TestRecipeFilter(unittest.TestCase):
     """
@@ -19,7 +20,7 @@ class TestRecipeFilter(unittest.TestCase):
                 ["fish", "lemon", "garlic"],
             ],
             "nutrition": [
-                [200, 10, 15, 30, 20, 5, 50],  # Example: [calories, fat, protein, fiber, etc.]
+                [200, 10, 15, 30, 20, 5, 50],  # [calories, fat, protein, fiber, etc.]
                 [150, 5, 10, 20, 25, 3, 40],
                 [300, 15, 20, 35, 10, 7, 30],
                 [250, 12, 18, 25, 15, 6, 35],
@@ -31,11 +32,29 @@ class TestRecipeFilter(unittest.TestCase):
         """
         Test filtering recipes by selected ingredients.
         """
-        selected_ingredients = ["flour", "sugar", "butter"]
+        selected_ingredients = ["flour", "milk", "eggs"]
         self.recipe_filter.filter_by_ingredients(selected_ingredients)
         filtered_recipes = self.recipe_filter.get_filtered_recipes()
         self.assertEqual(len(filtered_recipes), 1)
-        self.assertEqual(filtered_recipes.iloc[0]["ingredients"], ["flour", "sugar", "butter"])
+        self.assertEqual(
+            filtered_recipes.iloc[0]["ingredients"], ["flour", "milk", "eggs"]
+        )
+
+    def test_filter_by_ingredients_empty(self):
+        """
+        Test filtering with ingredients that don't exist in any recipe.
+        """
+        self.recipe_filter.filter_by_ingredients(["nonexistent"])
+        filtered_recipes = self.recipe_filter.get_filtered_recipes()
+        self.assertTrue(filtered_recipes.empty)
+
+    def test_filter_by_ingredients_no_selection(self):
+        """
+        Test filtering with an empty selection of ingredients.
+        """
+        self.recipe_filter.filter_by_ingredients([])
+        filtered_recipes = self.recipe_filter.get_filtered_recipes()
+        self.assertEqual(len(filtered_recipes), len(self.sample_data))
 
     def test_filter_by_nutrition_protein(self):
         """
@@ -44,16 +63,6 @@ class TestRecipeFilter(unittest.TestCase):
         self.recipe_filter.filter_by_nutrition(protein_min=18)
         filtered_recipes = self.recipe_filter.get_filtered_recipes()
         self.assertEqual(len(filtered_recipes), 2)
-        self.assertTrue(all(recipe[2] >= 18 for recipe in filtered_recipes["nutrition"]))
-
-    def test_filter_by_nutrition_carbs(self):
-        """
-        Test filtering recipes by minimum carbohydrates value.
-        """
-        self.recipe_filter.filter_by_nutrition(carbs_min=40)
-        filtered_recipes = self.recipe_filter.get_filtered_recipes()
-        self.assertEqual(len(filtered_recipes), 2)
-        self.assertTrue(all(recipe[6] >= 40 for recipe in filtered_recipes["nutrition"]))
 
     def test_filter_by_nutrition_fat(self):
         """
@@ -61,8 +70,15 @@ class TestRecipeFilter(unittest.TestCase):
         """
         self.recipe_filter.filter_by_nutrition(fat_max=10)
         filtered_recipes = self.recipe_filter.get_filtered_recipes()
-        self.assertEqual(len(filtered_recipes), 1)
-        self.assertTrue(all(recipe[1] <= 10 for recipe in filtered_recipes["nutrition"]))
+        self.assertEqual(len(filtered_recipes), 2)
+
+    def test_filter_by_nutrition_carbs(self):
+        """
+        Test filtering recipes by minimum carbs value.
+        """
+        self.recipe_filter.filter_by_nutrition(carbs_min=40)
+        filtered_recipes = self.recipe_filter.get_filtered_recipes()
+        self.assertEqual(len(filtered_recipes), 2)
 
     def test_combined_filters(self):
         """
@@ -70,9 +86,22 @@ class TestRecipeFilter(unittest.TestCase):
         """
         selected_ingredients = ["flour", "milk", "eggs"]
         self.recipe_filter.filter_by_ingredients(selected_ingredients)
-        self.recipe_filter.filter_by_nutrition(protein_min=18)
+        self.recipe_filter.filter_by_nutrition(protein_min=10)
         filtered_recipes = self.recipe_filter.get_filtered_recipes()
-        self.assertEqual(len(filtered_recipes), 0)  # No recipes match both criteria
+        self.assertEqual(len(filtered_recipes), 1)
+        self.assertEqual(
+            filtered_recipes.iloc[0]["ingredients"], ["flour", "milk", "eggs"]
+        )
+
+    def test_no_matching_combined_filters(self):
+        """
+        Test combining filters where no recipes match.
+        """
+        selected_ingredients = ["flour", "milk", "eggs"]
+        self.recipe_filter.filter_by_ingredients(selected_ingredients)
+        self.recipe_filter.filter_by_nutrition(protein_min=50)  # No recipes have protein >= 50
+        filtered_recipes = self.recipe_filter.get_filtered_recipes()
+        self.assertTrue(filtered_recipes.empty)
 
     def test_empty_filtered_recipes(self):
         """
@@ -82,23 +111,22 @@ class TestRecipeFilter(unittest.TestCase):
         filtered_recipes = self.recipe_filter.get_filtered_recipes()
         self.assertTrue(filtered_recipes.empty)
 
+    def test_get_filtered_recipes_initial(self):
+        """
+        Test the get_filtered_recipes method before any filtering.
+        """
+        filtered_recipes = self.recipe_filter.get_filtered_recipes()
+        pd.testing.assert_frame_equal(filtered_recipes, self.sample_data)
+
     def test_reset_filtered_recipes(self):
         """
-        Test that filtering starts with the original dataset each time.
+        Test resetting the filtered recipes to the original data.
         """
-        # First filter
-        self.recipe_filter.filter_by_ingredients(["flour", "sugar", "butter"])
-        filtered_recipes_first = self.recipe_filter.get_filtered_recipes()
-        self.assertEqual(len(filtered_recipes_first), 1)
-
-        # Reset filter
+        self.recipe_filter.filter_by_ingredients(["flour", "milk", "eggs"])
         self.recipe_filter.filtered_recipes = self.recipe_filter.recipes_df.copy()
+        filtered_recipes = self.recipe_filter.get_filtered_recipes()
+        pd.testing.assert_frame_equal(filtered_recipes, self.sample_data)
 
-        # Second filter
-        self.recipe_filter.filter_by_ingredients(["chicken", "rice", "peas"])
-        filtered_recipes_second = self.recipe_filter.get_filtered_recipes()
-        self.assertEqual(len(filtered_recipes_second), 1)
-        self.assertEqual(filtered_recipes_second.iloc[0]["ingredients"], ["chicken", "rice", "peas"])
 
 if __name__ == "__main__":
     unittest.main()

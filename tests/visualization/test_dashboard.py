@@ -1,6 +1,7 @@
 import unittest
 from unittest.mock import MagicMock, patch
 import pandas as pd
+import streamlit as st
 from src.visualization.dashboard import RecipeVisualizer
 
 
@@ -33,7 +34,9 @@ class TestRecipeVisualizer(unittest.TestCase):
 
     @patch("streamlit.columns")
     @patch("streamlit.session_state", {})
-    def test_render_navigation(self, mock_columns):
+    @patch("streamlit.button")
+    @patch("streamlit.markdown")
+    def test_render_navigation(self, mock_markdown, mock_button, mock_columns):
         """
         Test the render_navigation method.
         """
@@ -61,7 +64,7 @@ class TestRecipeVisualizer(unittest.TestCase):
         self.visualizer.render_pie_chart(selected_recipe)
 
         # Assert that plotly_chart was called once
-        self.assertTrue(mock_plotly_chart.called)
+        mock_plotly_chart.assert_called_once()
 
     @patch("streamlit.plotly_chart")
     def test_render_popularity_chart(self, mock_plotly_chart):
@@ -72,7 +75,7 @@ class TestRecipeVisualizer(unittest.TestCase):
         self.visualizer.render_popularity_chart(selected_recipe)
 
         # Assert that plotly_chart was called once
-        self.assertTrue(mock_plotly_chart.called)
+        mock_plotly_chart.assert_called_once()
 
     @patch("streamlit.plotly_chart")
     def test_render_score_chart(self, mock_plotly_chart):
@@ -83,11 +86,11 @@ class TestRecipeVisualizer(unittest.TestCase):
         self.visualizer.render_score_chart(selected_recipe)
 
         # Assert that plotly_chart was called once
-        self.assertTrue(mock_plotly_chart.called)
+        mock_plotly_chart.assert_called_once()
 
-    @patch("dashboard.RecipeVisualizer.render_navigation")
-    @patch("dashboard.RecipeVisualizer.render_pie_chart")
-    @patch("dashboard.RecipeVisualizer.render_score_chart")
+    @patch("src.visualization.dashboard.RecipeVisualizer.render_navigation")
+    @patch("src.visualization.dashboard.RecipeVisualizer.render_pie_chart")
+    @patch("src.visualization.dashboard.RecipeVisualizer.render_score_chart")
     def test_render_dashboard(self, mock_render_navigation, mock_render_pie_chart, mock_render_score_chart):
         """
         Test the render_dashboard method.
@@ -96,9 +99,9 @@ class TestRecipeVisualizer(unittest.TestCase):
         self.visualizer.render_dashboard(self.recipes_df)
 
         # Assert that all rendering methods are called
-        self.assertTrue(mock_render_navigation.called)
-        self.assertTrue(mock_render_pie_chart.called)
-        self.assertTrue(mock_render_score_chart.called)
+        mock_render_navigation.assert_called_once()
+        mock_render_pie_chart.assert_called_once()
+        mock_render_score_chart.assert_called_once()
 
 
 if __name__ == "__main__":
