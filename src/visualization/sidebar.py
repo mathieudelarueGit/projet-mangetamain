@@ -7,7 +7,7 @@ def get_sidebar_configurations(recipes_df, ingredient_list):
     """
     st.sidebar.title("What are we eating today?")
 
-    # Initialize session state for expanders and user inputs if not already set
+    # Initialize session state for expanders if not already set
     if "reset_clicked" not in st.session_state:
         st.session_state["reset_clicked"] = False
     if "expand_ingredients" not in st.session_state:
@@ -20,10 +20,13 @@ def get_sidebar_configurations(recipes_df, ingredient_list):
         "What's in your fridge?",
         expanded=st.session_state.get("expand_ingredients", False),
     ):
+        # Use the widget's return value directly instead of modifying session state
         selected_ingredients = st.multiselect(
             "Type to search ingredients:",
             options=ingredient_list,
-            default=[],  # Avoid using session state for default
+            default=st.session_state.get(
+                "selected_ingredients", []
+            ),  # Default value for the widget
             key="selected_ingredients",
             help="Start typing to see suggestions for ingredients.",
         )
@@ -38,10 +41,6 @@ def get_sidebar_configurations(recipes_df, ingredient_list):
             st.caption(f"Selected Ingredients: {selected_summary}")
         else:
             st.caption("No ingredients selected.")
-
-        # Update session state to control expander behavior
-        st.session_state["expand_ingredients"] = True
-        st.session_state["expand_macronutrients"] = False
 
     # **Collapsible Section: Macronutrients**
     with st.sidebar.expander(
@@ -81,10 +80,6 @@ def get_sidebar_configurations(recipes_df, ingredient_list):
         total_calories = (protein_min * 4) + (carbs_min * 4) + (fat_max * 9)
         st.markdown(f"**Total Calories: {total_calories} Kcal**")
 
-        # Update session state to control expander behavior
-        st.session_state["expand_macronutrients"] = True
-        st.session_state["expand_ingredients"] = False
-
     # **Buttons Below Expander**
     st.sidebar.markdown("---")
     col1, col2 = st.sidebar.columns([1, 1])
@@ -95,20 +90,13 @@ def get_sidebar_configurations(recipes_df, ingredient_list):
 
     # Handle reset button
     if reset_clicked:
-        st.session_state.clear()  # Clear all session state
-        st.session_state["reset_clicked"] = True
-        st.session_state["expand_ingredients"] = False
-        st.session_state["expand_macronutrients"] = False
-        st.session_state["protein_min"] = 0
-        st.session_state["carbs_min"] = 0
-        st.session_state["fat_max"] = 150
-        st.session_state["selected_ingredients"] = []
-        print(st.session_state)
-        # st.rerun()  # Restart the app
+        # Use st.session_state.clear() carefully without conflicting widget keys
+        st.session_state.clear()  # Clears session state, but widgets will reinitialize
+        st.rerun()  # Restart the app
 
     # Return all user inputs
     return {
-        "selected_ingredients": st.session_state.get("selected_ingredients", []),
+        "selected_ingredients": selected_ingredients,  # Use widget return value
         "protein_min": protein_min,
         "carbs_min": carbs_min,
         "fat_max": fat_max,

@@ -1,6 +1,6 @@
 import streamlit as st
 
-from visualization.charts import ChartFactory
+from src.visualization.charts import ChartFactory
 
 
 class RecipeVisualizer:

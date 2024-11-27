@@ -5,7 +5,7 @@ import pandas as pd
 import streamlit as st
 import ast
 
-from metrics import calculate_mtm_score
+from src.metrics import calculate_mtm_score
 
 # Get a logger specific to this module
 logger = logging.getLogger(__name__)
@@ -57,8 +57,8 @@ class DataLoader:
                     raise ValueError(f"Unsupported file type for {file_name}")
 
             return [os.path.join(extracted_dir, f) for f in os.listdir(extracted_dir)]
-        except Exception as e:
-            logger.error(f"Error while extracting {file_name}: {e}")
+        except Exception:
+            # logger.error(f"Error while extracting {file_name}: {e}")
             raise
 
     @st.cache_data
@@ -83,24 +83,24 @@ class DataLoader:
         Exception:
             If an error occurs during data loading.
         """
-        logger.info(f"Loading data from {file_name}")
+        # logger.info(f"Loading data from {file_name}")
         try:
             if file_name.endswith(".csv"):
                 df = pd.read_csv(file_name)
-                logger.info(f"Loaded CSV file: {file_name}")
+                # logger.info(f"Loaded CSV file: {file_name}")
 
             elif file_name.endswith(".zip"):
                 extracted_files = _self.unzip_data(file_name)
                 csv_file = [f for f in extracted_files if f.endswith(".csv")][0]
                 df = pd.read_csv(csv_file)
-                logger.info(f"Loaded CSV from ZIP: {csv_file}")
+                # logger.info(f"Loaded CSV from ZIP: {csv_file}")
             else:
                 raise ValueError(f"Unsupported file type: {file_name}")
 
             return df
 
-        except Exception as e:
-            logger.error(f"Error while loading data from {file_name}: {e}")
+        except Exception:
+            # logger.error(f"Error while loading data from {file_name}: {e}")
             raise
 
     @st.cache_data
@@ -150,6 +150,7 @@ class DataLoader:
 
             return df, ingredient_list
 
-        except Exception as e:
-            logger.error(f"Error while loading and parsing data from {file_name}: {e}")
+        except Exception:
+            # logger.error(
+            # f"Error while loading and parsing data from {file_name}: {e}")
             raise

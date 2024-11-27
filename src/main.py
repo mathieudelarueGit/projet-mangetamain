@@ -1,12 +1,12 @@
 import streamlit as st
 import pandas as pd
 
-from visualization.sidebar import get_sidebar_configurations
-from visualization.dashboard import RecipeVisualizer
-from visualization.front_page import render_front_page
+from src.visualization.sidebar import get_sidebar_configurations
+from src.visualization.dashboard import RecipeVisualizer
+from src.visualization.front_page import render_front_page
 
-from data_loader import DataLoader
-from filter import RecipeFilter
+from src.data_loader import DataLoader
+from src.filter import RecipeFilter
 
 # Load data
 data_loader = DataLoader()
