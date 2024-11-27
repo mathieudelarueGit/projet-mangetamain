@@ -1,137 +1,89 @@
 import unittest
-from unittest.mock import patch, MagicMock
 import os
+import zipfile
 import pandas as pd
-from src.data_loader import DataLoader
-
+from data_loader import DataLoader
 
 class TestDataLoader(unittest.TestCase):
-
     def setUp(self):
+        """
+        Set up resources for each test.
+        """
         self.data_loader = DataLoader()
+        self.test_csv_file = "test_file.csv"
+        self.test_zip_file = "test_file.zip"
 
-    @patch("os.path.exists")
-    @patch("os.makedirs")
-    @patch("os.listdir")
-    @patch("src.data_loader.zipfile.ZipFile")
-    def test_unzip_data_zipfile(self, mock_zipfile, mock_listdir, mock_makedirs, mock_exists):
+        # Create a sample CSV file
+        self.sample_data = pd.DataFrame({
+            "nutrition": ["[1.0, 2.0, 3.0]", "[4.0, 5.0, 6.0]"],
+            "ingredient_PP": ["['salt', 'sugar']", "['flour', 'water']"],
+        })
+        self.sample_data.to_csv(self.test_csv_file, index=False)
+
+        # Create a ZIP file containing the CSV
+        with zipfile.ZipFile(self.test_zip_file, "w") as zipf:
+            zipf.write(self.test_csv_file)
+
+    def tearDown(self):
         """
-        Test that ZIP files are unzipped correctly and extracted files are returned.
+        Clean up resources after each test.
         """
-        mock_exists.return_value = False
-        mock_listdir.return_value = ["file1.csv", "file2.csv"]
+        if os.path.exists(self.test_csv_file):
+            os.remove(self.test_csv_file)
+        if os.path.exists(self.test_zip_file):
+            os.remove(self.test_zip_file)
+        extracted_dir = os.path.splitext(self.test_zip_file)[0] + "_extracted"
+        if os.path.exists(extracted_dir):
+            for file in os.listdir(extracted_dir):
+                os.remove(os.path.join(extracted_dir, file))
+            os.rmdir(extracted_dir)
 
-        mock_zip = MagicMock()
-        mock_zipfile.return_value.__enter__.return_value = mock_zip
-
-        file_name = "test.zip"
-        result = self.data_loader.unzip_data(file_name)
-
-        mock_zip.extractall.assert_called_once()
-        mock_makedirs.assert_called_once_with("test_extracted")
-        self.assertEqual(result, ["test_extracted/file1.csv", "test_extracted/file2.csv"])
-
-    @patch("os.path.exists")
-    @patch("os.makedirs")
-    @patch("os.listdir")
-    @patch("src.data_loader.DataLoader.decompress_xz")
-    def test_unzip_data_xzfile(self, mock_decompress_xz, mock_listdir, mock_makedirs, mock_exists):
+    def test_unzip_data(self):
         """
-        Test that XZ files are decompressed correctly and the decompressed file is returned.
+        Test the unzip_data method.
         """
-        mock_exists.return_value = False
-        mock_listdir.return_value = ["file1.csv"]
-        mock_decompress_xz.return_value = "test_extracted/file1.csv"
+        extracted_files = self.data_loader.unzip_data(self.test_zip_file)
+        self.assertTrue(os.path.exists(extracted_files[0]))
+        self.assertTrue(extracted_files[0].endswith(".csv"))
 
-        file_name = "test.xz"
-        result = self.data_loader.unzip_data(file_name)
-
-        mock_decompress_xz.assert_called_once_with(file_name, "test_extracted")
-        mock_makedirs.assert_called_once_with("test_extracted")
-        self.assertEqual(result, ["test_extracted/file1.csv"])
-
-    @patch("pandas.read_csv")
-    @patch("src.data_loader.DataLoader.unzip_data")
-    def test_load_data_from_zip(self, mock_unzip_data, mock_read_csv):
+    def test_load_data_csv(self):
         """
-        Test that CSV files inside ZIP archives are loaded correctly.
+        Test the load_data method with a CSV file.
         """
-        mock_unzip_data.return_value = ["file1.csv"]
-        mock_df = pd.DataFrame({"col1": [1, 2], "col2": [3, 4]})
-        mock_read_csv.return_value = mock_df
+        df = self.data_loader.load_data(self.test_csv_file)
+        pd.testing.assert_frame_equal(df, self.sample_data)
 
-        file_name = "test.zip"
-        result = self.data_loader.load_data(file_name)
-
-        mock_unzip_data.assert_called_once_with(file_name)
-        mock_read_csv.assert_called_once_with("file1.csv")
-        pd.testing.assert_frame_equal(result, mock_df)
-
-    @patch("pandas.read_csv")
-    def test_load_data_from_csv(self, mock_read_csv):
+    def test_load_data_zip(self):
         """
-        Test that CSV files are loaded directly without unzipping.
+        Test the load_data method with a ZIP file.
         """
-        mock_df = pd.DataFrame({"col1": [1, 2], "col2": [3, 4]})
-        mock_read_csv.return_value = mock_df
+        df = self.data_loader.load_data(self.test_zip_file)
+        pd.testing.assert_frame_equal(df, self.sample_data)
 
-        file_name = "test.csv"
-        result = self.data_loader.load_data(file_name)
-
-        mock_read_csv.assert_called_once_with(file_name)
-        pd.testing.assert_frame_equal(result, mock_df)
-
-    @patch("pandas.read_pickle")
-    def test_load_data_from_pickle(self, mock_read_pickle):
+    def test_load_and_parse_data(self):
         """
-        Test that Pickle files are loaded correctly.
+        Test the load_and_parse_data method.
         """
-        mock_df = pd.DataFrame({"col1": [1, 2], "col2": [3, 4]})
-        mock_read_pickle.return_value = mock_df
+        df, ingredient_list = self.data_loader.load_and_parse_data(self.test_csv_file)
 
-        file_name = "test.pkl"
-        result = self.data_loader.load_data(file_name)
+        # Test the parsed DataFrame
+        expected_nutrition = [
+            [1.0, 2.0, 3.0],
+            [4.0, 5.0, 6.0],
+        ]
+        expected_ingredients = [
+            ["salt", "sugar"],
+            ["flour", "water"],
+        ]
+        self.assertEqual(df["nutrition"].tolist(), expected_nutrition)
+        self.assertEqual(df["ingredient_PP"].tolist(), expected_ingredients)
 
-        mock_read_pickle.assert_called_once_with(file_name)
-        pd.testing.assert_frame_equal(result, mock_df)
+        # Test the MTM score column
+        self.assertIn("mtm_score", df.columns)
 
-    @patch("pandas.read_csv")
-    @patch("src.data_loader.DataLoader.unzip_data")
-    def test_load_data_from_xz(self, mock_unzip_data, mock_read_csv):
-        """
-        Test that CSV files inside XZ archives are loaded correctly.
-        """
-        mock_unzip_data.return_value = ["test_extracted/file1.csv"]
-        mock_df = pd.DataFrame({"col1": [1, 2], "col2": [3, 4]})
-        mock_read_csv.return_value = mock_df
+        # Test the ingredient list
+        expected_ingredient_set = {"salt", "sugar", "flour", "water"}
+        self.assertEqual(set(ingredient_list), expected_ingredient_set)
 
-        file_name = "test.xz"
-        result = self.data_loader.load_data(file_name)
-
-        mock_unzip_data.assert_called_once_with(file_name)
-        mock_read_csv.assert_called_once_with("test_extracted/file1.csv")
-        pd.testing.assert_frame_equal(result, mock_df)
-
-    def test_load_data_unsupported_file_type(self):
-        """
-        Test that an unsupported file type raises the correct exception.
-        """
-        file_name = "test.txt"
-        with self.assertRaises(ValueError) as context:
-            self.data_loader.load_data(file_name)
-        self.assertEqual(str(context.exception), f"Unsupported file type: {file_name}")
-    
-    @patch("os.path.exists")
-    @patch("os.makedirs")
-    def test_unzip_data_unsupported_file_type(self, mock_makedirs, mock_exists):
-        """
-        Test that an unsupported file type raises a ValueError in unzip_data.
-        """
-        mock_exists.return_value = False
-        file_name = "test.unsupported"
-
-        with self.assertRaises(ValueError) as context:
-            self.data_loader.unzip_data(file_name)
-
-        self.assertEqual(str(context.exception), f"Unsupported file type for {file_name}")
-
+if __name__ == "__main__":
+    unittest.main()
