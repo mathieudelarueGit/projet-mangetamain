@@ -2,7 +2,8 @@ def calculate_mtm_score(nutrition):
     """
     Calculate the MTM score for a single recipe based on its nutritional values.
     Args:
-        nutrition: List of nutritional values [calories, fat, sugar, sodium, protein, saturated_fat, carbs].
+        nutrition: List of nutritional values
+        [calories, fat, sugar, sodium, protein, saturated_fat, carbs].
     Returns:
         MTM score (float).
     """
