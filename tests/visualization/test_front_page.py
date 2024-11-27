@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch
-import front_page
+from src.visualization.front_page import render_front_page
 
 
 class TestRenderFrontPage(unittest.TestCase):
@@ -15,7 +15,7 @@ class TestRenderFrontPage(unittest.TestCase):
         Test that the render_front_page function calls the appropriate Streamlit functions.
         """
         # Call the function
-        front_page.render_front_page()
+        render_front_page()
 
         # Assert that st.image was called with the correct arguments
         mock_image.assert_called_once_with(

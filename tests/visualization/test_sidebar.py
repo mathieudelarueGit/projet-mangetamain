@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch, MagicMock
-import sidebar
+from src.visualization.sidebar import get_sidebar_configurations
 
 
 class TestSidebar(unittest.TestCase):
@@ -57,7 +57,7 @@ class TestSidebar(unittest.TestCase):
             # Call the function
             recipes_df = MagicMock()
             ingredient_list = ["flour", "sugar", "eggs"]
-            config = sidebar.get_sidebar_configurations(recipes_df, ingredient_list)
+            config = get_sidebar_configurations(recipes_df, ingredient_list)
 
             # Assertions for returned configuration
             self.assertEqual(config["selected_ingredients"], ["flour", "sugar"])

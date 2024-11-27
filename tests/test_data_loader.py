@@ -2,7 +2,7 @@ import unittest
 import os
 import zipfile
 import pandas as pd
-from data_loader import DataLoader
+from src.data_loader import DataLoader
 
 class TestDataLoader(unittest.TestCase):
     def setUp(self):

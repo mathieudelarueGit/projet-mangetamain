@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import MagicMock, patch
 import pandas as pd
-from dashboard import RecipeVisualizer
+from src.visualization.dashboard import RecipeVisualizer
 
 
 class TestRecipeVisualizer(unittest.TestCase):
