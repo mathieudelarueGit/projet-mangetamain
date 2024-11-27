@@ -21,7 +21,8 @@ class RecipeFilter:
     def filter_by_ingredients(self, selected_ingredients):
         """
         Filter recipes based on selected ingredients.
-        A recipe is returned only if all its ingredients are present in the selected ingredients.
+        A recipe is returned only if all its ingredients are present
+        in the selected ingredients.
         """
 
         if self.filtered_recipes.empty:
@@ -56,19 +57,17 @@ class RecipeFilter:
 
         if "nutrition" in self.recipes_df.columns:
             # Filter by protein
-            valid_types = (
-                self.filtered_recipes["nutrition"]
-                .apply(lambda x: isinstance(x, (list, tuple)))
-                .sum()
-            )
             if protein_min > 0:
                 self.filtered_recipes = self.filtered_recipes[
                     self.filtered_recipes["nutrition"].apply(
-                        lambda x: isinstance(x, (list, tuple))
-                        and len(x) > 4
-                        and x[4] >= protein_min
+                        lambda x: (
+                            isinstance(x, (list, tuple)) and
+                            len(x) > 4 and
+                            x[4] >= protein_min
+                        )
                     )
                 ]
+
                 if self.check_empty():
                     return
 
@@ -76,11 +75,14 @@ class RecipeFilter:
             if carbs_min > 0:
                 self.filtered_recipes = self.filtered_recipes[
                     self.filtered_recipes["nutrition"].apply(
-                        lambda x: isinstance(x, (list, tuple))
-                        and len(x) > 6
-                        and x[6] >= carbs_min
+                        lambda x: (
+                            isinstance(x, (list, tuple)) and
+                            len(x) > 6 and
+                            x[6] >= carbs_min
+                        )
                     )
                 ]
+
                 if self.check_empty():
                     return
 
@@ -88,11 +90,14 @@ class RecipeFilter:
             if fat_max < 150:
                 self.filtered_recipes = self.filtered_recipes[
                     self.filtered_recipes["nutrition"].apply(
-                        lambda x: isinstance(x, (list, tuple))
-                        and len(x) > 1
-                        and x[1] <= fat_max
+                        lambda x: (
+                            isinstance(x, (list, tuple)) and
+                            len(x) > 1 and
+                            x[1] <= fat_max
+                        )
                     )
                 ]
+
                 if self.check_empty():
                     return
 

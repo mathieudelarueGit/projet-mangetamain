@@ -1,7 +1,6 @@
 import streamlit as st
-import pandas as pd
+
 from visualization.charts import ChartFactory
-from metrics import calculate_mtm_score
 
 
 class RecipeVisualizer:

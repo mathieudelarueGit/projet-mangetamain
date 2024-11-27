@@ -45,21 +45,23 @@ class ChartFactory:
     @staticmethod
     def score_display(mtm_score, nutrition):
         """
-        Display a simple table for the score and nutrition details with an external black border.
+        Display a simple table for the score and nutrition details
+        with an external black border.
 
         Parameters:
             mtm_score (int): The calculated score (e.g., 75).
-            nutrition (list): Nutritional values [calories, fat, sugars, sodium, protein, saturated fat, carbs].
+            nutrition (list): Nutritional values
+            [calories, fat, sugars, sodium, protein, saturated fat, carbs].
         """
         # Determine qualitative description and color
         if mtm_score < 30:
-            score_text = "Poor"
+            # score_text = "Poor"
             score_color = "red"
         elif 30 <= mtm_score < 70:
-            score_text = "Medium"
+            # score_text = "Medium"
             score_color = "orange"
         else:
-            score_text = "Good"
+            # score_text = "Good"
             score_color = "green"
 
         # Define nutritional labels
@@ -134,7 +136,11 @@ class ChartFactory:
 
         # Add an annotation to display the score
         fig.add_annotation(
-            text=f"<b>Healthiness Score<br><span style='color:{score_color};'>{mtm_score}/100</span></b>",
+            text=(
+                "<b>Healthiness Score<br>"
+                f"<span style='color: {score_color};'>{mtm_score}/100</span>"
+                "</b>"
+            ),
             x=0.5,  # Center across the table
             y=1.05,  # Position above the table
             xref="paper",

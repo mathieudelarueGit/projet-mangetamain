@@ -1,10 +1,7 @@
-import ast
-
 import streamlit as st
 import pandas as pd
 
 from visualization.sidebar import get_sidebar_configurations
-from visualization.charts import ChartFactory
 from visualization.dashboard import RecipeVisualizer
 from visualization.front_page import render_front_page
 
@@ -61,10 +58,13 @@ if user_inputs["start_search"]:
     # Handle "No Recipes Found" case
     if filtered_recipes.empty:
         st.session_state["no_recipes_message"] = (
-            "We didn't find any recipes that match your criteria. Try adding more ingredients or choose a different combination of macronutrients!"
+            "We didn't find any recipes that match your criteria. "
+            "Try adding more ingredients or "
+            " choose a different combination of macronutrients!"
         )
     else:
         st.session_state["no_recipes_message"] = ""
+
 else:
     # Retrieve filtered recipes from session state
     filtered_recipes = st.session_state.get("filtered_recipes", None)
@@ -73,8 +73,8 @@ else:
 if filtered_recipes is None or filtered_recipes.empty:
     # Display front page or "No Recipes Found" message
     if (
-        "no_recipes_message" in st.session_state
-        and st.session_state["no_recipes_message"]
+        "no_recipes_message" in st.session_state and
+        st.session_state["no_recipes_message"]
     ):
         st.sidebar.markdown(
             f"<span style='color:red;'>{st.session_state['no_recipes_message']}</span>",
