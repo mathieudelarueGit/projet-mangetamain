@@ -45,7 +45,7 @@ jobs:
       # Run Flake8 to check for PEP8 compliance
       - name: Run Flake8
         run: |
-          poetry run flake8 --max-line-length 88 --ignore=E402,E262,E265 src/
+          poetry run flake8 --max-line-length 88 --ignore=E402,E262,E265,W504 src/
 
       # Run Black to check code formatting
       - name: Run Black
