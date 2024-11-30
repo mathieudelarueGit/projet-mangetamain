@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch, MagicMock
 import pandas as pd
 import streamlit as st
 from src.visualization.dashboard import RecipeVisualizer
@@ -17,6 +17,11 @@ class TestRecipeVisualizer(unittest.TestCase):
         self.recipes_df = pd.DataFrame({
             "id": [1, 2, 3],
             "name": ["Recipe A", "Recipe B", "Recipe C"],
+            "ingredient_PP": [
+                ["chicken", "salt", "pepper"],
+                ["beef", "onion", "garlic"],
+                ["tofu", "soy sauce", "ginger"]
+            ],
             "nutrition": [
                 [400, 20, 10, 3, 15, 5, 50],
                 [300, 15, 8, 2, 10, 4, 30],
@@ -31,6 +36,32 @@ class TestRecipeVisualizer(unittest.TestCase):
         })
 
         self.visualizer = RecipeVisualizer(self.recipes_df, self.interactions_df)
+
+    @patch("streamlit.markdown")
+    @patch("streamlit.write")
+    def test_render_no_recipes_suggestions(self, mock_write, mock_markdown):
+        """
+        Test the render_no_recipes_suggestions method.
+        """
+        selected_ingredients = ["chicken", "salt"]
+        with patch("streamlit.session_state", {}):
+            self.visualizer.render_no_recipes_suggestions(selected_ingredients)
+
+            # Check if suggestions header was written
+            mock_markdown.assert_any_call(
+                "<h2 style='color:#FF6347;'>🔍 Suggestions Based on Your Ingredients</h2>",
+                unsafe_allow_html=True
+            )
+
+            # Check if the message was written
+            mock_write.assert_any_call(
+                "We didn't find any recipes that match your criteria. "
+                "Here are some suggestions based on your selected ingredients. "
+                "Consider adding the missing ingredients!"
+            )
+
+            # Check if individual recipes were displayed
+            self.assertTrue(mock_write.called)
 
     @patch("streamlit.columns")
     @patch("streamlit.session_state", {})

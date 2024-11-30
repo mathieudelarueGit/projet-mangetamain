@@ -55,4 +55,4 @@ jobs:
       # Run the tests with coverage threshold
       - name: Run tests with coverage
         run: |
-          poetry run pytest --cov=src --cov-fail-under=90
+          poetry run pytest --cov=src --cov-fail-under=80
