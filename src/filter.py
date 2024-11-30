@@ -31,7 +31,7 @@ class RecipeFilter:
         if not selected_ingredients:  # If no ingredients are selected
             return  # Do nothing and keep all recipes
 
-        if "ingredients" in self.recipes_df.columns and selected_ingredients:
+        if "ingredient_PP" in self.recipes_df.columns and selected_ingredients:
 
             def recipe_matches(recipe_ingredients):
                 """
@@ -42,7 +42,7 @@ class RecipeFilter:
 
             # Filter recipes
             self.filtered_recipes = self.filtered_recipes[
-                self.filtered_recipes["ingredients"].apply(recipe_matches)
+                self.filtered_recipes["ingredient_PP"].apply(recipe_matches)
             ]
         else:
             # If no selected ingredients, reset to empty DataFrame
