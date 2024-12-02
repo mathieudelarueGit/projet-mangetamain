@@ -85,9 +85,7 @@ def render_front_page():
                     souhaitent probablement passer moins de 2 heures au fourneau !
                 """
         )
-        st.image(
-            "src/visualization/images/preparation_time.png",
-            use_column_width=True)
+        st.image("src/visualization/images/preparation_time.png", use_column_width=True)
         st.write(
             """
                     De plus, nous considérons que les recettes de moins de 5 minutes
@@ -110,9 +108,7 @@ def render_front_page():
                     ce qui constitue une simplification très significative.
                 """
         )
-        st.image(
-            "src/visualization/images/word2vec.png",
-            use_column_width=True)
+        st.image("src/visualization/images/word2vec.png", use_column_width=True)
         st.write(
             """
                     Le nombre d'ingrédients par recette suit une loi de type loi gamma.
@@ -123,9 +119,7 @@ def render_front_page():
                     illustre le must-have pour cuisiner des recettes plus saines.
                 """
         )
-        st.image(
-            "src/visualization/images/top-ingredients.png",
-            use_column_width=True)
+        st.image("src/visualization/images/top-ingredients.png", use_column_width=True)
         st.write(
             """
                     **Composition nutritionnelle** \n
