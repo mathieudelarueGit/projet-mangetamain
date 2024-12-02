@@ -105,20 +105,14 @@ class ChartFactory:
                         values=["", ""],  # No visible header for table cells
                         fill_color="white",
                         align="center",
-                        font=dict(
-                            family="Source Sans Pro",
-                            size=16,
-                            color="white"),
+                        font=dict(family="Source Sans Pro", size=16, color="white"),
                         height=0,
                     ),
                     cells=dict(
                         values=rows,  # Populate table cells with nutrition data
                         fill_color="white",
                         align="center",
-                        font=dict(
-                            family="Source Sans Pro",
-                            size=12,
-                            color="black"),
+                        font=dict(family="Source Sans Pro", size=12, color="black"),
                         height=30,
                         line_color="white",
                     ),
