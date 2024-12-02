@@ -54,8 +54,7 @@ class RecipeVisualizer:
         current_recipe = filtered_recipes.iloc[st.session_state["current_recipe_index"]]
         with title:
             st.markdown(
-                f"<h3 style='text-align: center;'>{
-                    current_recipe['name']}</h3>",
+                f"<h3 style='text-align: center;'>{current_recipe['name']}</h3>",
                 unsafe_allow_html=True,
             )
 
