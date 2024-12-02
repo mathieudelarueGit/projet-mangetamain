@@ -1,12 +1,4 @@
-import base64
 import streamlit as st
-
-
-def image_to_base64(image_path):
-    with open(image_path, "rb") as img_file:
-        encoded_string = base64.b64encode(img_file.read()).decode()
-    return encoded_string
-
 
 def render_front_page():
     """
