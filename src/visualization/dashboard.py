@@ -1,4 +1,5 @@
 import streamlit as st
+
 from src.visualization.charts import ChartFactory
 
 
@@ -14,24 +15,40 @@ class RecipeVisualizer:
         """
         Render navigation arrows and recipe title.
         """
-        left_arrow, title, right_arrow = st.columns([1, 6, 1])
+        # Building the layout for the navigation arrows and recipe title
+        left_arrow_box, title, right_arrow_box = st.columns([1, 6, 1])
 
-        # Initialize current recipe index in session state
+        # Inirialize the current recipe index in the session state
         if "current_recipe_index" not in st.session_state:
             st.session_state["current_recipe_index"] = 0
 
-        # Update current recipe index on arrow click
-        with left_arrow:
-            if st.button("⬅️", key="prev_arrow"):
+        # Create navigation buttons
+
+        st.markdown(
+            """
+            <style>
+            .custom .stButton button {
+                border: none;
+                background: transparent;
+            }
+            </style>
+            """,
+            unsafe_allow_html=True,
+        )
+
+        st.markdown("<div class='custom'>", unsafe_allow_html=True)
+        with left_arrow_box:
+            if st.button("", key="prev_arrow", icon=":material/arrow_circle_left:"):
                 st.session_state["current_recipe_index"] = (
                     st.session_state["current_recipe_index"] - 1
                 ) % len(filtered_recipes)
 
-        with right_arrow:
-            if st.button("➡️", key="next_arrow"):
+        with right_arrow_box:
+            if st.button("", key="next_arrow", icon=":material/arrow_circle_right:"):
                 st.session_state["current_recipe_index"] = (
                     st.session_state["current_recipe_index"] + 1
                 ) % len(filtered_recipes)
+        st.markdown("</div>", unsafe_allow_html=True)
 
         # Display Recipe Title
         current_recipe = filtered_recipes.iloc[st.session_state["current_recipe_index"]]
@@ -45,7 +62,7 @@ class RecipeVisualizer:
 
     def render_pie_chart(self, selected_recipe):
         """
-        Render a pie chart for the selected recipe's macronutrient breakdown.
+        Render a pie chart for the selected recipe's macronutriment breakdown.
         """
         macronutrient_values = [
             selected_recipe["nutrition"][1] * 9,  # Fat
@@ -54,7 +71,7 @@ class RecipeVisualizer:
         ]
         macronutrient_labels = ["Fat", "Protein", "Carbs"]
         pie_fig = ChartFactory.pie_chart(
-            macronutrient_labels, macronutrient_values, "Macronutrient Breakdown"
+            macronutrient_labels, macronutrient_values, "Macronutriment Breakdown"
         )
         st.plotly_chart(
             pie_fig,
