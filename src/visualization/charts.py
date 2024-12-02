@@ -5,11 +5,20 @@ import plotly.graph_objects as go
 class ChartFactory:
     @staticmethod
     def pie_chart(labels, values, title="Nutritional Breakdown"):
-        return px.pie(names=labels, values=values, title=title)
+        fig = px.pie(
+            names=labels,
+            values=values,
+            title=title,
+            color=values,
+            color_discrete_sequence=px.colors.sequential.Blues[::-1],
+            hole=0.7,
+        )
+        fig.update_layout(title=dict(text=title, font=dict(size=18)))
+        return fig
 
     @staticmethod
     def bar_chart(
-        data, x_col, y_col, color_col, text_col, title="Macronutrient Proportions"
+        data, x_col, y_col, color_col, text_col, title="Macronutriment Proportions"
     ):
         fig = px.bar(
             data,
@@ -28,6 +37,7 @@ class ChartFactory:
             yaxis_title=None,
             uniformtext_minsize=8,
             uniformtext_mode="hide",
+            title=dict(font=dict(size=40)),
         )
         return fig
 
@@ -95,43 +105,25 @@ class ChartFactory:
                         values=["", ""],  # No visible header for table cells
                         fill_color="white",
                         align="center",
-                        font=dict(size=16, color="white"),
+                        font=dict(
+                            family="Source Sans Pro",
+                            size=16,
+                            color="white"),
                         height=0,
                     ),
                     cells=dict(
                         values=rows,  # Populate table cells with nutrition data
                         fill_color="white",
                         align="center",
-                        font=dict(size=12, color="black"),
+                        font=dict(
+                            family="Source Sans Pro",
+                            size=12,
+                            color="black"),
                         height=30,
                         line_color="white",
                     ),
                 )
             ]
-        )
-
-        # Add a black border above the first row
-        fig.add_shape(
-            type="line",
-            x0=0.1,
-            x1=0.9,
-            y0=0.85,  # Position above the first row
-            y1=0.85,
-            xref="paper",
-            yref="paper",
-            line=dict(color="black", width=2),
-        )
-
-        # Add a black border below the last row
-        fig.add_shape(
-            type="line",
-            x0=0.1,
-            x1=0.9,
-            y0=0.15,  # Position below the last row (adjust based on table layout)
-            y1=0.15,
-            xref="paper",
-            yref="paper",
-            line=dict(color="black", width=2),
         )
 
         # Add an annotation to display the score
@@ -146,7 +138,7 @@ class ChartFactory:
             xref="paper",
             yref="paper",
             showarrow=False,
-            font=dict(size=18, color="black", family="Arial"),
+            font=dict(size=18, color="black", family="Source Sans Pro"),
             align="center",
         )
 

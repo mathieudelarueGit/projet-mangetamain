@@ -20,7 +20,8 @@ def get_sidebar_configurations(recipes_df, ingredient_list):
         "What's in your fridge?",
         expanded=st.session_state.get("expand_ingredients", False),
     ):
-        # Use the widget's return value directly instead of modifying session state
+        # Use the widget's return value directly instead of modifying session
+        # state
         selected_ingredients = st.multiselect(
             "Type to search ingredients:",
             options=ingredient_list,
@@ -90,7 +91,8 @@ def get_sidebar_configurations(recipes_df, ingredient_list):
 
     # Handle reset button
     if reset_clicked:
-        # Use st.session_state.clear() carefully without conflicting widget keys
+        # Use st.session_state.clear() carefully without conflicting widget
+        # keys
         st.session_state.clear()  # Clears session state, but widgets will reinitialize
         st.rerun()  # Restart the app
 
