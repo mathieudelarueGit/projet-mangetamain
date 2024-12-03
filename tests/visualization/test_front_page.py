@@ -78,9 +78,10 @@ class TestRenderFrontPage(unittest.TestCase):
         # the seasonal information)
         self.assertTrue(mock_write.called)
 
-        # Assert that st.header was called in the second tab for "Sélection des
-        # recettes"
-        mock_header.assert_called_with("Sélection des recettes")
+        # Assert that st.header was called for "Exploration des données" before
+        # "Sélection des recettes"
+        mock_header.assert_any_call("Exploration des données")  # First header
+        mock_header.assert_any_call("Sélection des recettes")  # Second header
 
         # Check that st.tabs was called with the correct tabs
         mock_tabs.assert_called_once_with(
