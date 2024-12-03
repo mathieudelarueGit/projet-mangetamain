@@ -148,8 +148,8 @@ class RecipeVisualizer:
             )
         ]
 
-        # Select up to 5 random recipes
-        random_recipes = matching_recipes.sample(min(5, len(matching_recipes)))
+        # Select up to 5 recipes with the highest MTM score
+        top_recipes = matching_recipes.nlargest(5, "mtm_score")
 
         # Display a styled header for the suggestions
         st.markdown(
@@ -158,15 +158,17 @@ class RecipeVisualizer:
         )
         st.write(st.session_state["no_recipes_message"])
 
+        if "recipe_clicked" not in st.session_state:
+            st.session_state["recipe_clicked"] = None
+
         # Display each recipe suggestion with mtm_score and missing ingredients
-        for _, recipe in random_recipes.iterrows():
+        for _, recipe in top_recipes.iterrows():
             with st.container():
                 # Recipe name without anchor link
-                st.markdown(
-                    f"<p style='font-size:24px; color:#4682B4; margin-bottom:0;'>"
-                    f"{recipe['name']}</p>",
-                    unsafe_allow_html=True,
-                )
+                if st.button(
+                    f"View Recipe: {recipe['name']}", key=f"recipe_{recipe['id']}"
+                ):
+                    st.session_state[f"recipe_{recipe['id']}"] = True
 
                 # MTM score and missing ingredients logic remains the same
                 mtm_score = recipe["mtm_score"]

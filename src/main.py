@@ -27,13 +27,18 @@ class RecipeApp:
         # Get user inputs from sidebar
         user_inputs = get_sidebar_configurations(self.recipes_df, self.ingredient_list)
 
+        self.check_recipe_buttons_in_main(user_inputs)
+
         # Reset session state if reset is clicked
         if user_inputs["reset_clicked"]:
             self.reset_session_state()
 
         # Handle filtering and search
         if user_inputs["start_search"]:
-            self.filtered_recipes = self.filter_recipes(user_inputs)
+            if user_inputs["recipe_clicked"]:
+                self.filtered_recipes = st.session_state["filtered_recipes"]
+            else:
+                self.filtered_recipes = self.filter_recipes(user_inputs)
             self.display_results(user_inputs)
         else:
             self.filtered_recipes = st.session_state.get("filtered_recipes", None)
@@ -86,6 +91,34 @@ class RecipeApp:
         """Render the dashboard with filtered recipes."""
         visualizer = RecipeVisualizer(self.recipes_df, self.interactions_df)
         visualizer.render_dashboard(self.filtered_recipes)
+
+    def check_recipe_buttons_in_main(self, user_inputs):
+        """Check if any recipe button was clicked and update session state."""
+        for recipe_id_key in st.session_state.keys():
+            if recipe_id_key.startswith("recipe_") and st.session_state[recipe_id_key]:
+                # Extract the recipe ID from the key
+                recipe_id = int(recipe_id_key.split("_")[1])
+
+                # Find the recipe in the DataFrame
+                clicked_recipe = self.recipes_df[
+                    self.recipes_df["id"] == recipe_id
+                ].iloc[0]
+
+                # Update session state with recipe details
+                user_inputs["start_search"] = True
+                user_inputs["selected_ingredients"] = clicked_recipe["ingredient_PP"]
+                user_inputs["recipe_clicked"] = True
+
+                # Update filtered_recipes to contain only the clicked recipe
+                st.session_state["filtered_recipes"] = self.recipes_df[
+                    self.recipes_df["id"] == recipe_id
+                ]
+
+                # Reset all recipe buttons to False (optional, to prevent sticky state)
+                for key in st.session_state.keys():
+                    if key.startswith("recipe_"):
+                        st.session_state[key] = False
+                break
 
 
 if __name__ == "__main__":
