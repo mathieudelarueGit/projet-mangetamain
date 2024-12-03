@@ -104,5 +104,6 @@ def get_sidebar_configurations(recipes_df, ingredient_list):
         "fat_max": fat_max,
         "start_search": start_search,
         "reset_clicked": reset_clicked,
+        "recipe_clicked": False,
         "total_calories": total_calories,
     }
