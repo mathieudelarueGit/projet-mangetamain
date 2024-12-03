@@ -16,34 +16,56 @@ def render_front_page():
         # Welcome text with HTML for styling
         st.markdown(
             """
-            <div class="opaque-background">
+            <div style="text-align: justify">
                 <h1>Welcome to Mangetamain!</h1>
                 <p>
-                    A web app designed to help you cook healthy recipes
-                    depending on what is available in your fridge.
+                     A web app designed to help you cook healthy recipes depending
+                     on what is available in your fridge. At Mangetamain, you will
+                     only find traditional bio recipes that will make you healthier!
                 </p>
                 <p>
-                    At Mangetamain, you will only find traditional bio
-                    recipes that will make you healthier! We retrieved only recipes
-                    that our dear contributors rated minimum 4 stars,
-                    so you won't be disappointed!
+                     We retrieved only recipes that our dear contributors rated  a
+                     minimum of 4 stars, so you won't be disappointed!
                 </p>
                 <p>
-                    Just select which ingredients you have in your fridge,
-                    and we will propose you the best recipes there is for you.
-                    You can even filter by macronutrients if you are on a specific diet
-                    or you just care about what's inside your plate!
+                    Just select which ingredients you have in your fridge, and we will
+                    recommend the best recipes for you. You can filter by macronutrients
+                    if you are on a specific diet or you just care about what's inside
+                    your plate!
                 </p>
                 <p>
-                    In doubt, you can always refer to the MTM score,
-                    an in-house score specifically designed to help
-                    you assess the quality of the recipe.
+                    In doubt, you can always refer to the MTM score, an in-house score
+                    specifically designed to help you assess the quality of the recipe.
                 </p>
-                <h2>Have fun!</h2>
+                <h2>Have fun & checkout fun facts down below!</h2>
             </div>
-        """,
+                """,
             unsafe_allow_html=True,
         )
+        st.write(
+            """
+        ________________________________________________________________________
+        """
+        )
+        col1, col2 = st.columns(2)
+        with col1:
+            st.write("**A vast community of food enthousiasts!**")
+            st.write("220K+ users that tend to like a lot recipes from Food.com!")
+            st.image(
+                "src/visualization/images/fig_ratings_ratios.png", use_column_width=True
+            )
+        with col2:
+            st.write("**A very dynamic website...**")
+            st.write(
+                """
+                     ...up to the point when Instagram stepped in! Note this
+                     might be pure coincidence though!
+                     """
+            )
+            st.image(
+                "src/visualization/images/fig_dynamics.png",
+                use_column_width=True)
+
     with tabs[1]:
         st.header("Sélection des recettes")
         st.write(
@@ -85,7 +107,9 @@ def render_front_page():
                     souhaitent probablement passer moins de 2 heures au fourneau !
                 """
         )
-        st.image("src/visualization/images/preparation_time.png", use_column_width=True)
+        st.image(
+            "src/visualization/images/preparation_time.png",
+            use_column_width=True)
         st.write(
             """
                     De plus, nous considérons que les recettes de moins de 5 minutes
@@ -103,12 +127,14 @@ def render_front_page():
                     ingrédient est décrit avec plusieurs mots, nous le représentons
                     par le vecteur moyen de ses mots. Notre dataset contient plus de
                     6000 ingrédients uniques. A l'aide de Word2Vec nous récupérons la
-                    déisgnation simple la plus proche de l'ingrédient original. Nous
+                    désignation simple la plus proche de l'ingrédient original. Nous
                     réduisons ainsi le nombre d'ingrédients uniques à environ 1200,
                     ce qui constitue une simplification très significative.
                 """
         )
-        st.image("src/visualization/images/word2vec.png", use_column_width=True)
+        st.image(
+            "src/visualization/images/word2vec.png",
+            use_column_width=True)
         st.write(
             """
                     Le nombre d'ingrédients par recette suit une loi de type loi gamma.
@@ -119,7 +145,9 @@ def render_front_page():
                     illustre le must-have pour cuisiner des recettes plus saines.
                 """
         )
-        st.image("src/visualization/images/top-ingredients.png", use_column_width=True)
+        st.image(
+            "src/visualization/images/top-ingredients.png",
+            use_column_width=True)
         st.write(
             """
                     **Composition nutritionnelle** \n
@@ -137,12 +165,76 @@ def render_front_page():
         )
         st.write(
             """
-                    **Dataset final** \n
+                    **Datasets finaux** \n
                     Avec en tête ce que l'application doit fournir, nous décidons
-                    de ne conserver que les informations suivantes dans le dataset :
+                    de ne conserver que les informations suivantes dans le dataset:
                     - nom de recette
                     - numério identification
                     - composition nutritionnelle
                     - liste des ingrédients
                 """
         )
+
+        st.header("Exploration des données")
+        st.write(
+            """
+                    **Détecter une saisonalité** \n
+                    Il est intéressant de voir si les recettes sont influencées par
+                    les saisons. En effet, nous proposons des recettes saines mais
+                    nous voulons aussi être éthiques et proposer des recettes de
+                    saison, pour des raisons écologiques et sociales.
+                    **Mais va-t-on aller à l'encontre des habitudes des utilisateurs
+                    que nous ciblons ?**
+                    Pour répondre à cette question, nous avons fait une jointure entre
+                    notre dataset de recettes filtrées bio et traditionnelles avec le
+                    dataset des interactions utilisateurs.
+                    Afin de pouvoir analyser la saisonalité, nous avons arbitrairement
+                    écarté les recettes ayant moins de 20 interactions. Nous passons
+                    de 365K interactions à 130K et de 70K recettes à 2,5K. \n
+                    **Comment calculer la saisonalité ?** \n
+                    Nous avons calculé la saisonalité d'une recette en fonction des
+                    dates de ses reviews. Les étapes suivantes ont été réalisées:
+                    - retrait de l'information des années
+                    - mapping des dates (mois et jour du mois) vers un angle compris
+                      entre 0 et 2 pi
+                    - calcul des moyennes des cosinus et sinus des dates angulaires
+                    - calcul des éccarts types des cosinus et sinus des dates angulaires
+                    - calcul de la saisonalité moyenne comme l'arctangente du sinus
+                        moyen et du cosinus moyen
+                    - calcul de l'écart type comme l'arctangente des écart types des
+                        sinus et cosinus des dates angulaires \n
+                    Les éccarts types et les moyennes sont calculés pour chaque recette
+                    et sont représentés dans la carte de chaleur ci-dessous :
+                """
+        )
+        st.image(
+            "src/visualization/images/seasonality.png",
+            use_column_width=True)
+        st.write(
+            """
+                    **Analyse de la saisonalité** \n
+                    Les recettes que nous avons sélectionnées ont une saisonnalité
+                    marquée pendant l'année. Cette saisonnalité est de l'ordre du
+                    trimestre, avec et s'étale sur toute l'année, même si la dynamque
+                    est moins forte en hiver. Le choix des recettes de notre public
+                    cible est bien influencé par les saisons. Ils seront donc réceptifs
+                    à des suggestions de saison.
+                    **Ajouter l'information de saisonalité dans le dataset final** \n
+                    Nous décidons finalement d'ajouter la saisonalité moyenne dans
+                    le dataset final. L'application proposera en priorité les recettes
+                    qui sont de saison!
+                """
+        )
+
+    st.write(
+        """
+            ________________________________________________________________________
+            **This project was made from a dataset consisting of 180K+ recipes and
+            700K+ recipe reviews covering 18 years of user interactions and uploads
+            on Food.com (formerly GeniusKitchen) to this link:**
+            """
+    )
+    st.link_button(
+        "Food.com dataset from Kaggle",
+        "https://www.kaggle.com/shuyangli94/food-com-recipes-and-user-interactions",
+    )
