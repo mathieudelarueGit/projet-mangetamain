@@ -1,7 +1,7 @@
 import streamlit as st
 
 
-def render_front_page():
+def render_front_page() -> None:
     """
     Render the front page of the app when no recipes are displayed.
     """

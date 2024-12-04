@@ -8,64 +8,85 @@ class MaxLevelFilter(logging.Filter):
     """
 
     def __init__(self, max_level: int) -> None:
+        """
+        Initialize the filter with a maximum logging level.
+
+        Parameters:
+        ----------
+        max_level : int
+            The highest logging level this filter will allow.
+        """
         self.max_level = max_level
         super().__init__()
 
     def filter(self, record: logging.LogRecord) -> bool:
+        """
+        Determine whether a log record should be allowed.
+
+        Parameters:
+        ----------
+        record : logging.LogRecord
+            The log record to evaluate.
+
+        Returns:
+        -------
+        bool
+            True if the record level is below or equal to max_level, otherwise False.
+        """
         return record.levelno <= self.max_level
 
 
 def setup_logging() -> None:
     """
-    Configures the global logging for the application, ensuring logs are
-    written to files.
+    Configure global logging for the application, ensuring logs are written to files.
 
     - Creates a "src/logs" directory if it doesn't exist.
-    - Sets up two separate log files: one for debug-level logs (DEBUG, INFO,
-      WARNING) and one for error-level logs (ERROR, CRITICAL).
-    - Adds the module name to log messages.
+    - Sets up two separate log files:
+      1. `app_debug.log` for DEBUG, INFO, and WARNING logs.
+      2. `app_error.log` for ERROR and CRITICAL logs.
+    - Suppresses unnecessary debug logs from external libraries like Pillow.
 
     Raises:
-        OSError: If the log directory cannot be created.
+    -------
+    OSError
+        If the log directory cannot be created.
     """
-
-    # Define the directory where log files will be stored
     log_directory: str = "src/logs"
 
-    # Check if the log directory exists, and if not, create it
+    # Create the log directory if it doesn't exist
     if not os.path.exists(log_directory):
         os.makedirs(log_directory)
 
-    # Get the root logger
+    # Configure the root logger
     logger = logging.getLogger()
-    logger.setLevel(logging.DEBUG)  # Set the logging level for the root logger
+    logger.setLevel(logging.DEBUG)  # Capture all logs at or above DEBUG level
 
-    # Add handlers only if none exist
+    # Avoid adding handlers multiple times
     if not logger.hasHandlers():
-
-        # Set up a file handler for debug-level logs (app_debug.log)
+        # Debug handler for detailed logs (DEBUG to WARNING)
         debug_handler = logging.FileHandler(
             os.path.join(log_directory, "app_debug.log"), mode="a"
         )
-
-        # Capture DEBUG, INFO, and WARNING logs
         debug_handler.setLevel(logging.DEBUG)
         debug_handler.setFormatter(
             logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
         )
-        debug_handler.addFilter(MaxLevelFilter(logging.WARNING))
+        debug_handler.addFilter(
+            MaxLevelFilter(logging.WARNING)
+        )  # Limit to DEBUG, INFO, and WARNING
 
-        # Set up a file handler for error-level logs (app_error.log)
+        # Error handler for critical issues (ERROR and CRITICAL)
         error_handler = logging.FileHandler(
             os.path.join(log_directory, "app_error.log"), mode="a"
         )
-
-        # Capture only ERROR and CRITICAL logs
         error_handler.setLevel(logging.ERROR)
         error_handler.setFormatter(
             logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
         )
 
-        # Add both handlers to the root logger
+        # Add handlers to the root logger
         logger.addHandler(debug_handler)
         logger.addHandler(error_handler)
+
+    # Suppress excessive debug logs from external libraries
+    logging.getLogger("PIL").setLevel(logging.INFO)
