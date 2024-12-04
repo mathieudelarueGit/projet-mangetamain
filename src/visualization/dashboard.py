@@ -1,209 +1,266 @@
+import logging
+import pandas as pd
 import streamlit as st
-
 from src.visualization.charts import ChartFactory
+
+# Create a logger for the RecipeVisualizer module
+logger = logging.getLogger(__name__)
 
 
 class RecipeVisualizer:
-    def __init__(self, recipes_df, interactions_df):
+    """
+    A class for visualizing recipes and related data in the Streamlit app.
+    """
+
+    def __init__(self, recipes_df: pd.DataFrame, interactions_df: pd.DataFrame) -> None:
         """
-        Initialize the visualizer with recipes and interactions data.
+        Initialize the visualizer with recipe and interaction data.
+
+        Parameters:
+        ----------
+        recipes_df : pd.DataFrame
+            DataFrame containing recipe data.
+        interactions_df : pd.DataFrame
+            DataFrame containing user interaction data.
         """
         self.recipes_df = recipes_df
         self.interactions_df = interactions_df
+        logger.info("RecipeVisualizer initialized with recipes and interactions data.")
 
-    def render_navigation(self, filtered_recipes):
+    def render_navigation(self, filtered_recipes: pd.DataFrame) -> pd.Series:
         """
-        Render navigation arrows and recipe title.
+        Render navigation arrows and display the recipe title.
+
+        Parameters:
+        ----------
+        filtered_recipes : pd.DataFrame
+            DataFrame containing filtered recipes.
+
+        Returns:
+        -------
+        pd.Series
+            The current recipe being displayed.
         """
-        # Building the layout for the navigation arrows and recipe title
-        left_arrow_box, title, right_arrow_box = st.columns([1, 6, 1])
+        try:
+            left_arrow_box, title, right_arrow_box = st.columns([1, 6, 1])
 
-        # Inirialize the current recipe index in the session state
-        if "current_recipe_index" not in st.session_state:
-            st.session_state["current_recipe_index"] = 0
+            if "current_recipe_index" not in st.session_state:
+                st.session_state["current_recipe_index"] = 0
 
-        # Create navigation buttons
-
-        st.markdown(
-            """
-            <style>
-            .custom .stButton button {
-                border: none;
-                background: transparent;
-            }
-            </style>
-            """,
-            unsafe_allow_html=True,
-        )
-
-        st.markdown("<div class='custom'>", unsafe_allow_html=True)
-        with left_arrow_box:
-            if st.button("", key="prev_arrow", icon=":material/arrow_circle_left:"):
-                st.session_state["current_recipe_index"] = (
-                    st.session_state["current_recipe_index"] - 1
-                ) % len(filtered_recipes)
-
-        with right_arrow_box:
-            if st.button("", key="next_arrow", icon=":material/arrow_circle_right:"):
-                st.session_state["current_recipe_index"] = (
-                    st.session_state["current_recipe_index"] + 1
-                ) % len(filtered_recipes)
-        st.markdown("</div>", unsafe_allow_html=True)
-
-        # Display Recipe Title
-        current_recipe = filtered_recipes.iloc[st.session_state["current_recipe_index"]]
-        with title:
             st.markdown(
-                f"<h3 style='text-align: center;'>{current_recipe['name']}</h3>",
+                """
+                <style>
+                .custom .stButton button {
+                    border: none;
+                    background: transparent;
+                }
+                </style>
+                """,
                 unsafe_allow_html=True,
             )
 
-        return current_recipe
+            st.markdown("<div class='custom'>", unsafe_allow_html=True)
+            with left_arrow_box:
+                if st.button("", key="prev_arrow", icon=":material/arrow_circle_left:"):
+                    st.session_state["current_recipe_index"] = (
+                        st.session_state["current_recipe_index"] - 1
+                    ) % len(filtered_recipes)
 
-    def render_pie_chart(self, selected_recipe):
-        """
-        Render a pie chart for the selected recipe's macronutriment breakdown.
-        """
-        macronutrient_values = [
-            selected_recipe["nutrition"][1] * 9,  # Fat
-            selected_recipe["nutrition"][4] * 4,  # Protein
-            selected_recipe["nutrition"][6] * 4,  # Carbs
-        ]
-        macronutrient_labels = ["Fat", "Protein", "Carbs"]
-        pie_fig = ChartFactory.pie_chart(
-            macronutrient_labels, macronutrient_values, "Macronutriment Breakdown"
-        )
-        st.plotly_chart(
-            pie_fig,
-            use_container_width=True,
-            config={"displayModeBar": False},
-        )
+            with right_arrow_box:
+                if st.button(
+                    "", key="next_arrow", icon=":material/arrow_circle_right:"
+                ):
+                    st.session_state["current_recipe_index"] = (
+                        st.session_state["current_recipe_index"] + 1
+                    ) % len(filtered_recipes)
+            st.markdown("</div>", unsafe_allow_html=True)
 
-    def render_popularity_chart(self, selected_recipe):
+            current_recipe = filtered_recipes.iloc[
+                st.session_state["current_recipe_index"]
+            ]
+            with title:
+                st.markdown(
+                    f"<h3 style='text-align: center;'>{current_recipe['name']}</h3>",
+                    unsafe_allow_html=True,
+                )
+            logger.info("Rendered navigation for recipe: %s", current_recipe["name"])
+            return current_recipe
+        except Exception as e:
+            logger.error("Failed to render navigation: %s", str(e))
+            raise
+
+    def render_pie_chart(self, selected_recipe: pd.Series) -> None:
         """
-        Render a popularity chart for the selected recipe.
+        Render a pie chart for the selected recipe's macronutrient breakdown.
+
+        Parameters:
+        ----------
+        selected_recipe : pd.Series
+            The selected recipe data.
         """
-        recipe_interactions = self.interactions_df[
-            self.interactions_df["recipe_id"] == selected_recipe["id"]
-        ]
-        if not recipe_interactions.empty:
-            interactions_count = (
-                recipe_interactions.groupby("date")
-                .size()
-                .reset_index(name="Interactions")
-            )
-            fig_popularity = ChartFactory.popularity_chart(
-                interactions_count, "date", "Interactions"
+        try:
+            macronutrient_values = [
+                selected_recipe["nutrition"][1] * 9,  # Fat
+                selected_recipe["nutrition"][4] * 4,  # Protein
+                selected_recipe["nutrition"][6] * 4,  # Carbs
+            ]
+            macronutrient_labels = ["Fat", "Protein", "Carbs"]
+            pie_fig = ChartFactory.pie_chart(
+                macronutrient_labels, macronutrient_values, "Macronutrient Breakdown"
             )
             st.plotly_chart(
-                fig_popularity,
-                use_container_width=True,
+                pie_fig, use_container_width=True, config={"displayModeBar": False}
             )
+            logger.info("Rendered pie chart for recipe: %s", selected_recipe["name"])
+        except Exception as e:
+            logger.error("Failed to render pie chart: %s", str(e))
+            raise
 
-    def render_score_chart(self, selected_recipe):
+    def render_popularity_chart(self, selected_recipe: pd.Series) -> None:
+        """
+        Render a popularity chart for the selected recipe.
+
+        Parameters:
+        ----------
+        selected_recipe : pd.Series
+            The selected recipe data.
+        """
+        try:
+            recipe_interactions = self.interactions_df[
+                self.interactions_df["recipe_id"] == selected_recipe["id"]
+            ]
+            if not recipe_interactions.empty:
+                interactions_count = (
+                    recipe_interactions.groupby("date")
+                    .size()
+                    .reset_index(name="Interactions")
+                )
+                fig_popularity = ChartFactory.popularity_chart(
+                    interactions_count, "date", "Interactions"
+                )
+                st.plotly_chart(fig_popularity, use_container_width=True)
+                logger.info(
+                    "Rendered popularity chart for recipe: %s",
+                    selected_recipe["name"],
+                )
+        except Exception as e:
+            logger.error("Failed to render popularity chart: %s", str(e))
+            raise
+
+    def render_score_chart(self, selected_recipe: pd.Series) -> None:
         """
         Render the MTM Score as a custom visualization.
-        """
-        fig_score = ChartFactory.score_display(
-            selected_recipe["mtm_score"], selected_recipe["nutrition"]
-        )
-        st.plotly_chart(
-            fig_score,
-            use_container_width=True,
-            config={"displayModeBar": False},
-        )
 
-    def render_dashboard(self, filtered_recipes):
+        Parameters:
+        ----------
+        selected_recipe : pd.Series
+            The selected recipe data.
+        """
+        try:
+            fig_score = ChartFactory.score_display(
+                selected_recipe["mtm_score"], selected_recipe["nutrition"]
+            )
+            st.plotly_chart(
+                fig_score, use_container_width=True, config={"displayModeBar": False}
+            )
+            logger.info("Rendered score chart for recipe: %s", selected_recipe["name"])
+        except Exception as e:
+            logger.error("Failed to render score chart: %s", str(e))
+            raise
+
+    def render_dashboard(self, filtered_recipes: pd.DataFrame) -> None:
         """
         Render the complete dashboard for the selected recipe.
+
+        Parameters:
+        ----------
+        filtered_recipes : pd.DataFrame
+            DataFrame containing filtered recipes.
         """
-        # Render navigation and get the current recipe
-        current_recipe = self.render_navigation(filtered_recipes)
+        try:
+            current_recipe = self.render_navigation(filtered_recipes)
 
-        # Display Pie Chart and Popularity Chart Side by Side
-        col1, col2 = st.columns(2)
+            col1, col2 = st.columns(2)
+            with col1:
+                self.render_score_chart(current_recipe)
+            with col2:
+                self.render_pie_chart(current_recipe)
 
-        with col1:
-            self.render_score_chart(current_recipe)
+            logger.info("Rendered dashboard for recipe: %s", current_recipe["name"])
+        except Exception as e:
+            logger.error("Failed to render dashboard: %s", str(e))
+            raise
 
-        with col2:
-            self.render_pie_chart(current_recipe)
-
-    def render_no_recipes_suggestions(self, selected_ingredients):
+    def render_no_recipes_suggestions(self, selected_ingredients: list) -> None:
         """
         Render suggestions when no recipes match the user's criteria.
+
+        Parameters:
+        ----------
+        selected_ingredients : list
+            List of ingredients selected by the user.
         """
-        st.session_state["no_recipes_message"] = (
-            "We didn't find any recipes that match your criteria. "
-            "Here are some suggestions based on your selected ingredients. "
-            "Consider adding the missing ingredients!"
-        )
-
-        # Find recipes with matching ingredients
-        matching_recipes = self.recipes_df[
-            self.recipes_df["ingredient_PP"].apply(
-                lambda ingredients: all(
-                    selected in ingredients for selected in selected_ingredients
-                )
+        try:
+            st.session_state["no_recipes_message"] = (
+                "We didn't find any recipes that match your criteria. "
+                "Here are some suggestions based on your selected ingredients. "
+                "Consider adding the missing ingredients!"
             )
-        ]
 
-        # Select up to 5 recipes with the highest MTM score
-        top_recipes = matching_recipes.nlargest(5, "mtm_score")
-
-        # Display a styled header for the suggestions
-        st.markdown(
-            "<h2 style='color:#FF6347;'>🔍 Suggestions Based on Your Ingredients</h2>",
-            unsafe_allow_html=True,
-        )
-        st.write(st.session_state["no_recipes_message"])
-
-        if "recipe_clicked" not in st.session_state:
-            st.session_state["recipe_clicked"] = None
-
-        # Display each recipe suggestion with mtm_score and missing ingredients
-        for _, recipe in top_recipes.iterrows():
-            with st.container():
-                # Recipe name without anchor link
-                if st.button(
-                    f"View Recipe: {recipe['name']}", key=f"recipe_{recipe['id']}"
-                ):
-                    st.session_state[f"recipe_{recipe['id']}"] = True
-
-                # MTM score and missing ingredients logic remains the same
-                mtm_score = recipe["mtm_score"]
-                if mtm_score < 30:
-                    score_color = "#FF0000"  # Red
-                elif 30 <= mtm_score < 70:
-                    score_color = "#FFA500"  # Orange
-                else:
-                    score_color = "#2E8B57"  # Green
-
-                st.markdown(
-                    f"<p style='color:{score_color};'><strong>MTM Score:</strong> "
-                    f"{mtm_score:.2f}</p>",
-                    unsafe_allow_html=True,
-                )
-
-                missing_ingredients = [
-                    ingredient
-                    for ingredient in recipe["ingredient_PP"]
-                    if ingredient not in selected_ingredients
-                ]
-                if missing_ingredients:
-                    st.markdown(
-                        f"<p><strong>Missing Ingredients:</strong> "
-                        f"{', '.join(missing_ingredients)}</p>",
-                        unsafe_allow_html=True,
+            matching_recipes = self.recipes_df[
+                self.recipes_df["ingredient_PP"].apply(
+                    lambda ingredients: all(
+                        selected in ingredients for selected in selected_ingredients
                     )
-                else:
+                )
+            ]
+            top_recipes = matching_recipes.nlargest(5, "mtm_score")
+
+            st.markdown(
+                "<h2 style='color:#FF6347;'>"
+                "🔍 Suggestions Based on Your Ingredients</h2>",
+                unsafe_allow_html=True,
+            )
+            st.write(st.session_state["no_recipes_message"])
+
+            for _, recipe in top_recipes.iterrows():
+                with st.container():
+                    if st.button(
+                        f"View Recipe: {recipe['name']}", key=f"recipe_{recipe['id']}"
+                    ):
+                        st.session_state[f"recipe_{recipe['id']}"] = True
+
+                    mtm_score = recipe["mtm_score"]
+                    score_color = (
+                        "#FF0000"
+                        if mtm_score < 30
+                        else "#FFA500" if mtm_score < 70 else "#2E8B57"
+                    )
                     st.markdown(
-                        "<p><strong>Missing Ingredients:</strong> None</p>",
+                        f"<p style='color:{score_color};'><strong>MTM Score:</strong> "
+                        f"{mtm_score:.2f}</p>",
                         unsafe_allow_html=True,
                     )
 
-                # Add a separator between recipes
-                st.markdown(
-                    "<hr style='border:1px solid #DCDCDC;'>",
-                    unsafe_allow_html=True,
-                )
+                    missing_ingredients = [
+                        ingredient
+                        for ingredient in recipe["ingredient_PP"]
+                        if ingredient not in selected_ingredients
+                    ]
+                    missing = (
+                        ", ".join(missing_ingredients)
+                        if missing_ingredients
+                        else "None"
+                    )
+                    st.markdown(
+                        f"<p><strong>Missing Ingredients:</strong> {missing}</p>",
+                        unsafe_allow_html=True,
+                    )
+
+                    st.markdown(
+                        "<hr style='border:1px solid #DCDCDC;'>", unsafe_allow_html=True
+                    )
+            logger.info("Rendered no-recipes suggestions.")
+        except Exception as e:
+            logger.error("Failed to render no-recipes suggestions: %s", str(e))
+            raise
