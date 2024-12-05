@@ -96,8 +96,7 @@ class RecipeVisualizer:
             ]
             with title:
                 st.markdown(
-                    f"<h3 style='text-align: center;'>{
-                        current_recipe['name']}</h3>",
+                    f"<h3 style='text-align: center;'>{current_recipe['name']}</h3>",
                     unsafe_allow_html=True,
                 )
             logger.info("Rendered navigation for recipe: %s", current_recipe["name"])
