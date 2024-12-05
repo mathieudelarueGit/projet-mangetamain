@@ -1,4 +1,8 @@
+import ast
+import datetime
+import gc
 import logging
+
 import pandas as pd
 import streamlit as st
 from src.visualization.charts import ChartFactory
@@ -30,6 +34,7 @@ class RecipeVisualizer:
     def render_navigation(self, filtered_recipes: pd.DataFrame) -> pd.Series:
         """
         Render navigation arrows and display the recipe title.
+        Selects recipes based on the date of the user.
 
         Parameters:
         ----------
@@ -41,25 +46,37 @@ class RecipeVisualizer:
         pd.Series
             The current recipe being displayed.
         """
+
+        # Select recipes based on the date of the user
+        current_date = int(datetime.date.today().month)
+        current_date += int(datetime.date.today().day) / 30 - 1
+        # Obtain trough the data analysis
+        std_dev = 1.54
+        # Sets the filter for the recipes
+        season_min = (current_date - std_dev) % 12
+        season_max = (current_date + std_dev) % 12
+        final = filtered_recipes.copy()
+        # Conditions to limits requires some special care
+        if season_min < 0:
+            final[(final.avg_date > 12 + season_min) & (final.avg_date < season_max)]
+        if season_max > 12:
+            final[(final.avg_date > season_min) | (final.avg_date < season_max - 12)]
+        else:
+            final[(final.avg_date > season_min) & (final.avg_date < season_max)]
+        # The case where no recipes are available
+        if not final.empty:
+            filtered_recipes = final
+        # Freeing memory
+        else:
+            del final
+            gc.collect()
+
         try:
             left_arrow_box, title, right_arrow_box = st.columns([1, 6, 1])
 
             if "current_recipe_index" not in st.session_state:
                 st.session_state["current_recipe_index"] = 0
 
-            st.markdown(
-                """
-                <style>
-                .custom .stButton button {
-                    border: none;
-                    background: transparent;
-                }
-                </style>
-                """,
-                unsafe_allow_html=True,
-            )
-
-            st.markdown("<div class='custom'>", unsafe_allow_html=True)
             with left_arrow_box:
                 if st.button("", key="prev_arrow", icon=":material/arrow_circle_left:"):
                     st.session_state["current_recipe_index"] = (
@@ -73,7 +90,6 @@ class RecipeVisualizer:
                     st.session_state["current_recipe_index"] = (
                         st.session_state["current_recipe_index"] + 1
                     ) % len(filtered_recipes)
-            st.markdown("</div>", unsafe_allow_html=True)
 
             current_recipe = filtered_recipes.iloc[
                 st.session_state["current_recipe_index"]
@@ -185,6 +201,37 @@ class RecipeVisualizer:
                 self.render_score_chart(current_recipe)
             with col2:
                 self.render_pie_chart(current_recipe)
+
+            separtor = """
+            ________________________________________________________________________
+            """
+            st.write(separtor)
+            st.header("Now, let's cook!")
+            col1, col2 = st.columns(2)
+            with col1:
+                st.write("**Just follow the steps**")
+            with col2:
+                show_ingredients = st.toggle(
+                    "I wana see ingredients!", key="ingredients"
+                )
+            if show_ingredients:
+                try:
+                    for stuff in current_recipe["ingredient_PP"]:
+                        st.write(f" - {stuff}")
+                except BaseException:
+                    st.write("No ingredients available")
+                    logger.error(
+                        "Failed to find ingredients: %s", current_recipe["name"]
+                    )
+                st.write(separtor)
+            try:
+                steps = ast.literal_eval(current_recipe["steps"])
+                for step in steps:
+                    st.write(f" - {step}")
+            except BaseException:
+                st.write("No steps available")
+                logger.error("Failed to find steps: %s", current_recipe["name"])
+            st.write(separtor)
 
             logger.info("Rendered dashboard for recipe: %s", current_recipe["name"])
         except Exception as e:

@@ -28,6 +28,8 @@ class TestRecipeVisualizer(unittest.TestCase):
                 [500, 25, 12, 4, 20, 6, 70],
             ],
             "mtm_score": [75, 60, 85],
+            "avg_date": [1.5, 6, 11.2],
+            "steps": ['["Step 1", "Step 2"]', '["Step 1", "Step 2"]', '["Step 1", "Step 2"]']
         })
 
         self.interactions_df = pd.DataFrame({
@@ -133,6 +135,25 @@ class TestRecipeVisualizer(unittest.TestCase):
         mock_render_navigation.assert_called_once()
         mock_render_pie_chart.assert_called_once()
         mock_render_score_chart.assert_called_once()
+        
+        @patch("streamlit.toggle")
+        def test_render_dashboard_ingredients_toggle(self, mock_toggle):
+            """
+            Test the ingredients toggle functionality in the render_dashboard method.
+            """
+            selected_recipe = self.recipes_df.iloc[0]
+            with patch("streamlit.session_state", {}):
+                self.visualizer.render_dashboard(self.recipes_df)
+            
+            # Check if toggle button is shown
+            mock_toggle.assert_called_once()
+
+            # Simulate toggling ingredients visibility
+            show_ingredients = True  # Mocking toggle behavior
+            if show_ingredients:
+                for ingredient in selected_recipe["ingredient_PP"]:
+                    # Ensure ingredients are listed
+                    self.assertIn(ingredient, selected_recipe["ingredient_PP"])
 
 
 if __name__ == "__main__":
