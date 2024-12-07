@@ -13,4 +13,5 @@ __pycache__/
 .coverage
 
 # Ignore Sphinx build folder
-docs/build/
+docs/build/doctrees/
+docs/build/.buildinfo
