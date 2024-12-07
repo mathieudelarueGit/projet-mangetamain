@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>src.visualization.dashboard &#8212; Mangetamain 1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/basic.css?v=c058f7c8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=27fed22d" />
+    <script src="../../../_static/documentation_options.js?v=f2a433a1"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for src.visualization.dashboard</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">ast</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">gc</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">streamlit</span> <span class="k">as</span> <span class="nn">st</span>
+<span class="kn">from</span> <span class="nn">src.visualization.charts</span> <span class="kn">import</span> <span class="n">ChartFactory</span>
+
+<span class="c1"># Create a logger for the RecipeVisualizer module</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="RecipeVisualizer">
+<a class="viewcode-back" href="../../../src.visualization.html#src.visualization.dashboard.RecipeVisualizer">[docs]</a>
+<span class="k">class</span> <span class="nc">RecipeVisualizer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A class for visualizing recipes and related data in the Streamlit app.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">recipes_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">interactions_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the visualizer with recipe and interaction data.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        ----------</span>
+<span class="sd">        recipes_df : pd.DataFrame</span>
+<span class="sd">            DataFrame containing recipe data.</span>
+<span class="sd">        interactions_df : pd.DataFrame</span>
+<span class="sd">            DataFrame containing user interaction data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recipes_df</span> <span class="o">=</span> <span class="n">recipes_df</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">interactions_df</span> <span class="o">=</span> <span class="n">interactions_df</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;RecipeVisualizer initialized with recipes and interactions data.&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="RecipeVisualizer.render_navigation">
+<a class="viewcode-back" href="../../../src.visualization.html#src.visualization.dashboard.RecipeVisualizer.render_navigation">[docs]</a>
+    <span class="k">def</span> <span class="nf">render_navigation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filtered_recipes</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Render navigation arrows and display the recipe title.</span>
+<span class="sd">        Selects recipes based on the date of the user.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filtered_recipes : pd.DataFrame</span>
+<span class="sd">            DataFrame containing filtered recipes.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        -------</span>
+<span class="sd">        pd.Series</span>
+<span class="sd">            The current recipe being displayed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Select recipes based on the date of the user</span>
+        <span class="n">current_date</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">.</span><span class="n">month</span><span class="p">)</span>
+        <span class="n">current_date</span> <span class="o">+=</span> <span class="nb">int</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">.</span><span class="n">day</span><span class="p">)</span> <span class="o">/</span> <span class="mi">30</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="c1"># Obtain trough the data analysis</span>
+        <span class="n">std_dev</span> <span class="o">=</span> <span class="mf">1.54</span>
+        <span class="c1"># Sets the filter for the recipes</span>
+        <span class="n">season_min</span> <span class="o">=</span> <span class="p">(</span><span class="n">current_date</span> <span class="o">-</span> <span class="n">std_dev</span><span class="p">)</span> <span class="o">%</span> <span class="mi">12</span>
+        <span class="n">season_max</span> <span class="o">=</span> <span class="p">(</span><span class="n">current_date</span> <span class="o">+</span> <span class="n">std_dev</span><span class="p">)</span> <span class="o">%</span> <span class="mi">12</span>
+        <span class="n">final</span> <span class="o">=</span> <span class="n">filtered_recipes</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="c1"># Conditions to limits requires some special care</span>
+        <span class="k">if</span> <span class="n">season_min</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">final</span><span class="p">[(</span><span class="n">final</span><span class="o">.</span><span class="n">avg_date</span> <span class="o">&gt;</span> <span class="mi">12</span> <span class="o">+</span> <span class="n">season_min</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">final</span><span class="o">.</span><span class="n">avg_date</span> <span class="o">&lt;</span> <span class="n">season_max</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="n">season_max</span> <span class="o">&gt;</span> <span class="mi">12</span><span class="p">:</span>
+            <span class="n">final</span><span class="p">[(</span><span class="n">final</span><span class="o">.</span><span class="n">avg_date</span> <span class="o">&gt;</span> <span class="n">season_min</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">final</span><span class="o">.</span><span class="n">avg_date</span> <span class="o">&lt;</span> <span class="n">season_max</span> <span class="o">-</span> <span class="mi">12</span><span class="p">)]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">final</span><span class="p">[(</span><span class="n">final</span><span class="o">.</span><span class="n">avg_date</span> <span class="o">&gt;</span> <span class="n">season_min</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">final</span><span class="o">.</span><span class="n">avg_date</span> <span class="o">&lt;</span> <span class="n">season_max</span><span class="p">)]</span>
+        <span class="c1"># The case where no recipes are available</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">final</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+            <span class="n">filtered_recipes</span> <span class="o">=</span> <span class="n">final</span>
+        <span class="c1"># Freeing memory</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">del</span> <span class="n">final</span>
+            <span class="n">gc</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">left_arrow_box</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">right_arrow_box</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">columns</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+
+            <span class="k">if</span> <span class="s2">&quot;current_recipe_index&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">:</span>
+                <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s2">&quot;current_recipe_index&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+            <span class="k">with</span> <span class="n">left_arrow_box</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">st</span><span class="o">.</span><span class="n">button</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s2">&quot;prev_arrow&quot;</span><span class="p">,</span> <span class="n">icon</span><span class="o">=</span><span class="s2">&quot;:material/arrow_circle_left:&quot;</span><span class="p">):</span>
+                    <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s2">&quot;current_recipe_index&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s2">&quot;current_recipe_index&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
+                    <span class="p">)</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">filtered_recipes</span><span class="p">)</span>
+
+            <span class="k">with</span> <span class="n">right_arrow_box</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">st</span><span class="o">.</span><span class="n">button</span><span class="p">(</span>
+                    <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s2">&quot;next_arrow&quot;</span><span class="p">,</span> <span class="n">icon</span><span class="o">=</span><span class="s2">&quot;:material/arrow_circle_right:&quot;</span>
+                <span class="p">):</span>
+                    <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s2">&quot;current_recipe_index&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s2">&quot;current_recipe_index&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+                    <span class="p">)</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">filtered_recipes</span><span class="p">)</span>
+
+            <span class="n">current_recipe</span> <span class="o">=</span> <span class="n">filtered_recipes</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span>
+                <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s2">&quot;current_recipe_index&quot;</span><span class="p">]</span>
+            <span class="p">]</span>
+            <span class="k">with</span> <span class="n">title</span><span class="p">:</span>
+                <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;&lt;h3 style=&#39;text-align: center;&#39;&gt;</span><span class="si">{</span><span class="n">current_recipe</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&lt;/h3&gt;&quot;</span><span class="p">,</span>
+                    <span class="n">unsafe_allow_html</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Rendered navigation for recipe: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">current_recipe</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">])</span>
+            <span class="k">return</span> <span class="n">current_recipe</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Failed to render navigation: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+            <span class="k">raise</span></div>
+
+
+<div class="viewcode-block" id="RecipeVisualizer.render_pie_chart">
+<a class="viewcode-back" href="../../../src.visualization.html#src.visualization.dashboard.RecipeVisualizer.render_pie_chart">[docs]</a>
+    <span class="k">def</span> <span class="nf">render_pie_chart</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selected_recipe</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Render a pie chart for the selected recipe&#39;s macronutrient breakdown.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        ----------</span>
+<span class="sd">        selected_recipe : pd.Series</span>
+<span class="sd">            The selected recipe data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">macronutrient_values</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">selected_recipe</span><span class="p">[</span><span class="s2">&quot;nutrition&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mi">9</span><span class="p">,</span>  <span class="c1"># Fat</span>
+                <span class="n">selected_recipe</span><span class="p">[</span><span class="s2">&quot;nutrition&quot;</span><span class="p">][</span><span class="mi">4</span><span class="p">]</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span>  <span class="c1"># Protein</span>
+                <span class="n">selected_recipe</span><span class="p">[</span><span class="s2">&quot;nutrition&quot;</span><span class="p">][</span><span class="mi">6</span><span class="p">]</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span>  <span class="c1"># Carbs</span>
+            <span class="p">]</span>
+            <span class="n">macronutrient_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Fat&quot;</span><span class="p">,</span> <span class="s2">&quot;Protein&quot;</span><span class="p">,</span> <span class="s2">&quot;Carbs&quot;</span><span class="p">]</span>
+            <span class="n">pie_fig</span> <span class="o">=</span> <span class="n">ChartFactory</span><span class="o">.</span><span class="n">pie_chart</span><span class="p">(</span>
+                <span class="n">macronutrient_labels</span><span class="p">,</span> <span class="n">macronutrient_values</span><span class="p">,</span> <span class="s2">&quot;Macronutrient Breakdown&quot;</span>
+            <span class="p">)</span>
+            <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span>
+                <span class="n">pie_fig</span><span class="p">,</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;displayModeBar&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
+            <span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Rendered pie chart for recipe: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">selected_recipe</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">])</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Failed to render pie chart: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+            <span class="k">raise</span></div>
+
+
+<div class="viewcode-block" id="RecipeVisualizer.render_popularity_chart">
+<a class="viewcode-back" href="../../../src.visualization.html#src.visualization.dashboard.RecipeVisualizer.render_popularity_chart">[docs]</a>
+    <span class="k">def</span> <span class="nf">render_popularity_chart</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selected_recipe</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Render a popularity chart for the selected recipe.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        ----------</span>
+<span class="sd">        selected_recipe : pd.Series</span>
+<span class="sd">            The selected recipe data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">recipe_interactions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">interactions_df</span><span class="p">[</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">interactions_df</span><span class="p">[</span><span class="s2">&quot;recipe_id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">selected_recipe</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+            <span class="p">]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">recipe_interactions</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="n">interactions_count</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">recipe_interactions</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;date&quot;</span><span class="p">)</span>
+                    <span class="o">.</span><span class="n">size</span><span class="p">()</span>
+                    <span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Interactions&quot;</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="n">fig_popularity</span> <span class="o">=</span> <span class="n">ChartFactory</span><span class="o">.</span><span class="n">popularity_chart</span><span class="p">(</span>
+                    <span class="n">interactions_count</span><span class="p">,</span> <span class="s2">&quot;date&quot;</span><span class="p">,</span> <span class="s2">&quot;Interactions&quot;</span>
+                <span class="p">)</span>
+                <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">fig_popularity</span><span class="p">,</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                    <span class="s2">&quot;Rendered popularity chart for recipe: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="n">selected_recipe</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
+                <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Failed to render popularity chart: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+            <span class="k">raise</span></div>
+
+
+<div class="viewcode-block" id="RecipeVisualizer.render_score_chart">
+<a class="viewcode-back" href="../../../src.visualization.html#src.visualization.dashboard.RecipeVisualizer.render_score_chart">[docs]</a>
+    <span class="k">def</span> <span class="nf">render_score_chart</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selected_recipe</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Render the MTM Score as a custom visualization.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        ----------</span>
+<span class="sd">        selected_recipe : pd.Series</span>
+<span class="sd">            The selected recipe data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">fig_score</span> <span class="o">=</span> <span class="n">ChartFactory</span><span class="o">.</span><span class="n">score_display</span><span class="p">(</span>
+                <span class="n">selected_recipe</span><span class="p">[</span><span class="s2">&quot;mtm_score&quot;</span><span class="p">],</span> <span class="n">selected_recipe</span><span class="p">[</span><span class="s2">&quot;nutrition&quot;</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span>
+                <span class="n">fig_score</span><span class="p">,</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;displayModeBar&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
+            <span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Rendered score chart for recipe: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">selected_recipe</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">])</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Failed to render score chart: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+            <span class="k">raise</span></div>
+
+
+<div class="viewcode-block" id="RecipeVisualizer.render_dashboard">
+<a class="viewcode-back" href="../../../src.visualization.html#src.visualization.dashboard.RecipeVisualizer.render_dashboard">[docs]</a>
+    <span class="k">def</span> <span class="nf">render_dashboard</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filtered_recipes</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Render the complete dashboard for the selected recipe.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filtered_recipes : pd.DataFrame</span>
+<span class="sd">            DataFrame containing filtered recipes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">current_recipe</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_navigation</span><span class="p">(</span><span class="n">filtered_recipes</span><span class="p">)</span>
+
+            <span class="n">col1</span><span class="p">,</span> <span class="n">col2</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">columns</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+            <span class="k">with</span> <span class="n">col1</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">render_score_chart</span><span class="p">(</span><span class="n">current_recipe</span><span class="p">)</span>
+            <span class="k">with</span> <span class="n">col2</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">render_pie_chart</span><span class="p">(</span><span class="n">current_recipe</span><span class="p">)</span>
+
+            <span class="n">separtor</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            ________________________________________________________________________</span>
+<span class="s2">            &quot;&quot;&quot;</span>
+            <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">separtor</span><span class="p">)</span>
+            <span class="n">st</span><span class="o">.</span><span class="n">header</span><span class="p">(</span><span class="s2">&quot;Now, let&#39;s cook!&quot;</span><span class="p">)</span>
+            <span class="n">col1</span><span class="p">,</span> <span class="n">col2</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">columns</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+            <span class="k">with</span> <span class="n">col1</span><span class="p">:</span>
+                <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;**Just follow the steps**&quot;</span><span class="p">)</span>
+            <span class="k">with</span> <span class="n">col2</span><span class="p">:</span>
+                <span class="n">show_ingredients</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">toggle</span><span class="p">(</span>
+                    <span class="s2">&quot;I wana see ingredients!&quot;</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s2">&quot;ingredients&quot;</span>
+                <span class="p">)</span>
+            <span class="k">if</span> <span class="n">show_ingredients</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">stuff</span> <span class="ow">in</span> <span class="n">current_recipe</span><span class="p">[</span><span class="s2">&quot;ingredient_PP&quot;</span><span class="p">]:</span>
+                        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; - </span><span class="si">{</span><span class="n">stuff</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">BaseException</span><span class="p">:</span>
+                    <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;No ingredients available&quot;</span><span class="p">)</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+                        <span class="s2">&quot;Failed to find ingredients: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">current_recipe</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+                    <span class="p">)</span>
+                <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">separtor</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">steps</span> <span class="o">=</span> <span class="n">ast</span><span class="o">.</span><span class="n">literal_eval</span><span class="p">(</span><span class="n">current_recipe</span><span class="p">[</span><span class="s2">&quot;steps&quot;</span><span class="p">])</span>
+                <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="n">steps</span><span class="p">:</span>
+                    <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; - </span><span class="si">{</span><span class="n">step</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">BaseException</span><span class="p">:</span>
+                <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;No steps available&quot;</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Failed to find steps: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">current_recipe</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">])</span>
+            <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">separtor</span><span class="p">)</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Rendered dashboard for recipe: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">current_recipe</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">])</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Failed to render dashboard: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+            <span class="k">raise</span></div>
+
+
+<div class="viewcode-block" id="RecipeVisualizer.render_no_recipes_suggestions">
+<a class="viewcode-back" href="../../../src.visualization.html#src.visualization.dashboard.RecipeVisualizer.render_no_recipes_suggestions">[docs]</a>
+    <span class="k">def</span> <span class="nf">render_no_recipes_suggestions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selected_ingredients</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Render suggestions when no recipes match the user&#39;s criteria.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        ----------</span>
+<span class="sd">        selected_ingredients : list</span>
+<span class="sd">            List of ingredients selected by the user.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s2">&quot;no_recipes_message&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;We didn&#39;t find any recipes that match your criteria. &quot;</span>
+                <span class="s2">&quot;Here are some suggestions based on your selected ingredients. &quot;</span>
+                <span class="s2">&quot;Consider adding the missing ingredients!&quot;</span>
+            <span class="p">)</span>
+
+            <span class="n">matching_recipes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">recipes_df</span><span class="p">[</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">recipes_df</span><span class="p">[</span><span class="s2">&quot;ingredient_PP&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+                    <span class="k">lambda</span> <span class="n">ingredients</span><span class="p">:</span> <span class="nb">all</span><span class="p">(</span>
+                        <span class="n">selected</span> <span class="ow">in</span> <span class="n">ingredients</span> <span class="k">for</span> <span class="n">selected</span> <span class="ow">in</span> <span class="n">selected_ingredients</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+            <span class="p">]</span>
+            <span class="n">top_recipes</span> <span class="o">=</span> <span class="n">matching_recipes</span><span class="o">.</span><span class="n">nlargest</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;mtm_score&quot;</span><span class="p">)</span>
+
+            <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;h2 style=&#39;color:#FF6347;&#39;&gt;&quot;</span>
+                <span class="s2">&quot;🔍 Suggestions Based on Your Ingredients&lt;/h2&gt;&quot;</span><span class="p">,</span>
+                <span class="n">unsafe_allow_html</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s2">&quot;no_recipes_message&quot;</span><span class="p">])</span>
+
+            <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">recipe</span> <span class="ow">in</span> <span class="n">top_recipes</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+                <span class="k">with</span> <span class="n">st</span><span class="o">.</span><span class="n">container</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">st</span><span class="o">.</span><span class="n">button</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;View Recipe: </span><span class="si">{</span><span class="n">recipe</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;recipe_</span><span class="si">{</span><span class="n">recipe</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="p">):</span>
+                        <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;recipe_</span><span class="si">{</span><span class="n">recipe</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+                    <span class="n">mtm_score</span> <span class="o">=</span> <span class="n">recipe</span><span class="p">[</span><span class="s2">&quot;mtm_score&quot;</span><span class="p">]</span>
+                    <span class="n">score_color</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="s2">&quot;#FF0000&quot;</span>
+                        <span class="k">if</span> <span class="n">mtm_score</span> <span class="o">&lt;</span> <span class="mi">30</span>
+                        <span class="k">else</span> <span class="s2">&quot;#FFA500&quot;</span> <span class="k">if</span> <span class="n">mtm_score</span> <span class="o">&lt;</span> <span class="mi">70</span> <span class="k">else</span> <span class="s2">&quot;#2E8B57&quot;</span>
+                    <span class="p">)</span>
+                    <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;&lt;p style=&#39;color:</span><span class="si">{</span><span class="n">score_color</span><span class="si">}</span><span class="s2">;&#39;&gt;&lt;strong&gt;MTM Score:&lt;/strong&gt; &quot;</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">mtm_score</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&lt;/p&gt;&quot;</span><span class="p">,</span>
+                        <span class="n">unsafe_allow_html</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="p">)</span>
+
+                    <span class="n">missing_ingredients</span> <span class="o">=</span> <span class="p">[</span>
+                        <span class="n">ingredient</span>
+                        <span class="k">for</span> <span class="n">ingredient</span> <span class="ow">in</span> <span class="n">recipe</span><span class="p">[</span><span class="s2">&quot;ingredient_PP&quot;</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="n">ingredient</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">selected_ingredients</span>
+                    <span class="p">]</span>
+                    <span class="n">missing</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">missing_ingredients</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">missing_ingredients</span>
+                        <span class="k">else</span> <span class="s2">&quot;None&quot;</span>
+                    <span class="p">)</span>
+                    <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;&lt;p&gt;&lt;strong&gt;Missing Ingredients:&lt;/strong&gt; </span><span class="si">{</span><span class="n">missing</span><span class="si">}</span><span class="s2">&lt;/p&gt;&quot;</span><span class="p">,</span>
+                        <span class="n">unsafe_allow_html</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="p">)</span>
+
+                    <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span>
+                        <span class="s2">&quot;&lt;hr style=&#39;border:1px solid #DCDCDC;&#39;&gt;&quot;</span><span class="p">,</span> <span class="n">unsafe_allow_html</span><span class="o">=</span><span class="kc">True</span>
+                    <span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Rendered no-recipes suggestions.&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Failed to render no-recipes suggestions: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+            <span class="k">raise</span></div>
+</div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">Mangetamain</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">API Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">src</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2024, Mathieu DELARUE & François-Xavier MOREL.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.0.2</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

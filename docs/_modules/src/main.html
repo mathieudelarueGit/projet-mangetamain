@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>src.main &#8212; Mangetamain 1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../../_static/basic.css?v=c058f7c8" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=27fed22d" />
+    <script src="../../_static/documentation_options.js?v=f2a433a1"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for src.main</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">streamlit</span> <span class="k">as</span> <span class="nn">st</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">src.visualization.sidebar</span> <span class="kn">import</span> <span class="n">get_sidebar_configurations</span>
+<span class="kn">from</span> <span class="nn">src.visualization.dashboard</span> <span class="kn">import</span> <span class="n">RecipeVisualizer</span>
+<span class="kn">from</span> <span class="nn">src.visualization.front_page</span> <span class="kn">import</span> <span class="n">render_front_page</span>
+<span class="kn">from</span> <span class="nn">src.data_loader</span> <span class="kn">import</span> <span class="n">DataLoader</span>
+<span class="kn">from</span> <span class="nn">src.filter</span> <span class="kn">import</span> <span class="n">RecipeFilter</span>
+<span class="kn">from</span> <span class="nn">src.log_config</span> <span class="kn">import</span> <span class="n">setup_logging</span>
+
+
+<div class="viewcode-block" id="RecipeApp">
+<a class="viewcode-back" href="../../src.html#src.main.RecipeApp">[docs]</a>
+<span class="k">class</span> <span class="nc">RecipeApp</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Main application class for running the recipe filtering and visualization.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the application by setting up logging and loading data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">setup_logging</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Initializing RecipeApp...&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Load data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Loading recipes and interactions data...&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recipes_df</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ingredient_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_loader</span><span class="o">.</span><span class="n">load_and_parse_data</span><span class="p">(</span>
+            <span class="s2">&quot;dataset/PP_recipes_final.csv.zip&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">interactions_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_loader</span><span class="o">.</span><span class="n">load_data</span><span class="p">(</span>
+            <span class="s2">&quot;dataset/PP_interactions_final.csv.zip&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">interactions_df</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interactions_df</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filtered_recipes</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="RecipeApp.run">
+<a class="viewcode-back" href="../../src.html#src.main.RecipeApp.run">[docs]</a>
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Main function to run the app logic, including sidebar interactions</span>
+<span class="sd">        and recipe filtering.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Running RecipeApp...&quot;</span><span class="p">)</span>
+        <span class="n">user_inputs</span> <span class="o">=</span> <span class="n">get_sidebar_configurations</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">recipes_df</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ingredient_list</span><span class="p">)</span>
+
+        <span class="c1"># Check if any recipe button is clicked</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_recipe_buttons_in_main</span><span class="p">(</span><span class="n">user_inputs</span><span class="p">)</span>
+
+        <span class="c1"># Handle reset action</span>
+        <span class="k">if</span> <span class="n">user_inputs</span><span class="p">[</span><span class="s2">&quot;reset_clicked&quot;</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Reset button clicked.&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reset_session_state</span><span class="p">()</span>
+
+        <span class="c1"># Handle search action</span>
+        <span class="k">if</span> <span class="n">user_inputs</span><span class="p">[</span><span class="s2">&quot;start_search&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">user_inputs</span><span class="p">[</span><span class="s2">&quot;recipe_clicked&quot;</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">filtered_recipes</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s2">&quot;filtered_recipes&quot;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Filtering recipes based on user inputs.&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">filtered_recipes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter_recipes</span><span class="p">(</span><span class="n">user_inputs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">display_results</span><span class="p">(</span><span class="n">user_inputs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">filtered_recipes</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;filtered_recipes&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">display_dashboard_or_message</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="RecipeApp.reset_session_state">
+<a class="viewcode-back" href="../../src.html#src.main.RecipeApp.reset_session_state">[docs]</a>
+    <span class="k">def</span> <span class="nf">reset_session_state</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reset the app state and rerun the Streamlit app.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Resetting session state.&quot;</span><span class="p">)</span>
+        <span class="n">render_front_page</span><span class="p">()</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">rerun</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="RecipeApp.filter_recipes">
+<a class="viewcode-back" href="../../src.html#src.main.RecipeApp.filter_recipes">[docs]</a>
+    <span class="k">def</span> <span class="nf">filter_recipes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_inputs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Apply ingredient and nutritional filters to the recipes.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        ----------</span>
+<span class="sd">        user_inputs : dict</span>
+<span class="sd">            Dictionary containing user-selected filters.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        -------</span>
+<span class="sd">        pd.DataFrame</span>
+<span class="sd">            Filtered recipes based on user inputs.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Applying filters: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">user_inputs</span><span class="p">)</span>
+        <span class="n">recipe_filter</span> <span class="o">=</span> <span class="n">RecipeFilter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">recipes_df</span><span class="p">)</span>
+        <span class="n">recipe_filter</span><span class="o">.</span><span class="n">filter_by_ingredients</span><span class="p">(</span><span class="n">user_inputs</span><span class="p">[</span><span class="s2">&quot;selected_ingredients&quot;</span><span class="p">])</span>
+        <span class="n">recipe_filter</span><span class="o">.</span><span class="n">filter_by_nutrition</span><span class="p">(</span>
+            <span class="n">protein_min</span><span class="o">=</span><span class="n">user_inputs</span><span class="p">[</span><span class="s2">&quot;protein_min&quot;</span><span class="p">],</span>
+            <span class="n">carbs_min</span><span class="o">=</span><span class="n">user_inputs</span><span class="p">[</span><span class="s2">&quot;carbs_min&quot;</span><span class="p">],</span>
+            <span class="n">fat_max</span><span class="o">=</span><span class="n">user_inputs</span><span class="p">[</span><span class="s2">&quot;fat_max&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
+        <span class="n">filtered_recipes</span> <span class="o">=</span> <span class="n">recipe_filter</span><span class="o">.</span><span class="n">get_filtered_recipes</span><span class="p">()</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s2">&quot;filtered_recipes&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">filtered_recipes</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s2">&quot;current_recipe_index&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">return</span> <span class="n">filtered_recipes</span></div>
+
+
+<div class="viewcode-block" id="RecipeApp.display_results">
+<a class="viewcode-back" href="../../src.html#src.main.RecipeApp.display_results">[docs]</a>
+    <span class="k">def</span> <span class="nf">display_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_inputs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Display the results based on filtered recipes.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        ----------</span>
+<span class="sd">        user_inputs : dict</span>
+<span class="sd">            Dictionary containing user-selected filters.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">filtered_recipes</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;No recipes found. Showing suggestions.&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">handle_no_recipes</span><span class="p">(</span><span class="n">user_inputs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s2">&quot;no_recipes_message&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">render_dashboard</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="RecipeApp.handle_no_recipes">
+<a class="viewcode-back" href="../../src.html#src.main.RecipeApp.handle_no_recipes">[docs]</a>
+    <span class="k">def</span> <span class="nf">handle_no_recipes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_inputs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Display suggestions when no recipes match the filters.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        ----------</span>
+<span class="sd">        user_inputs : dict</span>
+<span class="sd">            Dictionary containing user-selected filters.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">selected_ingredients</span> <span class="o">=</span> <span class="n">user_inputs</span><span class="p">[</span><span class="s2">&quot;selected_ingredients&quot;</span><span class="p">]</span>
+        <span class="n">visualizer</span> <span class="o">=</span> <span class="n">RecipeVisualizer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">recipes_df</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">interactions_df</span><span class="p">)</span>
+        <span class="n">visualizer</span><span class="o">.</span><span class="n">render_no_recipes_suggestions</span><span class="p">(</span><span class="n">selected_ingredients</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RecipeApp.display_dashboard_or_message">
+<a class="viewcode-back" href="../../src.html#src.main.RecipeApp.display_dashboard_or_message">[docs]</a>
+    <span class="k">def</span> <span class="nf">display_dashboard_or_message</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Display the front page or the filtered recipes dashboard.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">filtered_recipes</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">filtered_recipes</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Displaying the front page.&quot;</span><span class="p">)</span>
+            <span class="n">render_front_page</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">render_dashboard</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="RecipeApp.render_dashboard">
+<a class="viewcode-back" href="../../src.html#src.main.RecipeApp.render_dashboard">[docs]</a>
+    <span class="k">def</span> <span class="nf">render_dashboard</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Render the dashboard for the filtered recipes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Rendering dashboard.&quot;</span><span class="p">)</span>
+        <span class="n">visualizer</span> <span class="o">=</span> <span class="n">RecipeVisualizer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">recipes_df</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">interactions_df</span><span class="p">)</span>
+        <span class="n">visualizer</span><span class="o">.</span><span class="n">render_dashboard</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filtered_recipes</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RecipeApp.check_recipe_buttons_in_main">
+<a class="viewcode-back" href="../../src.html#src.main.RecipeApp.check_recipe_buttons_in_main">[docs]</a>
+    <span class="k">def</span> <span class="nf">check_recipe_buttons_in_main</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_inputs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if any recipe button is clicked and update session state.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        ----------</span>
+<span class="sd">        user_inputs : dict</span>
+<span class="sd">            Dictionary containing user-selected filters.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">recipe_id_key</span> <span class="ow">in</span> <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">recipe_id_key</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;recipe_&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="n">recipe_id_key</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Recipe button clicked: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">recipe_id_key</span><span class="p">)</span>
+
+                <span class="n">recipe_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">recipe_id_key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">clicked_recipe</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">recipes_df</span><span class="p">[</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">recipes_df</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">recipe_id</span>
+                <span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+                <span class="n">user_inputs</span><span class="p">[</span><span class="s2">&quot;start_search&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="n">user_inputs</span><span class="p">[</span><span class="s2">&quot;selected_ingredients&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">clicked_recipe</span><span class="p">[</span><span class="s2">&quot;ingredient_PP&quot;</span><span class="p">]</span>
+                <span class="n">user_inputs</span><span class="p">[</span><span class="s2">&quot;recipe_clicked&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+                <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s2">&quot;filtered_recipes&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">recipes_df</span><span class="p">[</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">recipes_df</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">recipe_id</span>
+                <span class="p">]</span>
+
+                <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">key</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;recipe_&quot;</span><span class="p">):</span>
+                        <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">break</span></div>
+</div>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">RecipeApp</span><span class="p">()</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">Mangetamain</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">API Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">src</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2024, Mathieu DELARUE & François-Xavier MOREL.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.0.2</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
