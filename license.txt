@@ -1,0 +1,9 @@
+MIT License
+
+Copyright (c) 2024 Mathieu Delarue et François-Xavier Morel
+
+Par la présente, l'auteur(s) ou titulaire(s) des droits d'auteur accorde(nt) une licence, gratuite, mondiale, irrévocable, et non exclusive, à toute personne obtenant une copie du logiciel et des fichiers associés (le "Logiciel"), de traiter le Logiciel dans le but d'utiliser, reproduire, modifier, publier, distribuer, sous-licencier et/ou vendre des copies du Logiciel, et d'autoriser les personnes auxquelles le Logiciel est fourni de faire de même, sous réserve des conditions suivantes :
+
+La notice de droit d'auteur ci-dessus et cette déclaration de licence doivent être incluses dans toutes les copies ou parties substantielles du Logiciel.
+
+LE LOGICIEL EST FOURNI "EN L'ÉTAT", SANS GARANTIE D'AUCUNE SORTE, EXPRESSE OU IMPLICITE, Y COMPRIS, MAIS SANS S'Y LIMITER, LES GARANTIES DE QUALITÉ MARCHANDE, D'ADAPTATION À UN BUT PARTICULIER ET D'ABSENCE DE CONTREFAÇON. EN AUCUN CAS L'AUTEUR OU LES DÉTENTEURS DU DROIT D'AUTEUR NE POURRONT ÊTRE TENUS RESPONSABLES DE TOUTE RÉCLAMATION, DOMMAGE OU AUTRE RESPONSABILITÉ, QUE CE SOIT EN ACTION CONTRACTUELLE, DÉLICTUELLE OU AUTRE, DÉCOULANT DE, OU EN RELATION AVEC LE LOGICIEL OU L'UTILISATION OU D'AUTRES TRANSACTIONS DANS LE LOGICIEL.
