@@ -31,7 +31,7 @@ class RecipeVisualizer:
         self.interactions_df = interactions_df
         logger.info("RecipeVisualizer initialized with recipes and interactions data.")
 
-    def render_navigation(self, filtered_recipes: pd.DataFrame) -> pd.Series:
+    def render_navigation(self, filtered_recipes: pd.DataFrame) -> tuple:
         """
         Render navigation arrows and display the recipe title.
         Selects recipes based on the date of the user.
@@ -43,8 +43,10 @@ class RecipeVisualizer:
 
         Returns:
         -------
-        pd.Series
-            The current recipe being displayed.
+        tuple
+        A tuple containing:
+        - filtered_recipes (pd.DataFrame): The filtered recipes DataFrame.
+        - current_recipe (pd.Series): The current recipe being displayed.
         """
 
         # Select recipes based on the date of the user
