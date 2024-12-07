@@ -65,28 +65,44 @@ class TestRecipeVisualizer(unittest.TestCase):
             # Check if individual recipes were displayed
             self.assertTrue(mock_write.called)
 
-    @patch("streamlit.columns")
-    @patch("streamlit.session_state", {})
-    @patch("streamlit.button")
-    @patch("streamlit.markdown")
-    def test_render_navigation(self, mock_markdown, mock_button, mock_columns):
-        """
-        Test the render_navigation method.
-        """
-        mock_left_arrow = MagicMock()
-        mock_title = MagicMock()
-        mock_right_arrow = MagicMock()
-        mock_columns.return_value = [mock_left_arrow, mock_title, mock_right_arrow]
+@patch("streamlit.columns")
+@patch("streamlit.session_state", {})
+@patch("streamlit.button")
+@patch("streamlit.markdown")
+def test_render_navigation(self, mock_markdown, mock_button, mock_columns):
+    """
+    Test the render_navigation method.
+    """
+    # Prepare mock columns and setup
+    mock_left_arrow = MagicMock()
+    mock_title = MagicMock()
+    mock_right_arrow = MagicMock()
+    mock_columns.return_value = [mock_left_arrow, mock_title, mock_right_arrow]
 
-        current_recipe = self.visualizer.render_navigation(self.recipes_df)
+    # Prepare a mock DataFrame for recipes
+    data = {
+        "name": ["Recipe A", "Recipe B", "Recipe C"],
+        "avg_date": [2.5, 3.0, 3.5]  # Simulating avg_date as a numeric column for filtering
+    }
+    self.recipes_df = pd.DataFrame(data)
 
-        # Assert current recipe index defaults to 0
-        self.assertEqual(current_recipe["name"], "Recipe A")
+    # Call the method under test
+    filtered_recipes, current_recipe = self.visualizer.render_navigation(self.recipes_df)
 
-        # Simulate clicking the right arrow
-        st.session_state["current_recipe_index"] = 1
-        current_recipe = self.visualizer.render_navigation(self.recipes_df)
-        self.assertEqual(current_recipe["name"], "Recipe B")
+    # Assert that the current recipe index defaults to 0
+    self.assertEqual(current_recipe["name"], "Recipe A")
+
+    # Simulate clicking the right arrow by setting the session state index
+    st.session_state["current_recipe_index"] = 1
+    filtered_recipes, current_recipe = self.visualizer.render_navigation(self.recipes_df)
+    self.assertEqual(current_recipe["name"], "Recipe B")
+
+    # Simulate clicking the left arrow
+    st.session_state["current_recipe_index"] = 2
+    filtered_recipes, current_recipe = self.visualizer.render_navigation(self.recipes_df)
+    self.assertEqual(current_recipe["name"], "Recipe C")
+    # Ensure that the DataFrame is filtered
+    self.assertTrue(filtered_recipes.shape[0] > 0)  
 
     @patch("streamlit.plotly_chart")
     def test_render_pie_chart(self, mock_plotly_chart):
