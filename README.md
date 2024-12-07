@@ -37,8 +37,10 @@ Before getting started, ensure you have the following dependencies installed:
    git clone https://github.com/yourusername/mangetamain.git
    cd mangetamain
 2. Install the required Python packages:
+   ```bash
    pip install -r requirements.txt
-3. Run the web app locally:
+4. Run the web app locally:
+   ```bash
    streamlit run src/main.py
 
 ## Dataset & Methodology
