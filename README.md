@@ -75,21 +75,21 @@ A key feature of Mangetamain is the ability to suggest recipes based on seasonal
 - Calculation of mean and standard deviation for the sine and cosine values of these angles to assess the seasonality.
 - Recipes with a high seasonality score are prioritized in the app's recommendations.
 
-# Contributing
+## Contributing
 
 We welcome contributions to the project! If you want to report a bug, suggest a feature, or submit a pull request, feel free to open an issue or create a pull request.
 
-# License
+## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-# Acknowledgments
+## Acknowledgments
 
 - **Food.com Dataset**: Our app is powered by a rich dataset of recipes and user reviews, sourced from Food.com (formerly GeniusKitchen).
 - **Word2Vec**: We used Word2Vec to vectorize the ingredients for more accurate recipe matching.
 - **Seasonality Analysis**: Special thanks to the contributors who helped in analyzing seasonal trends in recipes.
 
-# Documentation
+## Documentation
 
 The project documentation is available online at the following link:
 
