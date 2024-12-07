@@ -71,7 +71,7 @@ def render_front_page() -> None:
                     **Cibler des recettes "healthy" et éthiques** \n
                     Le fichier RAW recipes contient tout un nombre de recettes qui ne
                     correspondent pas à notre objectif de suggérer des recettes qui
-                    soient "healthy". Pour cibler les recettes d'intéret pour nous,
+                    soient "healthy". Pour cibler les recettes d'intérêt pour nous,
                     nous avons filtré selon les données de la colonne "tag" et avons
                     retenus arbitrairement les recettes comportant les mentions:
                     organic, bio, clean, vegetable, vegan, traditional, eco-friendly,
@@ -119,7 +119,7 @@ def render_front_page() -> None:
                     **Vectorisation des ingrédients** \n
                     Nous utilisons le fichier pickle pour réécrire la liste des
                     ingrédients sous forme de texte. Ensuite, nous appliquons Word2Vec
-                    pour obtenir les vecteurs denses des ingédients. Lorsqu'un
+                    pour obtenir les vecteurs denses des ingrédients. Lorsqu'un
                     ingrédient est décrit avec plusieurs mots, nous le représentons
                     par le vecteur moyen de ses mots. Notre dataset contient plus de
                     6000 ingrédients uniques. A l'aide de Word2Vec nous récupérons la
@@ -132,7 +132,7 @@ def render_front_page() -> None:
         st.write(
             """
                     Le nombre d'ingrédients par recette suit une loi de type loi gamma.
-                    La rationnalisation de la désignation des ingrédients permets
+                    La rationalisation de la désignation des ingrédients permet
                     d'analyser les ingrédients les plus utilisés dans les recettes.
                     Les condiments sont surreprésentés, ils ne caractérisent pas les
                     recettes. Au passage, la liste des 40 ingrédients ci-dessous
@@ -143,7 +143,7 @@ def render_front_page() -> None:
         st.write(
             """
                     **Composition nutritionnelle** \n
-                    La composition nutruitionnelle est un élément clé pour répondre
+                    La composition nutritionnelle est un élément clé pour répondre
                     à notre problématique. Les macronutriments sont initialement
                     exprimés en pourcentage des apports journaliers recommandés.
                     Nous convertissons ces valeurs en grammes et recalculons l'apport
@@ -161,7 +161,7 @@ def render_front_page() -> None:
                     Avec en tête ce que l'application doit fournir, nous décidons
                     de ne conserver que les informations suivantes dans le dataset:
                     - nom de recette
-                    - numério identification
+                    - numéro identification
                     - composition nutritionnelle
                     - liste des ingrédients
                 """
@@ -170,46 +170,46 @@ def render_front_page() -> None:
         st.header("Exploration des données")
         st.write(
             """
-                    **Détecter une saisonalité** \n
+                    **Détecter une saisonnalité** \n
                     Il est intéressant de voir si les recettes sont influencées par
                     les saisons. En effet, nous proposons des recettes saines mais
                     nous voulons aussi être éthiques et proposer des recettes de
-                    saison, pour des raisons écologiques et sociales.
+                    saison, pour des raisons écologiques et sociales. \n
                     **Mais va-t-on aller à l'encontre des habitudes des utilisateurs
-                    que nous ciblons ?**
+                    que nous ciblons ?** \n
                     Pour répondre à cette question, nous avons fait une jointure entre
                     notre dataset de recettes filtrées bio et traditionnelles avec le
                     dataset des interactions utilisateurs.
-                    Afin de pouvoir analyser la saisonalité, nous avons arbitrairement
+                    Afin de pouvoir analyser la saisonnalité, nous avons arbitrairement
                     écarté les recettes ayant moins de 20 interactions. Nous passons
                     de 365K interactions à 130K et de 70K recettes à 2,5K. \n
-                    **Comment calculer la saisonalité ?** \n
-                    Nous avons calculé la saisonalité d'une recette en fonction des
+                    **Comment calculer la saisonnalité ?** \n
+                    Nous avons calculé la saisonnalité d'une recette en fonction des
                     dates de ses reviews. Les étapes suivantes ont été réalisées:
                     - retrait de l'information des années
                     - mapping des dates (mois et jour du mois) vers un angle compris
                       entre 0 et 2 pi
                     - calcul des moyennes des cosinus et sinus des dates angulaires
                     - calcul des éccarts types des cosinus et sinus des dates angulaires
-                    - calcul de la saisonalité moyenne comme l'arctangente du sinus
+                    - calcul de la saisonnalité moyenne comme l'arc tangente du sinus
                         moyen et du cosinus moyen
-                    - calcul de l'écart type comme l'arctangente des écart types des
+                    - calcul de l'écart type comme l'arc tangente des écart types des
                         sinus et cosinus des dates angulaires \n
-                    Les éccarts types et les moyennes sont calculés pour chaque recette
+                    Les écarts types et les moyennes sont calculés pour chaque recette
                     et sont représentés dans la carte de chaleur ci-dessous :
                 """
         )
         st.image("src/visualization/images/seasonality.png", use_column_width=True)
         st.write(
             """
-                    **Analyse de la saisonalité** \n
+                    **Analyse de la saisonnalité** \n
                     Les recettes que nous avons sélectionnées ont une saisonnalité
                     marquée pendant l'année. Cette saisonnalité est de l'ordre du
-                    trimestre, avec et s'étale sur toute l'année, même si la dynamque
+                    trimestre, avec et s'étale sur toute l'année, même si la dynamique
                     est moins forte en hiver. Le choix des recettes de notre public
                     cible est bien influencé par les saisons. Ils seront donc réceptifs
-                    à des suggestions de saison.
-                    **Ajouter l'information de saisonalité dans le dataset final** \n
+                    à des suggestions de saison. \n
+                    **Ajouter l'information de saisonnalité dans le dataset final** \n
                     Nous décidons finalement d'ajouter la saisonalité moyenne dans
                     le dataset final. L'application proposera en priorité les recettes
                     qui sont de saison!
@@ -221,7 +221,7 @@ def render_front_page() -> None:
             ________________________________________________________________________
             **This project was made from a dataset consisting of 180K+ recipes and
             700K+ recipe reviews covering 18 years of user interactions and uploads
-            on Food.com (formerly GeniusKitchen) to this link:**
+            on Food.com (formerly GeniusKitchen).**
             """
     )
     st.link_button(
