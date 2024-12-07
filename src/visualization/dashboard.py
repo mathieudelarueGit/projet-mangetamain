@@ -53,9 +53,10 @@ class RecipeVisualizer:
         # Obtain trough the data analysis
         std_dev = 1.54
         # Sets the filter for the recipes
-        season_min = (current_date - std_dev) % 12
-        season_max = (current_date + std_dev) % 12
+        season_min = current_date - std_dev
+        season_max = current_date + std_dev
         final = filtered_recipes.copy()
+        final = final[final.avg_date >= 0]
         # Conditions to limits requires some special care
         if season_min < 0:
             final[(final.avg_date > 12 + season_min) & (final.avg_date < season_max)]
@@ -96,11 +97,12 @@ class RecipeVisualizer:
             ]
             with title:
                 st.markdown(
-                    f"<h3 style='text-align: center;'>{current_recipe['name']}</h3>",
+                    f"<h3 style='text-align: center;'>{
+                        current_recipe['name']}</h3>",
                     unsafe_allow_html=True,
                 )
             logger.info("Rendered navigation for recipe: %s", current_recipe["name"])
-            return current_recipe
+            return filtered_recipes, current_recipe
         except Exception as e:
             logger.error("Failed to render navigation: %s", str(e))
             raise
@@ -194,13 +196,34 @@ class RecipeVisualizer:
             DataFrame containing filtered recipes.
         """
         try:
-            current_recipe = self.render_navigation(filtered_recipes)
+            filtered_recipes, current_recipe = self.render_navigation(filtered_recipes)
 
             col1, col2 = st.columns(2)
             with col1:
                 self.render_score_chart(current_recipe)
             with col2:
                 self.render_pie_chart(current_recipe)
+
+            # Display the seasonality of the recipe
+            seasonality = int(current_recipe["avg_date"] - 0.01)
+            m_dict = {
+                0: "January",
+                1: "February",
+                2: "March",
+                3: "April",
+                4: "May",
+                5: "June",
+                6: "July",
+                7: "August",
+                8: "September",
+                9: "October",
+                10: "November",
+                11: "December",
+            }
+
+            # Recipes with no seasonality are set to -
+            if seasonality >= 0:
+                st.write(f"**Seasonality:** {m_dict[seasonality]}")
 
             separtor = """
             ________________________________________________________________________
