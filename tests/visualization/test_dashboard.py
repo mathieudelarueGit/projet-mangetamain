@@ -4,7 +4,6 @@ import pandas as pd
 import streamlit as st
 from src.visualization.dashboard import RecipeVisualizer
 
-
 class TestRecipeVisualizer(unittest.TestCase):
     """
     Unit tests for the RecipeVisualizer class.
@@ -65,44 +64,45 @@ class TestRecipeVisualizer(unittest.TestCase):
             # Check if individual recipes were displayed
             self.assertTrue(mock_write.called)
 
-@patch("streamlit.columns")
-@patch("streamlit.session_state", {})
-@patch("streamlit.button")
-@patch("streamlit.markdown")
-def test_render_navigation(self, mock_markdown, mock_button, mock_columns):
-    """
-    Test the render_navigation method.
-    """
-    # Prepare mock columns and setup
-    mock_left_arrow = MagicMock()
-    mock_title = MagicMock()
-    mock_right_arrow = MagicMock()
-    mock_columns.return_value = [mock_left_arrow, mock_title, mock_right_arrow]
+    @patch("streamlit.columns")
+    @patch("streamlit.session_state", {})
+    @patch("streamlit.button")
+    @patch("streamlit.markdown")
+    def test_render_navigation(self, mock_markdown, mock_button, mock_columns):
+        """
+        Test the render_navigation method.
+        """
+        # Prepare mock columns and setup
+        mock_left_arrow = MagicMock()
+        mock_title = MagicMock()
+        mock_right_arrow = MagicMock()
+        mock_columns.return_value = [mock_left_arrow, mock_title, mock_right_arrow]
 
-    # Prepare a mock DataFrame for recipes
-    data = {
-        "name": ["Recipe A", "Recipe B", "Recipe C"],
-        "avg_date": [2.5, 3.0, 3.5]  # Simulating avg_date as a numeric column for filtering
-    }
-    self.recipes_df = pd.DataFrame(data)
+        # Prepare a mock DataFrame for recipes
+        data = {
+            "name": ["Recipe A", "Recipe B", "Recipe C"],
+            "avg_date": [2.5, 3.0, 3.5]  # Simulating avg_date as a numeric column for filtering
+        }
+        self.recipes_df = pd.DataFrame(data)
 
-    # Call the method under test
-    filtered_recipes, current_recipe = self.visualizer.render_navigation(self.recipes_df)
+        # Call the method under test
+        filtered_recipes, current_recipe = self.visualizer.render_navigation(self.recipes_df)
 
-    # Assert that the current recipe index defaults to 0
-    self.assertEqual(current_recipe["name"], "Recipe A")
+        # Assert that the current recipe index defaults to 0
+        self.assertEqual(current_recipe["name"], "Recipe A")
 
-    # Simulate clicking the right arrow by setting the session state index
-    st.session_state["current_recipe_index"] = 1
-    filtered_recipes, current_recipe = self.visualizer.render_navigation(self.recipes_df)
-    self.assertEqual(current_recipe["name"], "Recipe B")
+        # Simulate clicking the right arrow by setting the session state index
+        st.session_state["current_recipe_index"] = 1
+        filtered_recipes, current_recipe = self.visualizer.render_navigation(self.recipes_df)
+        self.assertEqual(current_recipe["name"], "Recipe B")
 
-    # Simulate clicking the left arrow
-    st.session_state["current_recipe_index"] = 2
-    filtered_recipes, current_recipe = self.visualizer.render_navigation(self.recipes_df)
-    self.assertEqual(current_recipe["name"], "Recipe C")
-    # Ensure that the DataFrame is filtered
-    self.assertTrue(filtered_recipes.shape[0] > 0)  
+        # Simulate clicking the left arrow
+        st.session_state["current_recipe_index"] = 2
+        filtered_recipes, current_recipe = self.visualizer.render_navigation(self.recipes_df)
+        self.assertEqual(current_recipe["name"], "Recipe C")
+
+        # Ensure that the DataFrame is filtered
+        self.assertTrue(filtered_recipes.shape[0] > 0)
 
     @patch("streamlit.plotly_chart")
     def test_render_pie_chart(self, mock_plotly_chart):
@@ -137,39 +137,56 @@ def test_render_navigation(self, mock_markdown, mock_button, mock_columns):
         # Assert that plotly_chart was called once
         mock_plotly_chart.assert_called_once()
 
-    @patch("src.visualization.dashboard.RecipeVisualizer.render_navigation")
-    @patch("src.visualization.dashboard.RecipeVisualizer.render_pie_chart")
-    @patch("src.visualization.dashboard.RecipeVisualizer.render_score_chart")
-    def test_render_dashboard(self, mock_render_navigation, mock_render_pie_chart, mock_render_score_chart):
-        """
-        Test the render_dashboard method.
-        """
-        mock_render_navigation.return_value = self.recipes_df.iloc[0]
-        self.visualizer.render_dashboard(self.recipes_df)
+@patch("src.visualization.dashboard.RecipeVisualizer.render_navigation")
+@patch("src.visualization.dashboard.RecipeVisualizer.render_pie_chart")
+@patch("src.visualization.dashboard.RecipeVisualizer.render_score_chart")
+def test_render_dashboard(self, mock_render_navigation, mock_render_pie_chart, mock_render_score_chart):
+    """
+    Test the render_dashboard method.
+    """
 
-        # Assert that all rendering methods are called
+    # Prepare mock data
+    mock_filtered_recipes = self.recipes_df  # You can adjust this to your filtered DataFrame
+    mock_current_recipe = self.recipes_df.iloc[0]  # Select the first recipe as the current recipe
+
+    # Mock the render_navigation method to return filtered recipes and the current recipe
+    mock_render_navigation.return_value = (mock_filtered_recipes, mock_current_recipe)
+
+    # Call render_dashboard
+    self.visualizer.render_dashboard(self.recipes_df)
+
+    # Assert that all rendering methods are called
+    mock_render_navigation.assert_called_once()
+    mock_render_pie_chart.assert_called_once()
+    mock_render_score_chart.assert_called_once()
+
+    # Test case when no recipes are available (empty DataFrame)
+    mock_render_navigation.return_value = (pd.DataFrame(), None)  # No recipes, current_recipe is None
+    with patch("streamlit.write") as mock_write:
+        self.visualizer.render_dashboard(pd.DataFrame())  # Pass an empty DataFrame to simulate no recipes
+
+        # Assert that the method can handle an empty DataFrame and doesn't raise an error
         mock_render_navigation.assert_called_once()
-        mock_render_pie_chart.assert_called_once()
-        mock_render_score_chart.assert_called_once()
-        
-        @patch("streamlit.toggle")
-        def test_render_dashboard_ingredients_toggle(self, mock_toggle):
-            """
-            Test the ingredients toggle functionality in the render_dashboard method.
-            """
-            selected_recipe = self.recipes_df.iloc[0]
-            with patch("streamlit.session_state", {}):
-                self.visualizer.render_dashboard(self.recipes_df)
-            
-            # Check if toggle button is shown
-            mock_toggle.assert_called_once()
+        mock_write.assert_called_with("No recipes available.")
 
-            # Simulate toggling ingredients visibility
-            show_ingredients = True  # Mocking toggle behavior
-            if show_ingredients:
-                for ingredient in selected_recipe["ingredient_PP"]:
-                    # Ensure ingredients are listed
-                    self.assertIn(ingredient, selected_recipe["ingredient_PP"])
+    @patch("streamlit.toggle")
+    def test_render_dashboard_ingredients_toggle(self, mock_toggle):
+        """
+        Test the ingredients toggle functionality in the render_dashboard method.
+        """
+        selected_recipe = self.recipes_df.iloc[0]
+        with patch("streamlit.session_state", {}):
+            self.visualizer.render_dashboard(self.recipes_df)
+
+        # Check if toggle button is shown
+        mock_toggle.assert_called_once()
+
+        # Simulate toggling ingredients visibility
+        show_ingredients = True  # Mocking toggle behavior
+        if show_ingredients:
+            for ingredient in selected_recipe["ingredient_PP"]:
+                # Ensure ingredients are listed
+                self.assertIn(ingredient, selected_recipe["ingredient_PP"])
 
 
 if __name__ == "__main__":
