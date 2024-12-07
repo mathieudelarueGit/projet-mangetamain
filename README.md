@@ -86,3 +86,9 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - **Food.com Dataset**: Our app is powered by a rich dataset of recipes and user reviews, sourced from Food.com (formerly GeniusKitchen).
 - **Word2Vec**: We used Word2Vec to vectorize the ingredients for more accurate recipe matching.
 - **Seasonality Analysis**: Special thanks to the contributors who helped in analyzing seasonal trends in recipes.
+
+# Documentation
+
+The project documentation is available online at the following link:
+
+[Click here for the documentation](https://mathieudelaruegit.github.io/projet-mangetamain)

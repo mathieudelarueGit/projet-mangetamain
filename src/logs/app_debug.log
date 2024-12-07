@@ -505,3 +505,426 @@
 2024-12-04 16:57:18,497 - src.visualization.sidebar - INFO - Rendering sidebar configurations.
 2024-12-04 16:57:18,516 - src.visualization.sidebar - INFO - User inputs collected successfully.
 2024-12-04 16:57:18,517 - __main__ - INFO - Displaying the front page.
+2024-12-04 17:10:04,773 - __main__ - INFO - Initializing RecipeApp...
+2024-12-04 17:10:04,773 - src.data_loader - INFO - DataLoader initialized.
+2024-12-04 17:10:04,773 - __main__ - INFO - Loading recipes and interactions data...
+2024-12-04 17:10:05,539 - src.data_loader - INFO - Loaded CSV from ZIP: dataset/PP_recipes_final.csv_extracted/PP_recipes_final.csv
+2024-12-04 17:10:09,978 - src.data_loader - INFO - Calculated MTM scores for 66711 recipes.
+2024-12-04 17:10:10,035 - src.data_loader - INFO - Generated ingredient list with 1226 unique ingredients.
+2024-12-04 17:10:10,524 - src.data_loader - INFO - Loaded CSV from ZIP: dataset/PP_interactions_final.csv_extracted/PP_interactions.csv
+2024-12-04 17:10:10,602 - __main__ - INFO - Running RecipeApp...
+2024-12-04 17:10:10,603 - src.visualization.sidebar - INFO - Rendering sidebar configurations.
+2024-12-04 17:10:10,608 - src.visualization.sidebar - INFO - User inputs collected successfully.
+2024-12-04 17:10:10,608 - __main__ - INFO - Displaying the front page.
+2024-12-04 17:10:13,655 - __main__ - INFO - Initializing RecipeApp...
+2024-12-04 17:10:13,659 - src.data_loader - INFO - DataLoader initialized.
+2024-12-04 17:10:13,678 - __main__ - INFO - Loading recipes and interactions data...
+2024-12-04 17:10:14,569 - __main__ - INFO - Running RecipeApp...
+2024-12-04 17:10:14,570 - src.visualization.sidebar - INFO - Rendering sidebar configurations.
+2024-12-04 17:10:14,578 - src.visualization.sidebar - INFO - User inputs collected successfully.
+2024-12-04 17:10:14,578 - __main__ - INFO - Displaying the front page.
+2024-12-04 17:10:15,398 - __main__ - INFO - Initializing RecipeApp...
+2024-12-04 17:10:15,398 - src.data_loader - INFO - DataLoader initialized.
+2024-12-04 17:10:15,398 - __main__ - INFO - Loading recipes and interactions data...
+2024-12-04 17:10:16,145 - __main__ - INFO - Running RecipeApp...
+2024-12-04 17:10:16,145 - src.visualization.sidebar - INFO - Rendering sidebar configurations.
+2024-12-04 17:10:16,157 - src.visualization.sidebar - INFO - User inputs collected successfully.
+2024-12-04 17:10:16,157 - __main__ - INFO - Filtering recipes based on user inputs.
+2024-12-04 17:10:16,157 - __main__ - DEBUG - Applying filters: {'selected_ingredients': ['pumpkin'], 'protein_min': 0, 'carbs_min': 0, 'fat_max': 150, 'start_search': True, 'reset_clicked': False, 'recipe_clicked': False, 'total_calories': 1350}
+2024-12-04 17:10:16,221 - src.filter - INFO - RecipeFilter initialized with 66711 recipes.
+2024-12-04 17:10:16,371 - src.filter - INFO - Filtered by ingredients; 0 recipes remain.
+2024-12-04 17:10:16,371 - src.filter - INFO - Skipping nutrition filtering; no recipes available.
+2024-12-04 17:10:16,371 - src.filter - INFO - Returning 0 filtered recipes.
+2024-12-04 17:10:16,376 - __main__ - INFO - No recipes found. Showing suggestions.
+2024-12-04 17:10:16,376 - src.visualization.dashboard - INFO - RecipeVisualizer initialized with recipes and interactions data.
+2024-12-04 17:10:16,493 - src.visualization.dashboard - INFO - Rendered no-recipes suggestions.
+2024-12-04 17:10:17,612 - __main__ - INFO - Initializing RecipeApp...
+2024-12-04 17:10:17,612 - src.data_loader - INFO - DataLoader initialized.
+2024-12-04 17:10:17,612 - __main__ - INFO - Loading recipes and interactions data...
+2024-12-04 17:10:18,233 - __main__ - INFO - Running RecipeApp...
+2024-12-04 17:10:18,233 - src.visualization.sidebar - INFO - Rendering sidebar configurations.
+2024-12-04 17:10:18,239 - src.visualization.sidebar - INFO - User inputs collected successfully.
+2024-12-04 17:10:18,240 - __main__ - INFO - Recipe button clicked: recipe_251673
+2024-12-04 17:10:18,242 - __main__ - INFO - Rendering dashboard.
+2024-12-04 17:10:18,243 - src.visualization.dashboard - INFO - RecipeVisualizer initialized with recipes and interactions data.
+2024-12-04 17:10:18,251 - src.visualization.dashboard - INFO - Rendered navigation for recipe: asian style pumpkin soup
+2024-12-04 17:10:18,296 - src.visualization.charts - INFO - Generated score display for MTM score: 100
+2024-12-04 17:10:18,301 - src.visualization.dashboard - INFO - Rendered score chart for recipe: asian style pumpkin soup
+2024-12-04 17:10:18,515 - src.visualization.charts - INFO - Generated pie chart with title 'Macronutrient Breakdown'.
+2024-12-04 17:10:18,517 - src.visualization.dashboard - INFO - Rendered pie chart for recipe: asian style pumpkin soup
+2024-12-04 17:10:18,517 - src.visualization.dashboard - INFO - Rendered dashboard for recipe: asian style pumpkin soup
+2024-12-04 17:10:19,413 - __main__ - INFO - Initializing RecipeApp...
+2024-12-04 17:10:19,413 - src.data_loader - INFO - DataLoader initialized.
+2024-12-04 17:10:19,413 - __main__ - INFO - Loading recipes and interactions data...
+2024-12-04 17:10:20,123 - __main__ - INFO - Running RecipeApp...
+2024-12-04 17:10:20,124 - src.visualization.sidebar - INFO - Rendering sidebar configurations.
+2024-12-04 17:10:20,165 - src.visualization.sidebar - INFO - Reset button clicked, clearing session state.
+2024-12-04 17:10:20,288 - __main__ - INFO - Initializing RecipeApp...
+2024-12-04 17:10:20,289 - src.data_loader - INFO - DataLoader initialized.
+2024-12-04 17:10:20,290 - __main__ - INFO - Loading recipes and interactions data...
+2024-12-04 17:10:20,992 - __main__ - INFO - Running RecipeApp...
+2024-12-04 17:10:20,992 - src.visualization.sidebar - INFO - Rendering sidebar configurations.
+2024-12-04 17:10:21,009 - src.visualization.sidebar - INFO - User inputs collected successfully.
+2024-12-04 17:10:21,019 - __main__ - INFO - Displaying the front page.
+2024-12-04 17:10:22,929 - __main__ - INFO - Initializing RecipeApp...
+2024-12-04 17:10:22,929 - src.data_loader - INFO - DataLoader initialized.
+2024-12-04 17:10:22,930 - __main__ - INFO - Loading recipes and interactions data...
+2024-12-04 17:10:23,456 - __main__ - INFO - Running RecipeApp...
+2024-12-04 17:10:23,456 - src.visualization.sidebar - INFO - Rendering sidebar configurations.
+2024-12-04 17:10:23,474 - src.visualization.sidebar - INFO - User inputs collected successfully.
+2024-12-04 17:10:23,474 - __main__ - INFO - Displaying the front page.
+2024-12-04 17:10:24,255 - __main__ - INFO - Initializing RecipeApp...
+2024-12-04 17:10:24,255 - src.data_loader - INFO - DataLoader initialized.
+2024-12-04 17:10:24,255 - __main__ - INFO - Loading recipes and interactions data...
+2024-12-04 17:10:24,915 - __main__ - INFO - Running RecipeApp...
+2024-12-04 17:10:24,915 - src.visualization.sidebar - INFO - Rendering sidebar configurations.
+2024-12-04 17:10:24,928 - src.visualization.sidebar - INFO - User inputs collected successfully.
+2024-12-04 17:10:24,929 - __main__ - INFO - Displaying the front page.
+2024-12-04 17:10:25,575 - __main__ - INFO - Initializing RecipeApp...
+2024-12-04 17:10:25,575 - src.data_loader - INFO - DataLoader initialized.
+2024-12-04 17:10:25,575 - __main__ - INFO - Loading recipes and interactions data...
+2024-12-04 17:10:26,277 - __main__ - INFO - Running RecipeApp...
+2024-12-04 17:10:26,277 - src.visualization.sidebar - INFO - Rendering sidebar configurations.
+2024-12-04 17:10:26,286 - src.visualization.sidebar - INFO - User inputs collected successfully.
+2024-12-04 17:10:26,287 - __main__ - INFO - Displaying the front page.
+2024-12-04 17:10:27,143 - __main__ - INFO - Initializing RecipeApp...
+2024-12-04 17:10:27,143 - src.data_loader - INFO - DataLoader initialized.
+2024-12-04 17:10:27,143 - __main__ - INFO - Loading recipes and interactions data...
+2024-12-04 17:10:27,922 - __main__ - INFO - Running RecipeApp...
+2024-12-04 17:10:27,923 - src.visualization.sidebar - INFO - Rendering sidebar configurations.
+2024-12-04 17:10:27,928 - src.visualization.sidebar - INFO - User inputs collected successfully.
+2024-12-04 17:10:27,928 - __main__ - INFO - Filtering recipes based on user inputs.
+2024-12-04 17:10:27,928 - __main__ - DEBUG - Applying filters: {'selected_ingredients': [], 'protein_min': 42, 'carbs_min': 29, 'fat_max': 72, 'start_search': True, 'reset_clicked': False, 'recipe_clicked': False, 'total_calories': 932}
+2024-12-04 17:10:27,968 - src.filter - INFO - RecipeFilter initialized with 66711 recipes.
+2024-12-04 17:10:27,968 - src.filter - INFO - No ingredients selected; keeping all recipes.
+2024-12-04 17:10:28,034 - src.filter - INFO - Filtered by protein (min 42); 3558 recipes remain.
+2024-12-04 17:10:28,037 - src.filter - INFO - Filtered by carbs (min 29); 2219 recipes remain.
+2024-12-04 17:10:28,040 - src.filter - INFO - Filtered by fat (max 72); 1733 recipes remain.
+2024-12-04 17:10:28,040 - src.filter - INFO - Returning 1733 filtered recipes.
+2024-12-04 17:10:28,043 - __main__ - INFO - Rendering dashboard.
+2024-12-04 17:10:28,043 - src.visualization.dashboard - INFO - RecipeVisualizer initialized with recipes and interactions data.
+2024-12-04 17:10:28,046 - src.visualization.dashboard - INFO - Rendered navigation for recipe: leftovers  spaghetti sauce
+2024-12-04 17:10:28,055 - src.visualization.charts - INFO - Generated score display for MTM score: 10
+2024-12-04 17:10:28,056 - src.visualization.dashboard - INFO - Rendered score chart for recipe: leftovers  spaghetti sauce
+2024-12-04 17:10:28,082 - src.visualization.charts - INFO - Generated pie chart with title 'Macronutrient Breakdown'.
+2024-12-04 17:10:28,084 - src.visualization.dashboard - INFO - Rendered pie chart for recipe: leftovers  spaghetti sauce
+2024-12-04 17:10:28,085 - src.visualization.dashboard - INFO - Rendered dashboard for recipe: leftovers  spaghetti sauce
+2024-12-04 17:10:29,655 - __main__ - INFO - Initializing RecipeApp...
+2024-12-04 17:10:29,655 - src.data_loader - INFO - DataLoader initialized.
+2024-12-04 17:10:29,655 - __main__ - INFO - Loading recipes and interactions data...
+2024-12-04 17:10:30,202 - __main__ - INFO - Running RecipeApp...
+2024-12-04 17:10:30,202 - src.visualization.sidebar - INFO - Rendering sidebar configurations.
+2024-12-04 17:10:30,209 - src.visualization.sidebar - INFO - User inputs collected successfully.
+2024-12-04 17:10:30,209 - __main__ - INFO - Rendering dashboard.
+2024-12-04 17:10:30,209 - src.visualization.dashboard - INFO - RecipeVisualizer initialized with recipes and interactions data.
+2024-12-04 17:10:30,214 - src.visualization.dashboard - INFO - Rendered navigation for recipe: it s too easy  pork chops   rice casserole
+2024-12-04 17:10:30,229 - src.visualization.charts - INFO - Generated score display for MTM score: 100
+2024-12-04 17:10:30,232 - src.visualization.dashboard - INFO - Rendered score chart for recipe: it s too easy  pork chops   rice casserole
+2024-12-04 17:10:30,268 - src.visualization.charts - INFO - Generated pie chart with title 'Macronutrient Breakdown'.
+2024-12-04 17:10:30,271 - src.visualization.dashboard - INFO - Rendered pie chart for recipe: it s too easy  pork chops   rice casserole
+2024-12-04 17:10:30,271 - src.visualization.dashboard - INFO - Rendered dashboard for recipe: it s too easy  pork chops   rice casserole
+2024-12-04 17:10:31,676 - __main__ - INFO - Initializing RecipeApp...
+2024-12-04 17:10:31,676 - src.data_loader - INFO - DataLoader initialized.
+2024-12-04 17:10:31,676 - __main__ - INFO - Loading recipes and interactions data...
+2024-12-04 17:10:32,237 - __main__ - INFO - Running RecipeApp...
+2024-12-04 17:10:32,237 - src.visualization.sidebar - INFO - Rendering sidebar configurations.
+2024-12-04 17:10:32,243 - src.visualization.sidebar - INFO - Reset button clicked, clearing session state.
+2024-12-04 17:10:32,362 - __main__ - INFO - Initializing RecipeApp...
+2024-12-04 17:10:32,363 - src.data_loader - INFO - DataLoader initialized.
+2024-12-04 17:10:32,364 - __main__ - INFO - Loading recipes and interactions data...
+2024-12-04 17:10:32,987 - __main__ - INFO - Running RecipeApp...
+2024-12-04 17:10:32,987 - src.visualization.sidebar - INFO - Rendering sidebar configurations.
+2024-12-04 17:10:33,004 - src.visualization.sidebar - INFO - User inputs collected successfully.
+2024-12-04 17:10:33,004 - __main__ - INFO - Displaying the front page.
+2024-12-07 10:36:23,910 - __main__ - INFO - Initializing RecipeApp...
+2024-12-07 10:36:23,910 - src.data_loader - INFO - DataLoader initialized.
+2024-12-07 10:36:23,911 - __main__ - INFO - Loading recipes and interactions data...
+2024-12-07 10:36:24,323 - src.data_loader - INFO - Loaded CSV from ZIP: dataset/PP_recipes_final.csv_extracted/PP_recipes_final.csv
+2024-12-07 10:36:27,496 - src.data_loader - INFO - Calculated MTM scores for 66711 recipes.
+2024-12-07 10:36:27,548 - src.data_loader - INFO - Generated ingredient list with 1226 unique ingredients.
+2024-12-07 10:36:28,029 - src.data_loader - INFO - Loaded CSV from ZIP: dataset/PP_interactions_final.csv_extracted/PP_interactions.csv
+2024-12-07 10:36:28,115 - __main__ - INFO - Running RecipeApp...
+2024-12-07 10:36:28,115 - src.visualization.sidebar - INFO - Rendering sidebar configurations.
+2024-12-07 10:36:28,120 - src.visualization.sidebar - INFO - User inputs collected successfully.
+2024-12-07 10:36:28,121 - __main__ - INFO - Displaying the front page.
+2024-12-07 10:36:32,192 - __main__ - INFO - Initializing RecipeApp...
+2024-12-07 10:36:32,193 - src.data_loader - INFO - DataLoader initialized.
+2024-12-07 10:36:32,193 - __main__ - INFO - Loading recipes and interactions data...
+2024-12-07 10:36:32,981 - __main__ - INFO - Running RecipeApp...
+2024-12-07 10:36:32,981 - src.visualization.sidebar - INFO - Rendering sidebar configurations.
+2024-12-07 10:36:32,989 - src.visualization.sidebar - INFO - User inputs collected successfully.
+2024-12-07 10:36:32,990 - __main__ - INFO - Displaying the front page.
+2024-12-07 10:36:33,227 - __main__ - INFO - Initializing RecipeApp...
+2024-12-07 10:36:33,227 - src.data_loader - INFO - DataLoader initialized.
+2024-12-07 10:36:33,227 - __main__ - INFO - Loading recipes and interactions data...
+2024-12-07 10:36:33,971 - __main__ - INFO - Running RecipeApp...
+2024-12-07 10:36:33,971 - src.visualization.sidebar - INFO - Rendering sidebar configurations.
+2024-12-07 10:36:33,977 - src.visualization.sidebar - INFO - User inputs collected successfully.
+2024-12-07 10:36:33,978 - __main__ - INFO - Displaying the front page.
+2024-12-07 10:36:34,201 - __main__ - INFO - Initializing RecipeApp...
+2024-12-07 10:36:34,202 - src.data_loader - INFO - DataLoader initialized.
+2024-12-07 10:36:34,202 - __main__ - INFO - Loading recipes and interactions data...
+2024-12-07 10:36:35,038 - __main__ - INFO - Running RecipeApp...
+2024-12-07 10:36:35,038 - src.visualization.sidebar - INFO - Rendering sidebar configurations.
+2024-12-07 10:36:35,052 - src.visualization.sidebar - INFO - User inputs collected successfully.
+2024-12-07 10:36:35,053 - __main__ - INFO - Displaying the front page.
+2024-12-07 10:36:35,787 - __main__ - INFO - Initializing RecipeApp...
+2024-12-07 10:36:35,787 - src.data_loader - INFO - DataLoader initialized.
+2024-12-07 10:36:35,787 - __main__ - INFO - Loading recipes and interactions data...
+2024-12-07 10:36:36,860 - __main__ - INFO - Running RecipeApp...
+2024-12-07 10:36:36,860 - src.visualization.sidebar - INFO - Rendering sidebar configurations.
+2024-12-07 10:36:36,870 - src.visualization.sidebar - INFO - User inputs collected successfully.
+2024-12-07 10:36:36,871 - __main__ - INFO - Filtering recipes based on user inputs.
+2024-12-07 10:36:36,871 - __main__ - DEBUG - Applying filters: {'selected_ingredients': [], 'protein_min': 37, 'carbs_min': 76, 'fat_max': 43, 'start_search': True, 'reset_clicked': False, 'recipe_clicked': False, 'total_calories': 839}
+2024-12-07 10:36:36,990 - src.filter - INFO - RecipeFilter initialized with 66711 recipes.
+2024-12-07 10:36:36,990 - src.filter - INFO - No ingredients selected; keeping all recipes.
+2024-12-07 10:36:37,043 - src.filter - INFO - Filtered by protein (min 37); 5146 recipes remain.
+2024-12-07 10:36:37,050 - src.filter - INFO - Filtered by carbs (min 76); 1457 recipes remain.
+2024-12-07 10:36:37,052 - src.filter - INFO - Filtered by fat (max 43); 818 recipes remain.
+2024-12-07 10:36:37,052 - src.filter - INFO - Returning 818 filtered recipes.
+2024-12-07 10:36:37,055 - __main__ - INFO - Rendering dashboard.
+2024-12-07 10:36:37,055 - src.visualization.dashboard - INFO - RecipeVisualizer initialized with recipes and interactions data.
+2024-12-07 10:36:48,683 - __main__ - INFO - Initializing RecipeApp...
+2024-12-07 10:36:48,683 - src.data_loader - INFO - DataLoader initialized.
+2024-12-07 10:36:48,684 - __main__ - INFO - Loading recipes and interactions data...
+2024-12-07 10:36:49,364 - __main__ - INFO - Running RecipeApp...
+2024-12-07 10:36:49,364 - src.visualization.sidebar - INFO - Rendering sidebar configurations.
+2024-12-07 10:36:49,371 - src.visualization.sidebar - INFO - Reset button clicked, clearing session state.
+2024-12-07 10:36:49,534 - __main__ - INFO - Initializing RecipeApp...
+2024-12-07 10:36:49,536 - src.data_loader - INFO - DataLoader initialized.
+2024-12-07 10:36:49,536 - __main__ - INFO - Loading recipes and interactions data...
+2024-12-07 10:36:50,318 - __main__ - INFO - Running RecipeApp...
+2024-12-07 10:36:50,318 - src.visualization.sidebar - INFO - Rendering sidebar configurations.
+2024-12-07 10:36:50,333 - src.visualization.sidebar - INFO - User inputs collected successfully.
+2024-12-07 10:36:50,334 - __main__ - INFO - Rendering dashboard.
+2024-12-07 10:36:50,334 - src.visualization.dashboard - INFO - RecipeVisualizer initialized with recipes and interactions data.
+2024-12-07 10:38:22,065 - __main__ - INFO - Initializing RecipeApp...
+2024-12-07 10:38:22,065 - src.data_loader - INFO - DataLoader initialized.
+2024-12-07 10:38:22,065 - __main__ - INFO - Loading recipes and interactions data...
+2024-12-07 10:38:22,318 - src.data_loader - INFO - Extracted ZIP file: dataset/PP_recipes_final.csv.zip
+2024-12-07 10:38:22,944 - src.data_loader - INFO - Loaded CSV from ZIP: dataset/PP_recipes_final.csv_extracted/final.csv
+2024-12-07 10:38:26,307 - src.data_loader - INFO - Calculated MTM scores for 66711 recipes.
+2024-12-07 10:38:26,362 - src.data_loader - INFO - Generated ingredient list with 1226 unique ingredients.
+2024-12-07 10:38:26,827 - src.data_loader - INFO - Extracted ZIP file: dataset/PP_interactions_final.csv.zip
+2024-12-07 10:38:26,968 - src.data_loader - INFO - Loaded CSV from ZIP: dataset/PP_interactions_final.csv_extracted/PP_interactions.csv
+2024-12-07 10:38:27,061 - __main__ - INFO - Running RecipeApp...
+2024-12-07 10:38:27,061 - src.visualization.sidebar - INFO - Rendering sidebar configurations.
+2024-12-07 10:38:27,068 - src.visualization.sidebar - INFO - User inputs collected successfully.
+2024-12-07 10:38:27,068 - __main__ - INFO - Displaying the front page.
+2024-12-07 10:38:30,547 - __main__ - INFO - Initializing RecipeApp...
+2024-12-07 10:38:30,547 - src.data_loader - INFO - DataLoader initialized.
+2024-12-07 10:38:30,547 - __main__ - INFO - Loading recipes and interactions data...
+2024-12-07 10:38:31,436 - __main__ - INFO - Running RecipeApp...
+2024-12-07 10:38:31,436 - src.visualization.sidebar - INFO - Rendering sidebar configurations.
+2024-12-07 10:38:31,452 - src.visualization.sidebar - INFO - User inputs collected successfully.
+2024-12-07 10:38:31,453 - __main__ - INFO - Displaying the front page.
+2024-12-07 10:38:31,904 - __main__ - INFO - Initializing RecipeApp...
+2024-12-07 10:38:31,905 - src.data_loader - INFO - DataLoader initialized.
+2024-12-07 10:38:31,905 - __main__ - INFO - Loading recipes and interactions data...
+2024-12-07 10:38:32,748 - __main__ - INFO - Initializing RecipeApp...
+2024-12-07 10:38:32,748 - src.data_loader - INFO - DataLoader initialized.
+2024-12-07 10:38:32,748 - __main__ - INFO - Loading recipes and interactions data...
+2024-12-07 10:38:32,854 - __main__ - INFO - Running RecipeApp...
+2024-12-07 10:38:33,000 - src.visualization.sidebar - INFO - Rendering sidebar configurations.
+2024-12-07 10:38:34,062 - __main__ - INFO - Running RecipeApp...
+2024-12-07 10:38:34,062 - src.visualization.sidebar - INFO - Rendering sidebar configurations.
+2024-12-07 10:38:34,070 - src.visualization.sidebar - INFO - User inputs collected successfully.
+2024-12-07 10:38:34,070 - __main__ - INFO - Displaying the front page.
+2024-12-07 10:38:34,627 - __main__ - INFO - Initializing RecipeApp...
+2024-12-07 10:38:34,628 - src.data_loader - INFO - DataLoader initialized.
+2024-12-07 10:38:34,629 - __main__ - INFO - Loading recipes and interactions data...
+2024-12-07 10:38:35,619 - __main__ - INFO - Running RecipeApp...
+2024-12-07 10:38:35,619 - src.visualization.sidebar - INFO - Rendering sidebar configurations.
+2024-12-07 10:38:35,636 - src.visualization.sidebar - INFO - User inputs collected successfully.
+2024-12-07 10:38:35,636 - __main__ - INFO - Filtering recipes based on user inputs.
+2024-12-07 10:38:35,636 - __main__ - DEBUG - Applying filters: {'selected_ingredients': [], 'protein_min': 41, 'carbs_min': 79, 'fat_max': 37, 'start_search': True, 'reset_clicked': False, 'recipe_clicked': False, 'total_calories': 813}
+2024-12-07 10:38:35,751 - src.filter - INFO - RecipeFilter initialized with 66711 recipes.
+2024-12-07 10:38:35,770 - src.filter - INFO - No ingredients selected; keeping all recipes.
+2024-12-07 10:38:35,829 - src.filter - INFO - Filtered by protein (min 41); 3837 recipes remain.
+2024-12-07 10:38:35,834 - src.filter - INFO - Filtered by carbs (min 79); 1091 recipes remain.
+2024-12-07 10:38:35,836 - src.filter - INFO - Filtered by fat (max 37); 493 recipes remain.
+2024-12-07 10:38:35,837 - src.filter - INFO - Returning 493 filtered recipes.
+2024-12-07 10:38:35,841 - __main__ - INFO - Rendering dashboard.
+2024-12-07 10:38:35,841 - src.visualization.dashboard - INFO - RecipeVisualizer initialized with recipes and interactions data.
+2024-12-07 10:38:35,854 - src.visualization.dashboard - INFO - Rendered navigation for recipe: dorito  popcorn seasoning
+2024-12-07 10:38:35,993 - src.visualization.charts - INFO - Generated score display for MTM score: 70
+2024-12-07 10:38:36,002 - src.visualization.dashboard - INFO - Rendered score chart for recipe: dorito  popcorn seasoning
+2024-12-07 10:38:36,352 - src.visualization.charts - INFO - Generated pie chart with title 'Macronutrient Breakdown'.
+2024-12-07 10:38:36,355 - src.visualization.dashboard - INFO - Rendered pie chart for recipe: dorito  popcorn seasoning
+2024-12-07 10:38:36,361 - src.visualization.dashboard - INFO - Rendered dashboard for recipe: dorito  popcorn seasoning
+2024-12-07 10:38:44,102 - __main__ - INFO - Initializing RecipeApp...
+2024-12-07 10:38:44,102 - src.data_loader - INFO - DataLoader initialized.
+2024-12-07 10:38:44,102 - __main__ - INFO - Loading recipes and interactions data...
+2024-12-07 10:38:44,891 - __main__ - INFO - Running RecipeApp...
+2024-12-07 10:38:44,891 - src.visualization.sidebar - INFO - Rendering sidebar configurations.
+2024-12-07 10:38:44,902 - src.visualization.sidebar - INFO - User inputs collected successfully.
+2024-12-07 10:38:44,903 - __main__ - INFO - Rendering dashboard.
+2024-12-07 10:38:44,903 - src.visualization.dashboard - INFO - RecipeVisualizer initialized with recipes and interactions data.
+2024-12-07 10:38:44,907 - src.visualization.dashboard - INFO - Rendered navigation for recipe: dorito  popcorn seasoning
+2024-12-07 10:38:44,935 - src.visualization.charts - INFO - Generated score display for MTM score: 70
+2024-12-07 10:38:44,937 - src.visualization.dashboard - INFO - Rendered score chart for recipe: dorito  popcorn seasoning
+2024-12-07 10:38:44,971 - src.visualization.charts - INFO - Generated pie chart with title 'Macronutrient Breakdown'.
+2024-12-07 10:38:44,973 - src.visualization.dashboard - INFO - Rendered pie chart for recipe: dorito  popcorn seasoning
+2024-12-07 10:38:44,990 - src.visualization.dashboard - INFO - Rendered dashboard for recipe: dorito  popcorn seasoning
+2024-12-07 10:38:48,180 - __main__ - INFO - Initializing RecipeApp...
+2024-12-07 10:38:48,181 - src.data_loader - INFO - DataLoader initialized.
+2024-12-07 10:38:48,181 - __main__ - INFO - Loading recipes and interactions data...
+2024-12-07 10:38:48,852 - __main__ - INFO - Running RecipeApp...
+2024-12-07 10:38:48,852 - src.visualization.sidebar - INFO - Rendering sidebar configurations.
+2024-12-07 10:38:48,858 - src.visualization.sidebar - INFO - User inputs collected successfully.
+2024-12-07 10:38:48,858 - __main__ - INFO - Rendering dashboard.
+2024-12-07 10:38:48,858 - src.visualization.dashboard - INFO - RecipeVisualizer initialized with recipes and interactions data.
+2024-12-07 10:38:48,862 - src.visualization.dashboard - INFO - Rendered navigation for recipe: dorito  popcorn seasoning
+2024-12-07 10:38:48,872 - src.visualization.charts - INFO - Generated score display for MTM score: 70
+2024-12-07 10:38:48,873 - src.visualization.dashboard - INFO - Rendered score chart for recipe: dorito  popcorn seasoning
+2024-12-07 10:38:48,915 - src.visualization.charts - INFO - Generated pie chart with title 'Macronutrient Breakdown'.
+2024-12-07 10:38:48,917 - src.visualization.dashboard - INFO - Rendered pie chart for recipe: dorito  popcorn seasoning
+2024-12-07 10:38:48,925 - src.visualization.dashboard - INFO - Rendered dashboard for recipe: dorito  popcorn seasoning
+2024-12-07 10:38:50,581 - __main__ - INFO - Initializing RecipeApp...
+2024-12-07 10:38:50,581 - src.data_loader - INFO - DataLoader initialized.
+2024-12-07 10:38:50,581 - __main__ - INFO - Loading recipes and interactions data...
+2024-12-07 10:38:51,159 - __main__ - INFO - Running RecipeApp...
+2024-12-07 10:38:51,159 - src.visualization.sidebar - INFO - Rendering sidebar configurations.
+2024-12-07 10:38:51,168 - src.visualization.sidebar - INFO - User inputs collected successfully.
+2024-12-07 10:38:51,169 - __main__ - INFO - Rendering dashboard.
+2024-12-07 10:38:51,170 - src.visualization.dashboard - INFO - RecipeVisualizer initialized with recipes and interactions data.
+2024-12-07 10:38:51,174 - src.visualization.dashboard - INFO - Rendered navigation for recipe: 16 quart chicken corn soup
+2024-12-07 10:38:51,189 - src.visualization.charts - INFO - Generated score display for MTM score: 70
+2024-12-07 10:38:51,191 - src.visualization.dashboard - INFO - Rendered score chart for recipe: 16 quart chicken corn soup
+2024-12-07 10:38:51,246 - src.visualization.charts - INFO - Generated pie chart with title 'Macronutrient Breakdown'.
+2024-12-07 10:38:51,248 - src.visualization.dashboard - INFO - Rendered pie chart for recipe: 16 quart chicken corn soup
+2024-12-07 10:38:51,261 - src.visualization.dashboard - INFO - Rendered dashboard for recipe: 16 quart chicken corn soup
+2024-12-07 10:38:52,281 - __main__ - INFO - Initializing RecipeApp...
+2024-12-07 10:38:52,281 - src.data_loader - INFO - DataLoader initialized.
+2024-12-07 10:38:52,281 - __main__ - INFO - Loading recipes and interactions data...
+2024-12-07 10:38:52,975 - __main__ - INFO - Running RecipeApp...
+2024-12-07 10:38:52,975 - src.visualization.sidebar - INFO - Rendering sidebar configurations.
+2024-12-07 10:38:52,981 - src.visualization.sidebar - INFO - User inputs collected successfully.
+2024-12-07 10:38:52,982 - __main__ - INFO - Rendering dashboard.
+2024-12-07 10:38:52,982 - src.visualization.dashboard - INFO - RecipeVisualizer initialized with recipes and interactions data.
+2024-12-07 10:38:52,989 - src.visualization.dashboard - INFO - Rendered navigation for recipe: 2 minute noodles for two with ham   cheese
+2024-12-07 10:38:53,000 - src.visualization.charts - INFO - Generated score display for MTM score: 100
+2024-12-07 10:38:53,003 - src.visualization.dashboard - INFO - Rendered score chart for recipe: 2 minute noodles for two with ham   cheese
+2024-12-07 10:38:53,090 - src.visualization.charts - INFO - Generated pie chart with title 'Macronutrient Breakdown'.
+2024-12-07 10:38:53,095 - src.visualization.dashboard - INFO - Rendered pie chart for recipe: 2 minute noodles for two with ham   cheese
+2024-12-07 10:38:53,104 - src.visualization.dashboard - INFO - Rendered dashboard for recipe: 2 minute noodles for two with ham   cheese
+2024-12-07 10:38:56,344 - __main__ - INFO - Initializing RecipeApp...
+2024-12-07 10:38:56,344 - src.data_loader - INFO - DataLoader initialized.
+2024-12-07 10:38:56,344 - __main__ - INFO - Loading recipes and interactions data...
+2024-12-07 10:38:57,040 - __main__ - INFO - Running RecipeApp...
+2024-12-07 10:38:57,040 - src.visualization.sidebar - INFO - Rendering sidebar configurations.
+2024-12-07 10:38:57,051 - src.visualization.sidebar - INFO - User inputs collected successfully.
+2024-12-07 10:38:57,054 - __main__ - INFO - Rendering dashboard.
+2024-12-07 10:38:57,055 - src.visualization.dashboard - INFO - RecipeVisualizer initialized with recipes and interactions data.
+2024-12-07 10:38:57,059 - src.visualization.dashboard - INFO - Rendered navigation for recipe: 5 can chicken enchiladas
+2024-12-07 10:38:57,071 - src.visualization.charts - INFO - Generated score display for MTM score: 95
+2024-12-07 10:38:57,073 - src.visualization.dashboard - INFO - Rendered score chart for recipe: 5 can chicken enchiladas
+2024-12-07 10:38:57,119 - src.visualization.charts - INFO - Generated pie chart with title 'Macronutrient Breakdown'.
+2024-12-07 10:38:57,121 - src.visualization.dashboard - INFO - Rendered pie chart for recipe: 5 can chicken enchiladas
+2024-12-07 10:38:57,138 - src.visualization.dashboard - INFO - Rendered dashboard for recipe: 5 can chicken enchiladas
+2024-12-07 10:38:58,133 - __main__ - INFO - Initializing RecipeApp...
+2024-12-07 10:38:58,133 - src.data_loader - INFO - DataLoader initialized.
+2024-12-07 10:38:58,133 - __main__ - INFO - Loading recipes and interactions data...
+2024-12-07 10:38:58,919 - __main__ - INFO - Running RecipeApp...
+2024-12-07 10:38:58,919 - src.visualization.sidebar - INFO - Rendering sidebar configurations.
+2024-12-07 10:38:58,924 - src.visualization.sidebar - INFO - User inputs collected successfully.
+2024-12-07 10:38:58,924 - __main__ - INFO - Rendering dashboard.
+2024-12-07 10:38:58,924 - src.visualization.dashboard - INFO - RecipeVisualizer initialized with recipes and interactions data.
+2024-12-07 10:38:58,927 - src.visualization.dashboard - INFO - Rendered navigation for recipe: 5 bean chili
+2024-12-07 10:38:58,940 - src.visualization.charts - INFO - Generated score display for MTM score: 100
+2024-12-07 10:38:58,942 - src.visualization.dashboard - INFO - Rendered score chart for recipe: 5 bean chili
+2024-12-07 10:38:58,982 - src.visualization.charts - INFO - Generated pie chart with title 'Macronutrient Breakdown'.
+2024-12-07 10:38:58,983 - src.visualization.dashboard - INFO - Rendered pie chart for recipe: 5 bean chili
+2024-12-07 10:38:58,988 - src.visualization.dashboard - INFO - Rendered dashboard for recipe: 5 bean chili
+2024-12-07 10:39:01,577 - __main__ - INFO - Initializing RecipeApp...
+2024-12-07 10:39:01,578 - src.data_loader - INFO - DataLoader initialized.
+2024-12-07 10:39:01,578 - __main__ - INFO - Loading recipes and interactions data...
+2024-12-07 10:39:02,193 - __main__ - INFO - Running RecipeApp...
+2024-12-07 10:39:02,193 - src.visualization.sidebar - INFO - Rendering sidebar configurations.
+2024-12-07 10:39:02,221 - src.visualization.sidebar - INFO - User inputs collected successfully.
+2024-12-07 10:39:02,234 - __main__ - INFO - Rendering dashboard.
+2024-12-07 10:39:02,235 - src.visualization.dashboard - INFO - RecipeVisualizer initialized with recipes and interactions data.
+2024-12-07 10:39:02,238 - src.visualization.dashboard - INFO - Rendered navigation for recipe: 5 bean chili
+2024-12-07 10:39:02,253 - src.visualization.charts - INFO - Generated score display for MTM score: 100
+2024-12-07 10:39:02,256 - src.visualization.dashboard - INFO - Rendered score chart for recipe: 5 bean chili
+2024-12-07 10:39:02,322 - src.visualization.charts - INFO - Generated pie chart with title 'Macronutrient Breakdown'.
+2024-12-07 10:39:02,324 - src.visualization.dashboard - INFO - Rendered pie chart for recipe: 5 bean chili
+2024-12-07 10:39:02,338 - src.visualization.dashboard - INFO - Rendered dashboard for recipe: 5 bean chili
+2024-12-07 10:39:03,821 - __main__ - INFO - Initializing RecipeApp...
+2024-12-07 10:39:03,822 - src.data_loader - INFO - DataLoader initialized.
+2024-12-07 10:39:03,822 - __main__ - INFO - Loading recipes and interactions data...
+2024-12-07 10:39:04,470 - __main__ - INFO - Running RecipeApp...
+2024-12-07 10:39:04,470 - src.visualization.sidebar - INFO - Rendering sidebar configurations.
+2024-12-07 10:39:04,476 - src.visualization.sidebar - INFO - User inputs collected successfully.
+2024-12-07 10:39:04,477 - __main__ - INFO - Rendering dashboard.
+2024-12-07 10:39:04,477 - src.visualization.dashboard - INFO - RecipeVisualizer initialized with recipes and interactions data.
+2024-12-07 10:39:04,481 - src.visualization.dashboard - INFO - Rendered navigation for recipe: 5 bean chili
+2024-12-07 10:39:04,490 - src.visualization.charts - INFO - Generated score display for MTM score: 100
+2024-12-07 10:39:04,492 - src.visualization.dashboard - INFO - Rendered score chart for recipe: 5 bean chili
+2024-12-07 10:39:04,547 - src.visualization.charts - INFO - Generated pie chart with title 'Macronutrient Breakdown'.
+2024-12-07 10:39:04,549 - src.visualization.dashboard - INFO - Rendered pie chart for recipe: 5 bean chili
+2024-12-07 10:39:04,555 - src.visualization.dashboard - INFO - Rendered dashboard for recipe: 5 bean chili
+2024-12-07 10:39:07,504 - __main__ - INFO - Initializing RecipeApp...
+2024-12-07 10:39:07,505 - src.data_loader - INFO - DataLoader initialized.
+2024-12-07 10:39:07,505 - __main__ - INFO - Loading recipes and interactions data...
+2024-12-07 10:39:08,183 - __main__ - INFO - Running RecipeApp...
+2024-12-07 10:39:08,183 - src.visualization.sidebar - INFO - Rendering sidebar configurations.
+2024-12-07 10:39:08,188 - src.visualization.sidebar - INFO - Reset button clicked, clearing session state.
+2024-12-07 10:39:08,332 - __main__ - INFO - Initializing RecipeApp...
+2024-12-07 10:39:08,332 - src.data_loader - INFO - DataLoader initialized.
+2024-12-07 10:39:08,334 - __main__ - INFO - Loading recipes and interactions data...
+2024-12-07 10:39:09,158 - __main__ - INFO - Running RecipeApp...
+2024-12-07 10:39:09,158 - src.visualization.sidebar - INFO - Rendering sidebar configurations.
+2024-12-07 10:39:09,167 - src.visualization.sidebar - INFO - User inputs collected successfully.
+2024-12-07 10:39:09,167 - __main__ - INFO - Displaying the front page.
+2024-12-07 11:19:22,525 - __main__ - INFO - Initializing RecipeApp...
+2024-12-07 11:19:22,526 - src.data_loader - INFO - DataLoader initialized.
+2024-12-07 11:19:22,526 - __main__ - INFO - Loading recipes and interactions data...
+2024-12-07 11:19:23,255 - src.data_loader - INFO - Loaded CSV from ZIP: dataset/PP_recipes_final.csv_extracted/final.csv
+2024-12-07 11:19:26,520 - src.data_loader - INFO - Calculated MTM scores for 66711 recipes.
+2024-12-07 11:19:26,579 - src.data_loader - INFO - Generated ingredient list with 1226 unique ingredients.
+2024-12-07 11:19:27,162 - src.data_loader - INFO - Loaded CSV from ZIP: dataset/PP_interactions_final.csv_extracted/PP_interactions.csv
+2024-12-07 11:19:27,245 - __main__ - INFO - Running RecipeApp...
+2024-12-07 11:19:27,246 - src.visualization.sidebar - INFO - Rendering sidebar configurations.
+2024-12-07 11:19:27,251 - src.visualization.sidebar - INFO - User inputs collected successfully.
+2024-12-07 11:19:27,251 - __main__ - INFO - Displaying the front page.
+2024-12-07 11:19:30,391 - __main__ - INFO - Initializing RecipeApp...
+2024-12-07 11:19:30,392 - src.data_loader - INFO - DataLoader initialized.
+2024-12-07 11:19:30,392 - __main__ - INFO - Loading recipes and interactions data...
+2024-12-07 11:19:31,238 - __main__ - INFO - Running RecipeApp...
+2024-12-07 11:19:31,238 - src.visualization.sidebar - INFO - Rendering sidebar configurations.
+2024-12-07 11:19:31,249 - src.visualization.sidebar - INFO - User inputs collected successfully.
+2024-12-07 11:19:31,250 - __main__ - INFO - Displaying the front page.
+2024-12-07 11:19:31,482 - __main__ - INFO - Initializing RecipeApp...
+2024-12-07 11:19:31,482 - src.data_loader - INFO - DataLoader initialized.
+2024-12-07 11:19:31,482 - __main__ - INFO - Loading recipes and interactions data...
+2024-12-07 11:19:32,209 - __main__ - INFO - Running RecipeApp...
+2024-12-07 11:19:32,209 - src.visualization.sidebar - INFO - Rendering sidebar configurations.
+2024-12-07 11:19:32,218 - src.visualization.sidebar - INFO - User inputs collected successfully.
+2024-12-07 11:19:32,219 - __main__ - INFO - Filtering recipes based on user inputs.
+2024-12-07 11:19:32,219 - __main__ - DEBUG - Applying filters: {'selected_ingredients': [], 'protein_min': 0, 'carbs_min': 0, 'fat_max': 29, 'start_search': True, 'reset_clicked': False, 'recipe_clicked': False, 'total_calories': 261}
+2024-12-07 11:19:32,331 - src.filter - INFO - RecipeFilter initialized with 66711 recipes.
+2024-12-07 11:19:32,331 - src.filter - INFO - No ingredients selected; keeping all recipes.
+2024-12-07 11:19:32,378 - src.filter - INFO - Filtered by fat (max 29); 54941 recipes remain.
+2024-12-07 11:19:32,378 - src.filter - INFO - Returning 54941 filtered recipes.
+2024-12-07 11:19:32,382 - __main__ - INFO - Rendering dashboard.
+2024-12-07 11:19:32,382 - src.visualization.dashboard - INFO - RecipeVisualizer initialized with recipes and interactions data.
+2024-12-07 11:19:32,397 - src.visualization.dashboard - INFO - Rendered navigation for recipe: arriba   baked winter squash mexican style
+2024-12-07 11:19:32,534 - src.visualization.charts - INFO - Generated score display for MTM score: 0
+2024-12-07 11:19:32,537 - src.visualization.dashboard - INFO - Rendered score chart for recipe: arriba   baked winter squash mexican style
+2024-12-07 11:19:32,728 - src.visualization.charts - INFO - Generated pie chart with title 'Macronutrient Breakdown'.
+2024-12-07 11:19:32,730 - src.visualization.dashboard - INFO - Rendered pie chart for recipe: arriba   baked winter squash mexican style
+2024-12-07 11:19:32,748 - src.visualization.dashboard - INFO - Rendered dashboard for recipe: arriba   baked winter squash mexican style
+2024-12-07 11:19:34,140 - __main__ - INFO - Initializing RecipeApp...
+2024-12-07 11:19:34,140 - src.data_loader - INFO - DataLoader initialized.
+2024-12-07 11:19:34,140 - __main__ - INFO - Loading recipes and interactions data...
+2024-12-07 11:19:34,838 - __main__ - INFO - Running RecipeApp...
+2024-12-07 11:19:34,838 - src.visualization.sidebar - INFO - Rendering sidebar configurations.
+2024-12-07 11:19:34,852 - src.visualization.sidebar - INFO - Reset button clicked, clearing session state.
+2024-12-07 11:19:35,046 - __main__ - INFO - Initializing RecipeApp...
+2024-12-07 11:19:35,047 - src.data_loader - INFO - DataLoader initialized.
+2024-12-07 11:19:35,048 - __main__ - INFO - Loading recipes and interactions data...
+2024-12-07 11:19:35,900 - __main__ - INFO - Running RecipeApp...
+2024-12-07 11:19:35,901 - src.visualization.sidebar - INFO - Rendering sidebar configurations.
+2024-12-07 11:19:35,913 - src.visualization.sidebar - INFO - User inputs collected successfully.
+2024-12-07 11:19:35,914 - __main__ - INFO - Displaying the front page.

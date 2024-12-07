@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>src.visualization.front_page &#8212; Mangetamain 1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/basic.css?v=c058f7c8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=27fed22d" />
+    <script src="../../../_static/documentation_options.js?v=f2a433a1"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for src.visualization.front_page</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">streamlit</span> <span class="k">as</span> <span class="nn">st</span>
+
+
+<div class="viewcode-block" id="render_front_page">
+<a class="viewcode-back" href="../../../src.visualization.html#src.visualization.front_page.render_front_page">[docs]</a>
+<span class="k">def</span> <span class="nf">render_front_page</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Render the front page of the app when no recipes are displayed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">tabs</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">tabs</span><span class="p">([</span><span class="s2">&quot;App purpose&quot;</span><span class="p">,</span> <span class="s2">&quot;Data processing behind the scene&quot;</span><span class="p">])</span>
+    <span class="k">with</span> <span class="n">tabs</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+        <span class="c1"># Add a banner image (use a relative path to assets directory)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">image</span><span class="p">(</span>
+            <span class="s2">&quot;src/visualization/images/mangetamain_front_page_banner.jpg&quot;</span><span class="p">,</span>
+            <span class="n">use_column_width</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Welcome text with HTML for styling</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            &lt;div style=&quot;text-align: justify&quot;&gt;</span>
+<span class="sd">                &lt;h1&gt;Welcome to Mangetamain!&lt;/h1&gt;</span>
+<span class="sd">                &lt;p&gt;</span>
+<span class="sd">                     A web app designed to help you cook healthy recipes depending</span>
+<span class="sd">                     on what is available in your fridge. At Mangetamain, you will</span>
+<span class="sd">                     only find traditional bio recipes that will make you healthier!</span>
+<span class="sd">                &lt;/p&gt;</span>
+<span class="sd">                &lt;p&gt;</span>
+<span class="sd">                     We retrieved only recipes that our dear contributors rated  a</span>
+<span class="sd">                     minimum of 4 stars, so you won&#39;t be disappointed!</span>
+<span class="sd">                &lt;/p&gt;</span>
+<span class="sd">                &lt;p&gt;</span>
+<span class="sd">                    Just select which ingredients you have in your fridge, and we will</span>
+<span class="sd">                    recommend the best recipes for you. You can filter by macronutrients</span>
+<span class="sd">                    if you are on a specific diet or you just care about what&#39;s inside</span>
+<span class="sd">                    your plate!</span>
+<span class="sd">                &lt;/p&gt;</span>
+<span class="sd">                &lt;p&gt;</span>
+<span class="sd">                    In doubt, you can always refer to the MTM score, an in-house score</span>
+<span class="sd">                    specifically designed to help you assess the quality of the recipe.</span>
+<span class="sd">                &lt;/p&gt;</span>
+<span class="sd">                &lt;h2&gt;Have fun &amp; checkout fun facts down below!&lt;/h2&gt;</span>
+<span class="sd">            &lt;/div&gt;</span>
+<span class="sd">                &quot;&quot;&quot;</span><span class="p">,</span>
+            <span class="n">unsafe_allow_html</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        ________________________________________________________________________</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="p">)</span>
+        <span class="n">col1</span><span class="p">,</span> <span class="n">col2</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">columns</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">col1</span><span class="p">:</span>
+            <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;**A vast community of food enthousiasts!**&quot;</span><span class="p">)</span>
+            <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;220K+ users that tend to like a lot recipes from Food.com!&quot;</span><span class="p">)</span>
+            <span class="n">st</span><span class="o">.</span><span class="n">image</span><span class="p">(</span>
+                <span class="s2">&quot;src/visualization/images/fig_ratings_ratios.png&quot;</span><span class="p">,</span> <span class="n">use_column_width</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+        <span class="k">with</span> <span class="n">col2</span><span class="p">:</span>
+            <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;**A very dynamic website...**&quot;</span><span class="p">)</span>
+            <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+<span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                     ...up to the point when Instagram stepped in! Note this</span>
+<span class="sd">                     might be pure coincidence though!</span>
+<span class="sd">                     &quot;&quot;&quot;</span>
+            <span class="p">)</span>
+            <span class="n">st</span><span class="o">.</span><span class="n">image</span><span class="p">(</span><span class="s2">&quot;src/visualization/images/fig_dynamics.png&quot;</span><span class="p">,</span> <span class="n">use_column_width</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="n">tabs</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">header</span><span class="p">(</span><span class="s2">&quot;Sélection des recettes&quot;</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                    **Cibler des recettes &quot;healthy&quot; et éthiques** \n</span>
+<span class="sd">                    Le fichier RAW recipes contient tout un nombre de recettes qui ne</span>
+<span class="sd">                    correspondent pas à notre objectif de suggérer des recettes qui</span>
+<span class="sd">                    soient &quot;healthy&quot;. Pour cibler les recettes d&#39;intéret pour nous,</span>
+<span class="sd">                    nous avons filtré selon les données de la colonne &quot;tag&quot; et avons</span>
+<span class="sd">                    retenus arbitrairement les recettes comportant les mentions:</span>
+<span class="sd">                    organic, bio, clean, vegetable, vegan, traditional, eco-friendly,</span>
+<span class="sd">                    local, healthy, seasonal, green, natural, fresh, plant,</span>
+<span class="sd">                    sustainable, heritage, garden, whole, farm.</span>
+<span class="sd">                &quot;&quot;&quot;</span>
+        <span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                    **Pertinence des reviews** \n</span>
+<span class="sd">                    Dans RAW_interactions, nous constatons que les notes des recettes</span>
+<span class="sd">                    sont trop élevées pour qu&#39;une étude se base sur ce critère.</span>
+<span class="sd">                &quot;&quot;&quot;</span>
+        <span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">image</span><span class="p">(</span><span class="s2">&quot;src/visualization/images/ratings.png&quot;</span><span class="p">,</span> <span class="n">use_column_width</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                    En outre, toutes les recettes ayant une note inférieure à 4</span>
+<span class="sd">                    sont considérées comme de mauvaises recettes, car les utilisateurs</span>
+<span class="sd">                    ont tendance à attribuer des notes très élevées en général. Nous</span>
+<span class="sd">                    filtrons donc les recettes ayant une note strictement inférieure à</span>
+<span class="sd">                    4, nous considérons que ce sont de mauvaises recettes.</span>
+<span class="sd">                &quot;&quot;&quot;</span>
+        <span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                    **Temps de préparation** \n</span>
+<span class="sd">                    Nous procédons ensuite à l&#39;analyse des temps de préparation. Nous</span>
+<span class="sd">                    ciblons des personnes actives, soucieuses de leur mode de vie,</span>
+<span class="sd">                    mais qui ont un temps limité pour cuisiner. Nos utilisateurs</span>
+<span class="sd">                    souhaitent probablement passer moins de 2 heures au fourneau !</span>
+<span class="sd">                &quot;&quot;&quot;</span>
+        <span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">image</span><span class="p">(</span><span class="s2">&quot;src/visualization/images/preparation_time.png&quot;</span><span class="p">,</span> <span class="n">use_column_width</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                    De plus, nous considérons que les recettes de moins de 5 minutes</span>
+<span class="sd">                    sont des erreurs de saisie ou peu sérieuses. Par conséquent, nous</span>
+<span class="sd">                    filtrons les recettes dont le temps de préparation est inférieur à</span>
+<span class="sd">                    5 minutes.</span>
+<span class="sd">                &quot;&quot;&quot;</span>
+        <span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                    **Vectorisation des ingrédients** \n</span>
+<span class="sd">                    Nous utilisons le fichier pickle pour réécrire la liste des</span>
+<span class="sd">                    ingrédients sous forme de texte. Ensuite, nous appliquons Word2Vec</span>
+<span class="sd">                    pour obtenir les vecteurs denses des ingédients. Lorsqu&#39;un</span>
+<span class="sd">                    ingrédient est décrit avec plusieurs mots, nous le représentons</span>
+<span class="sd">                    par le vecteur moyen de ses mots. Notre dataset contient plus de</span>
+<span class="sd">                    6000 ingrédients uniques. A l&#39;aide de Word2Vec nous récupérons la</span>
+<span class="sd">                    désignation simple la plus proche de l&#39;ingrédient original. Nous</span>
+<span class="sd">                    réduisons ainsi le nombre d&#39;ingrédients uniques à environ 1200,</span>
+<span class="sd">                    ce qui constitue une simplification très significative.</span>
+<span class="sd">                &quot;&quot;&quot;</span>
+        <span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">image</span><span class="p">(</span><span class="s2">&quot;src/visualization/images/word2vec.png&quot;</span><span class="p">,</span> <span class="n">use_column_width</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                    Le nombre d&#39;ingrédients par recette suit une loi de type loi gamma.</span>
+<span class="sd">                    La rationnalisation de la désignation des ingrédients permets</span>
+<span class="sd">                    d&#39;analyser les ingrédients les plus utilisés dans les recettes.</span>
+<span class="sd">                    Les condiments sont surreprésentés, ils ne caractérisent pas les</span>
+<span class="sd">                    recettes. Au passage, la liste des 40 ingrédients ci-dessous</span>
+<span class="sd">                    illustre le must-have pour cuisiner des recettes plus saines.</span>
+<span class="sd">                &quot;&quot;&quot;</span>
+        <span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">image</span><span class="p">(</span><span class="s2">&quot;src/visualization/images/top-ingredients.png&quot;</span><span class="p">,</span> <span class="n">use_column_width</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                    **Composition nutritionnelle** \n</span>
+<span class="sd">                    La composition nutruitionnelle est un élément clé pour répondre</span>
+<span class="sd">                    à notre problématique. Les macronutriments sont initialement</span>
+<span class="sd">                    exprimés en pourcentage des apports journaliers recommandés.</span>
+<span class="sd">                    Nous convertissons ces valeurs en grammes et recalculons l&#39;apport</span>
+<span class="sd">                    calorique pour chaque recette, en appliquant la règle suivante:</span>
+<span class="sd">                    -1 gramme de protéines = 4 kcal</span>
+<span class="sd">                    -1 gramme de glucides = 4 kcal</span>
+<span class="sd">                    -1 gramme de lipides = 9 kcal</span>
+<span class="sd">                    Nous éliminons également les recettes pour lesquelles les valeurs</span>
+<span class="sd">                    nutritionnelles sont manquantes (0) ou hors-cible (&gt; 3150).</span>
+<span class="sd">                &quot;&quot;&quot;</span>
+        <span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                    **Datasets finaux** \n</span>
+<span class="sd">                    Avec en tête ce que l&#39;application doit fournir, nous décidons</span>
+<span class="sd">                    de ne conserver que les informations suivantes dans le dataset:</span>
+<span class="sd">                    - nom de recette</span>
+<span class="sd">                    - numério identification</span>
+<span class="sd">                    - composition nutritionnelle</span>
+<span class="sd">                    - liste des ingrédients</span>
+<span class="sd">                &quot;&quot;&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">st</span><span class="o">.</span><span class="n">header</span><span class="p">(</span><span class="s2">&quot;Exploration des données&quot;</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                    **Détecter une saisonalité** \n</span>
+<span class="sd">                    Il est intéressant de voir si les recettes sont influencées par</span>
+<span class="sd">                    les saisons. En effet, nous proposons des recettes saines mais</span>
+<span class="sd">                    nous voulons aussi être éthiques et proposer des recettes de</span>
+<span class="sd">                    saison, pour des raisons écologiques et sociales.</span>
+<span class="sd">                    **Mais va-t-on aller à l&#39;encontre des habitudes des utilisateurs</span>
+<span class="sd">                    que nous ciblons ?**</span>
+<span class="sd">                    Pour répondre à cette question, nous avons fait une jointure entre</span>
+<span class="sd">                    notre dataset de recettes filtrées bio et traditionnelles avec le</span>
+<span class="sd">                    dataset des interactions utilisateurs.</span>
+<span class="sd">                    Afin de pouvoir analyser la saisonalité, nous avons arbitrairement</span>
+<span class="sd">                    écarté les recettes ayant moins de 20 interactions. Nous passons</span>
+<span class="sd">                    de 365K interactions à 130K et de 70K recettes à 2,5K. \n</span>
+<span class="sd">                    **Comment calculer la saisonalité ?** \n</span>
+<span class="sd">                    Nous avons calculé la saisonalité d&#39;une recette en fonction des</span>
+<span class="sd">                    dates de ses reviews. Les étapes suivantes ont été réalisées:</span>
+<span class="sd">                    - retrait de l&#39;information des années</span>
+<span class="sd">                    - mapping des dates (mois et jour du mois) vers un angle compris</span>
+<span class="sd">                      entre 0 et 2 pi</span>
+<span class="sd">                    - calcul des moyennes des cosinus et sinus des dates angulaires</span>
+<span class="sd">                    - calcul des éccarts types des cosinus et sinus des dates angulaires</span>
+<span class="sd">                    - calcul de la saisonalité moyenne comme l&#39;arctangente du sinus</span>
+<span class="sd">                        moyen et du cosinus moyen</span>
+<span class="sd">                    - calcul de l&#39;écart type comme l&#39;arctangente des écart types des</span>
+<span class="sd">                        sinus et cosinus des dates angulaires \n</span>
+<span class="sd">                    Les éccarts types et les moyennes sont calculés pour chaque recette</span>
+<span class="sd">                    et sont représentés dans la carte de chaleur ci-dessous :</span>
+<span class="sd">                &quot;&quot;&quot;</span>
+        <span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">image</span><span class="p">(</span><span class="s2">&quot;src/visualization/images/seasonality.png&quot;</span><span class="p">,</span> <span class="n">use_column_width</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                    **Analyse de la saisonalité** \n</span>
+<span class="sd">                    Les recettes que nous avons sélectionnées ont une saisonnalité</span>
+<span class="sd">                    marquée pendant l&#39;année. Cette saisonnalité est de l&#39;ordre du</span>
+<span class="sd">                    trimestre, avec et s&#39;étale sur toute l&#39;année, même si la dynamque</span>
+<span class="sd">                    est moins forte en hiver. Le choix des recettes de notre public</span>
+<span class="sd">                    cible est bien influencé par les saisons. Ils seront donc réceptifs</span>
+<span class="sd">                    à des suggestions de saison.</span>
+<span class="sd">                    **Ajouter l&#39;information de saisonalité dans le dataset final** \n</span>
+<span class="sd">                    Nous décidons finalement d&#39;ajouter la saisonalité moyenne dans</span>
+<span class="sd">                    le dataset final. L&#39;application proposera en priorité les recettes</span>
+<span class="sd">                    qui sont de saison!</span>
+<span class="sd">                &quot;&quot;&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            ________________________________________________________________________</span>
+<span class="sd">            **This project was made from a dataset consisting of 180K+ recipes and</span>
+<span class="sd">            700K+ recipe reviews covering 18 years of user interactions and uploads</span>
+<span class="sd">            on Food.com (formerly GeniusKitchen) to this link:**</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+    <span class="p">)</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">link_button</span><span class="p">(</span>
+        <span class="s2">&quot;Food.com dataset from Kaggle&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;https://www.kaggle.com/shuyangli94/food-com-recipes-and-user-interactions&quot;</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">Mangetamain</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">API Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">src</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2024, Mathieu DELARUE & François-Xavier MOREL.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.0.2</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

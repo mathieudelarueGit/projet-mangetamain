@@ -7,7 +7,7 @@ from src.visualization.dashboard import RecipeVisualizer
 from src.visualization.front_page import render_front_page
 from src.data_loader import DataLoader
 from src.filter import RecipeFilter
-from log_config import setup_logging
+from src.log_config import setup_logging
 
 
 class RecipeApp:
