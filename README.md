@@ -1,5 +1,5 @@
 ## Documentation
 
-To view the project documentation, open the following link in your browser:
+The project documentation is available online at the following link:
 
-[Click here for the documentation](docs/build/html/index.html)
+[Click here for the documentation](https://mathieudelaruegit.github.io/projet-mangetamain/)
