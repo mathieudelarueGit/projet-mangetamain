@@ -80,8 +80,8 @@ class TestRecipeVisualizer(unittest.TestCase):
 
         # Prepare a mock DataFrame for recipes
         data = {
-            "name": ["Recipe A", "Recipe B", "Recipe C"],
-            "avg_date": [2.5, 3.0, 3.5]  # Simulating avg_date as a numeric column for filtering
+            "name": ["Recipe A", "Recipe B", "Recipe C", "Recipe D", "Recipe E", "Recipe F", "Recipe G"],
+            "avg_date": [1.5, 3.0, 4.5, 6, 7.5, 10, 0.5]  # Simulating avg_date as a numeric column for filtering
         }
         self.recipes_df = pd.DataFrame(data)
 
@@ -191,3 +191,4 @@ def test_render_dashboard(self, mock_render_navigation, mock_render_pie_chart, m
 
 if __name__ == "__main__":
     unittest.main()
+    
