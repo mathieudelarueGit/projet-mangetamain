@@ -44,9 +44,9 @@ class RecipeVisualizer:
         Returns:
         -------
         tuple
-        A tuple containing:
-        - filtered_recipes (pd.DataFrame): The filtered recipes DataFrame.
-        - current_recipe (pd.Series): The current recipe being displayed.
+            A tuple containing:
+            - filtered_recipes (pd.DataFrame): The filtered recipes DataFrame.
+            - current_recipe (pd.Series): The current recipe being displayed.
         """
 
         # Select recipes based on the date of the user
@@ -99,7 +99,8 @@ class RecipeVisualizer:
             ]
             with title:
                 st.markdown(
-                    f"<h3 style='text-align: center;'>{current_recipe['name']}</h3>",
+                    f"<h3 style='text-align: center;'>{
+                        current_recipe['name']}</h3>",
                     unsafe_allow_html=True,
                 )
             logger.info("Rendered navigation for recipe: %s", current_recipe["name"])
@@ -198,6 +199,10 @@ class RecipeVisualizer:
         """
         try:
             filtered_recipes, current_recipe = self.render_navigation(filtered_recipes)
+            
+            if current_recipe is None:
+                st.write("No recipes available.")
+                return
 
             col1, col2 = st.columns(2)
             with col1:
