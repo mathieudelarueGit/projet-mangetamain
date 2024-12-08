@@ -198,7 +198,7 @@ class RecipeVisualizer:
         """
         try:
             filtered_recipes, current_recipe = self.render_navigation(filtered_recipes)
-            
+
             if current_recipe is None:
                 st.write("No recipes available.")
                 return
